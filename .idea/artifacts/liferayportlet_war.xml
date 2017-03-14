@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="liferayportlet:war">
+    <output-path>$PROJECT_DIR$/liferayportlet/target</output-path>
+    <root id="archive" name="liferayportlet-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="liferayportlet:war exploded" />
+    </root>
+  </artifact>
+</component>

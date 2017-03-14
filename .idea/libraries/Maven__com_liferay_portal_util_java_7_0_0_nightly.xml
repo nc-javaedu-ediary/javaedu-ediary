@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.liferay.portal:util-java:7.0.0-nightly">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/liferay/portal/util-java/7.0.0-nightly/util-java-7.0.0-nightly.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/liferay/portal/util-java/7.0.0-nightly/util-java-7.0.0-nightly-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/liferay/portal/util-java/7.0.0-nightly/util-java-7.0.0-nightly-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
