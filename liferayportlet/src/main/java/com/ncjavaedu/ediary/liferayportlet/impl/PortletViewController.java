@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.ncjavaedu.ediary.liferayportlet;
+package com.ncjavaedu.ediary.liferayportlet.impl;
 
 import com.liferay.portal.kernel.util.ReleaseInfo;
 
@@ -28,6 +28,7 @@ public class PortletViewController {
 	@RenderMapping
 	public String question(Model model) {
 		model.addAttribute("releaseInfo", ReleaseInfo.getReleaseInfo());
+		model.addAttribute("message", "This is implementation");
 
 		return "liferayportlet/view";
 	}

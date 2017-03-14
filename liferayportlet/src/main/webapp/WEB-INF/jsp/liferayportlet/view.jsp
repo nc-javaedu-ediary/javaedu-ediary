@@ -21,3 +21,4 @@
 This is the <b>liferayportlet</b> portlet.<br />
 
 <c:out escapeXml="true" value="${releaseInfo}" />.
+<c:out escapeXml="true" value="${message}"/>.
