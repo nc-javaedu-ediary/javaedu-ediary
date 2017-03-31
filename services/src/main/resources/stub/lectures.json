@@ -1,0 +1,4 @@
+[
+  {"id": 1, "title": "Lecture 1", "classroom": "3", "description": "some desc", "homework" : "none"},
+  {"id": 2, "title": "Lecture 2", "classroom": "5", "description": "some desc", "homework" : "none"}
+]

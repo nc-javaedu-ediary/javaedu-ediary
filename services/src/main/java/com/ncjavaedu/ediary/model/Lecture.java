@@ -1,17 +1,32 @@
 package com.ncjavaedu.ediary.model;
 
+import javax.persistence.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
+@Entity
+@Table(name = "LECTURES")
 public class Lecture {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
+    private Integer id;
+    @Column(name = "TITLE")
     private String title;
+    @Column(name = "DATE")
     private GregorianCalendar date = new GregorianCalendar();
+    @Transient
     private DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+    @Column(name = "CLASSROOM")
     private String classroom;
+    @Column(name = "DESCRIPTION")
     private String description;
+    @Column(name = "HOMEWORK")
     private String homework;
+
+    public Lecture() {}
 
     public Lecture(String title, String date, String classroom, String description) {
         this.title = title;
@@ -34,6 +49,14 @@ public class Lecture {
         this.classroom = classroom;
         this.description = description;
         this.homework = homework;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitle() {

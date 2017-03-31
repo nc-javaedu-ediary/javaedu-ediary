@@ -15,7 +15,11 @@
 package com.ncjavaedu.ediary.liferayportlet;
 
 import com.liferay.portal.kernel.util.ReleaseInfo;
+import com.ncjavaedu.ediary.model.Course;
+import com.ncjavaedu.ediary.model.Lecture;
 import com.ncjavaedu.ediary.model.User;
+import com.ncjavaedu.ediary.services.CourseService;
+import com.ncjavaedu.ediary.services.LectureService;
 import com.ncjavaedu.ediary.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,11 +35,17 @@ import java.util.List;
 public class PortletViewController {
 
 	@Autowired
-	private UserService service;
+	private UserService userSvc;
+	@Autowired
+	private LectureService lectureSvc;
+	@Autowired
+	private CourseService courseSvc;
 
 	@RenderMapping
 	public String question(Model model) {
-		List<User> users = service.getUsers();
+		List<User> users = userSvc.getUsers();
+		List<Lecture> lectures = lectureSvc.getLectures();
+		List<Course> courses = courseSvc.getCourses();
 		//TODO remove
 		if (users == null || users.isEmpty()){
 			users = (users == null) ? new ArrayList<User>() : users;
@@ -43,11 +53,13 @@ public class PortletViewController {
 			user.setFirstName("Morgan");
 			user.setLastName("Freeman");
 			user.setEmail("m.freeman@gmail.com");
-			service.saveUser(user);
+			userSvc.saveUser(user);
 			users.add(user);
 		}
 		model.addAttribute("releaseInfo",  ReleaseInfo.getReleaseInfo());
 		model.addAttribute("users", users);
+		model.addAttribute("lectures", lectures);
+		model.addAttribute("courses",courses);
 
 		return "liferayportlet/view";
 	}

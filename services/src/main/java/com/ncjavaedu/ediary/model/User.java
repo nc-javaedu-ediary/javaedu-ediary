@@ -2,6 +2,8 @@ package com.ncjavaedu.ediary.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "USERS")
@@ -19,12 +21,15 @@ public class User implements Serializable{
     @Column(name = "LAST_NAME")
     private String lastName;
     @Column(name = "UNIVERSITY")
-    private String university; //Нужно ли?
+    private String university;
     @Column(name = "EMAIL")
     private String email;
 
     @Transient
     private Role role;
+
+    @Transient
+    private List<Course> courses = new ArrayList<>();
 
     public User() {
     }
@@ -91,5 +96,19 @@ public class User implements Serializable{
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public List<Course> getCourses(){
+        return courses;
+    }
+
+    public void addCourse(Course course)
+    {
+        courses.add(course);
+    }
+
+    public void removeCourse(Course course)
+    {
+        courses.remove(course);
     }
 }
