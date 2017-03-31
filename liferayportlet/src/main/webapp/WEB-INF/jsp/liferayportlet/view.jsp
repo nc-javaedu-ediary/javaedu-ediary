@@ -21,4 +21,21 @@
 This is the <b>liferayportlet</b> portlet.<br />
 
 <c:out escapeXml="true" value="${releaseInfo}" />.
-<c:out escapeXml="true" value="${message}"/>.
+<table>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>University</th>
+            <th>E-mail</th>
+        </tr>
+    <c:forEach items="${users}" var="user">
+        <tr>
+            <td>${user.id}</td>
+            <td>${user.firstName}</td>
+            <td>${user.lastName}</td>
+            <td>${user.university}</td>
+            <td>${user.email}</td>
+        </tr>
+    </c:forEach>
+</table>

@@ -12,23 +12,42 @@
  * details.
  */
 
-package com.ncjavaedu.ediary.liferayportlet.impl;
+package com.ncjavaedu.ediary.liferayportlet;
 
 import com.liferay.portal.kernel.util.ReleaseInfo;
-
+import com.ncjavaedu.ediary.model.User;
+import com.ncjavaedu.ediary.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("VIEW")
 public class PortletViewController {
 
+	@Autowired
+	private UserService service;
+
 	@RenderMapping
 	public String question(Model model) {
-		model.addAttribute("releaseInfo", ReleaseInfo.getReleaseInfo());
-		model.addAttribute("message", "This is implementation");
+		List<User> users = service.getUsers();
+		//TODO remove
+		if (users == null || users.isEmpty()){
+			users = (users == null) ? new ArrayList<User>() : users;
+			User user = new User();
+			user.setFirstName("Morgan");
+			user.setLastName("Freeman");
+			user.setEmail("m.freeman@gmail.com");
+			service.saveUser(user);
+			users.add(user);
+		}
+		model.addAttribute("releaseInfo",  ReleaseInfo.getReleaseInfo());
+		model.addAttribute("users", users);
 
 		return "liferayportlet/view";
 	}
