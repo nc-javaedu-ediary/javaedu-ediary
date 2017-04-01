@@ -30,22 +30,14 @@ public class Lecture {
 
     public Lecture(String title, String date, String classroom, String description) {
         this.title = title;
-        try {
-            this.date.setTime(dateFormat.parse(date));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        parseDate(date);
         this.classroom = classroom;
         this.description = description;
     }
 
     public Lecture(String title, String date, String classroom, String description, String homework) {
         this.title = title;
-        try {
-            this.date.setTime(dateFormat.parse(date));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        parseDate(date);
         this.classroom = classroom;
         this.description = description;
         this.homework = homework;
@@ -75,6 +67,10 @@ public class Lecture {
         this.date = date;
     }
 
+    public void setDate(String date) {
+        parseDate(date);
+    }
+
     public String getClassroom() {
         return classroom;
     }
@@ -97,5 +93,13 @@ public class Lecture {
 
     public void setHomework(String homework) {
         this.homework = homework;
+    }
+
+    private void parseDate(String date) {
+        try {
+            this.date.setTime(dateFormat.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -21,7 +21,7 @@
 This is the <b>liferayportlet</b> portlet.<br />
 
 <c:out escapeXml="true" value="${releaseInfo}" />.
-USERS </br>
+</br>USERS </br>
 <table>
         <tr>
             <th>ID</th>

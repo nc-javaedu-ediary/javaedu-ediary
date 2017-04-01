@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Controller
@@ -53,8 +54,29 @@ public class PortletViewController {
 			user.setFirstName("Morgan");
 			user.setLastName("Freeman");
 			user.setEmail("m.freeman@gmail.com");
+			user.setUniversity("ITMO");
 			userSvc.saveUser(user);
 			users.add(user);
+		}
+		if(lectures == null || lectures.isEmpty())
+		{
+			lectures = (lectures == null) ? new ArrayList<Lecture>() : lectures;
+			Lecture lecture = new Lecture();
+			lecture.setClassroom("466");
+			lecture.setTitle("Spring framework");
+			lecture.setDate("2017-03-31 19:00");
+			lecture.setHomework("None");
+			lecture.setDescription("Spring lecture");
+			lectureSvc.saveLecture(lecture);
+			lectures.add(lecture);
+		}
+		if(courses == null || courses.isEmpty())
+		{
+			courses = (courses == null) ? new ArrayList<Course>() : courses;
+			Course course = new Course();
+			course.setTitle("Java Edu");
+			courseSvc.saveCourse(course);
+			courses.add(course);
 		}
 		model.addAttribute("releaseInfo",  ReleaseInfo.getReleaseInfo());
 		model.addAttribute("users", users);
