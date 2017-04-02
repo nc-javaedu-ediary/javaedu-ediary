@@ -8,8 +8,8 @@
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>javaedu-ediary.porlets</artifactId>
-	<name>javaedu-ediary.porlets</name>
+	<artifactId>javaedu-ediary.portlets</artifactId>
+	<name>javaedu-ediary.portlets</name>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
