@@ -1,6 +1,7 @@
 package com.ncjavaedu.ediary.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,11 +9,11 @@ import java.util.GregorianCalendar;
 
 @Entity
 @Table(name = "LECTURES")
-public class Lecture {
+public class Lecture implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Integer id;
+    @Column(name = "LECTURE_ID")
+    private Integer lectureId;
     @Column(name = "TITLE")
     private String title;
     @Column(name = "DATE")
@@ -43,12 +44,12 @@ public class Lecture {
         this.homework = homework;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getLectureId() {
+        return lectureId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setLectureId(Integer lectureId) {
+        this.lectureId = lectureId;
     }
 
     public String getTitle() {

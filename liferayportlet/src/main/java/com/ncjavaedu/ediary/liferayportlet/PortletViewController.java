@@ -47,17 +47,19 @@ public class PortletViewController {
 		List<User> users = userSvc.getUsers();
 		List<Lecture> lectures = lectureSvc.getLectures();
 		List<Course> courses = courseSvc.getCourses();
-		//TODO remove
-		if (users == null || users.isEmpty()){
-			users = (users == null) ? new ArrayList<User>() : users;
-			User user = new User();
-			user.setFirstName("Morgan");
-			user.setLastName("Freeman");
-			user.setEmail("m.freeman@gmail.com");
-			user.setUniversity("ITMO");
-			userSvc.saveUser(user);
-			users.add(user);
-		}
+        //TODO remove
+        if (users == null || users.isEmpty()){
+            users = (users == null) ? new ArrayList<User>() : users;
+            User user = new User();
+            user.setFirstName("Morgan");
+            user.setLastName("Freeman");
+            user.setEmail("m.freeman@gmail.com");
+            user.setUniversity("ITMO");
+//            user.addCourse(courses.get(0));
+//            user.addCourse(courses.get(1));
+            userSvc.saveUser(user);
+            users.add(user);
+        }
 		if(lectures == null || lectures.isEmpty())
 		{
 			lectures = (lectures == null) ? new ArrayList<Lecture>() : lectures;
@@ -77,6 +79,10 @@ public class PortletViewController {
 			course.setTitle("Java Edu");
 			courseSvc.saveCourse(course);
 			courses.add(course);
+//			Course course2 = new Course();
+//			course2.setTitle("Some course");
+//			courseSvc.saveCourse(course2);
+//			courses.add(course2);
 		}
 		model.addAttribute("releaseInfo",  ReleaseInfo.getReleaseInfo());
 		model.addAttribute("users", users);

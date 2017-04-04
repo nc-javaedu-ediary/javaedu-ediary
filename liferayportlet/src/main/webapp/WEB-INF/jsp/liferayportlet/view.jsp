@@ -32,7 +32,7 @@ This is the <b>liferayportlet</b> portlet.<br />
         </tr>
     <c:forEach items="${users}" var="user">
         <tr>
-            <td>${user.id}</td>
+            <td>${user.userId}</td>
             <td>${user.firstName}</td>
             <td>${user.lastName}</td>
             <td>${user.university}</td>
@@ -51,7 +51,7 @@ LECTURES </br>
     </tr>
     <c:forEach items="${lectures}" var="lecture">
         <tr>
-            <td>${lecture.id}</td>
+            <td>${lecture.lectureId}</td>
             <td>${lecture.title}</td>
             <td>${lecture.classroom}</td>
             <td>${lecture.description}</td>
@@ -67,7 +67,7 @@ COURSES </br>
     </tr>
     <c:forEach items="${courses}" var="course">
         <tr>
-            <td>${course.id}</td>
+            <td>${course.courseId}</td>
             <td>${course.title}</td>
         </tr>
     </c:forEach>

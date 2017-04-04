@@ -10,8 +10,8 @@ import java.util.List;
 public class User implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Integer id;
+    @Column(name = "USER_ID")
+    private Integer userId;
     @Column(name = "LOGIN")
     private String login;
     @Column(name = "PASSWORD")
@@ -29,6 +29,12 @@ public class User implements Serializable{
     private Role role;
 
     @Transient
+//    @OneToMany
+//    @JoinColumn(name = "COURSE_ID")
+//    @ManyToMany
+//    @JoinTable(name = "USER_COURSES", joinColumns = {
+//            @JoinColumn(name = "USER_ID")}, inverseJoinColumns = {
+//            @JoinColumn(name = "COURSE_ID")})
     private List<Course> courses = new ArrayList<>();
 
     public User() {
@@ -43,12 +49,12 @@ public class User implements Serializable{
         this.email = email;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getLogin() {

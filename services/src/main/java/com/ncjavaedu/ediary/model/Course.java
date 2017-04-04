@@ -1,16 +1,17 @@
 package com.ncjavaedu.ediary.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "COURSES")
-public class Course {
+public class Course implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
-    private Integer id;
+    @Column(name = "COURSE_ID")
+    private Integer courseId;
     @Column(name = "TITLE")
     private String title;
     @Transient
@@ -24,12 +25,12 @@ public class Course {
         this.title = title;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getCourseId() {
+        return courseId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setCourseId(Integer courseId) {
+        this.courseId = courseId;
     }
 
     public String getTitle() {
