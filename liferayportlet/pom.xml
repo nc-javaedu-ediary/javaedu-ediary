@@ -14,7 +14,7 @@
 	<packaging>war</packaging>
 
 	<properties>
-		<profileName>production</profileName>
+		<profileName>local</profileName>
 		<liferay.maven.plugin.version>7.0.0-m2</liferay.maven.plugin.version>
 		<liferay.version>7.0.0-nightly</liferay.version>
 		<liferay.auto.deploy.dir>/Users/abogdanov/Downloads/liferay-ce-portal-7.0-ga3/deploy</liferay.auto.deploy.dir>

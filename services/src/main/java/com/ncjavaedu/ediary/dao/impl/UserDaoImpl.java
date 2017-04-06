@@ -18,6 +18,6 @@ public class UserDaoImpl extends BaseDao<Integer, User> implements UserDao {
 
     @Transactional
     public void save(User user) {
-        getSession().persist(user);
+        getSession().saveOrUpdate(user);
     }
 }

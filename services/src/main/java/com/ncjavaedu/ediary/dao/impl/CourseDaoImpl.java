@@ -21,6 +21,6 @@ public class CourseDaoImpl extends BaseDao<Integer, Course> implements CourseDao
 
     @Transactional
     public void save(Course course){
-        getSession().persist(course);
+        getSession().saveOrUpdate(course);
     }
 }
