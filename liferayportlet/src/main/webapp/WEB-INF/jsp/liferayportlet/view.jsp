@@ -21,3 +21,54 @@
 This is the <b>liferayportlet</b> portlet.<br />
 
 <c:out escapeXml="true" value="${releaseInfo}" />.
+</br>USERS </br>
+<table>
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>University</th>
+            <th>E-mail</th>
+        </tr>
+    <c:forEach items="${users}" var="user">
+        <tr>
+            <td>${user.userId}</td>
+            <td>${user.firstName}</td>
+            <td>${user.lastName}</td>
+            <td>${user.university}</td>
+            <td>${user.email}</td>
+        </tr>
+    </c:forEach>
+</table>
+LECTURES </br>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Classroom</th>
+        <th>Description</th>
+        <th>Homework</th>
+    </tr>
+    <c:forEach items="${lectures}" var="lecture">
+        <tr>
+            <td>${lecture.lectureId}</td>
+            <td>${lecture.title}</td>
+            <td>${lecture.classroom}</td>
+            <td>${lecture.description}</td>
+            <td>${lecture.homework}</td>
+        </tr>
+    </c:forEach>
+</table>
+COURSES </br>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Title</th>
+    </tr>
+    <c:forEach items="${courses}" var="course">
+        <tr>
+            <td>${course.courseId}</td>
+            <td>${course.title}</td>
+        </tr>
+    </c:forEach>
+</table>
