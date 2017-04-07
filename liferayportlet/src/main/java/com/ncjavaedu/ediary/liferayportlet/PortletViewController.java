@@ -50,6 +50,29 @@ public class PortletViewController {
 
         //TODO remove
 		users = (users == null) ? new ArrayList<User>() : users;
+		courses = (courses == null) ? new ArrayList<Course>() : courses;
+		lectures = (lectures == null) ? new ArrayList<Lecture>() : lectures;
+
+        Lecture l1 = new Lecture();
+        l1.setClassroom("466");
+        l1.setTitle("Hibernate");
+        l1.setDescription("Hibernate");
+        l1.setDate("31-03-2017 19:00");
+        l1.setHomework("None");
+
+        Lecture l2 = new Lecture();
+        l2.setClassroom("403");
+        l2.setTitle("PL/SQL");
+        l2.setDescription("PL/SQL");
+        l2.setDate("07-04-2017 19:00");
+        l2.setHomework("None");
+
+        Lecture l3 = new Lecture();
+        l3.setClassroom("466");
+        l3.setTitle("Maven");
+        l3.setDescription("Maven");
+        l3.setDate("14-04-2017 19:00");
+        l3.setHomework("None");
 
 		double rnd = Math.random();
 		User user = new User();
@@ -60,35 +83,20 @@ public class PortletViewController {
 
 		Course c = new Course();
 		c.setTitle("Java Random " + rnd);
-        user.addCourse(c);
-		userSvc.saveUser(user);
-		users.add(user);
+        Course c2 = new Course();
+        c2.setTitle("Java Edu");
 
-        //}
-		if(lectures == null || lectures.isEmpty())
-		{
-			lectures = (lectures == null) ? new ArrayList<Lecture>() : lectures;
-			Lecture lecture = new Lecture();
-			lecture.setClassroom("466");
-			lecture.setTitle("Spring framework");
-			lecture.setDate("2017-03-31 19:00");
-			lecture.setHomework("None");
-			lecture.setDescription("Spring lecture");
-			lectureSvc.saveLecture(lecture);
-			lectures.add(lecture);
-		}
-		if(courses == null || courses.isEmpty())
-		{
-			courses = (courses == null) ? new ArrayList<Course>() : courses;
-			Course course = new Course();
-			course.setTitle("Java Edu");
-			courseSvc.saveCourse(course);
-			courses.add(course);
-//			Course course2 = new Course();
-//			course2.setTitle("Some course");
-//			courseSvc.saveCourse(course2);
-//			courses.add(course2);
-		}
+        c2.addLecture(l1);
+        c2.addLecture(l2);
+        c2.addLecture(l3);
+		user.addCourse(c);
+		user.addCourse(c2);
+        userSvc.saveUser(user);
+
+        users = userSvc.getUsers();
+        lectures = lectureSvc.getLectures();
+        courses = courseSvc.getCourses();
+
 		model.addAttribute("releaseInfo",  ReleaseInfo.getReleaseInfo());
 		model.addAttribute("users", users);
 		model.addAttribute("lectures", lectures);

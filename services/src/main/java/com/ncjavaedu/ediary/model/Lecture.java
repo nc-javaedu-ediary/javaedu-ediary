@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 @Entity
 @Table(name = "LECTURES")
@@ -26,6 +28,12 @@ public class Lecture implements Serializable{
     private String description;
     @Column(name = "HOMEWORK")
     private String homework;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "COURSE_LECTURES", joinColumns = {
+            @JoinColumn(name = "LECTURE_ID")}, inverseJoinColumns = {
+            @JoinColumn(name = "COURSE_ID")})
+   private  List<Course> courses = new ArrayList<>();
 
     public Lecture() {}
 
