@@ -28,10 +28,13 @@ public class User implements Serializable{
     @Transient
     private Role role;
 
+    //@Transient
+    //@OneToMany
+    //@JoinColumn(name = "COURSE_ID")
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "USER_COURSES", joinColumns = {
-            @JoinColumn(name = "USER_ID")}, inverseJoinColumns = {
-            @JoinColumn(name = "COURSE_ID")})
+    @JoinColumn(name = "USER_ID")}, inverseJoinColumns = {
+    @JoinColumn(name = "COURSE_ID")})
     private List<Course> courses = new ArrayList<>();
 
     public User() {
@@ -64,7 +67,7 @@ public class User implements Serializable{
 
     public String getPassword() {
         return password;
-    } 
+    }
 
     public void setPassword(String password) {
         this.password = password;
