@@ -10,8 +10,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>liferayportlet</module>
+        <!--<module>liferayportlet</module>-->
         <module>services</module>
+        <module>frontend</module>
     </modules>
 
     <properties>

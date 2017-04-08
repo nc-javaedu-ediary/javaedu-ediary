@@ -1,0 +1,31 @@
+/** Add css rules here for your application. */
+
+h1 {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+}
+
+body, td, a, div, .p {
+    font-family: arial, sans-serif
+}
+
+.margin-5 {
+
+}
+
+#icon {
+    display: block;
+    text-align: left;
+    width: inherit;
+    margin: 5px;
+    padding: 10px;
+}
+
+div {
+    margin: auto;
+}
+
+#exit_button{
+    right: 5px;
+}

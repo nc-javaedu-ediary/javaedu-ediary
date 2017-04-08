@@ -14,7 +14,7 @@
 
 package com.ncjavaedu.ediary.liferayportlet;
 
-import com.liferay.portal.kernel.util.ReleaseInfo;
+//import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.ncjavaedu.ediary.model.Course;
 import com.ncjavaedu.ediary.model.Lecture;
 import com.ncjavaedu.ediary.model.User;
@@ -97,7 +97,7 @@ public class PortletViewController {
         lectures = lectureSvc.getLectures();
         courses = courseSvc.getCourses();
 
-		model.addAttribute("releaseInfo",  ReleaseInfo.getReleaseInfo());
+//		model.addAttribute("releaseInfo",  ReleaseInfo.getReleaseInfo());
 		model.addAttribute("users", users);
 		model.addAttribute("lectures", lectures);
 		model.addAttribute("courses",courses);
