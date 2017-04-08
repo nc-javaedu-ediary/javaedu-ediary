@@ -16,7 +16,7 @@
     <servlet path='/ediary'
              class='com.ncjavaedu.ediary.frontend.server.frontendServiceImpl'/>
 
-    <source path='client' />
+    <source path="../java/com/ncjavaedu/ediary/frontend/client"/>
     <source path='shared' />
 
 </module>
