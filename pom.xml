@@ -6,122 +6,27 @@
 
     <artifactId>javaedu-ediary.parent</artifactId>
     <groupId>com.ncjavaedu.ediary</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>pom</packaging>
 
     <modules>
-        <!--<module>liferayportlet</module>-->
         <module>services</module>
         <module>frontend</module>
     </modules>
 
     <properties>
-        <liferay.maven.plugin.version>7.0.0-m2</liferay.maven.plugin.version>
-        <liferay.version>7.0.0-nightly</liferay.version>
-        <liferay.auto.deploy.dir>/Users/abogdanov/Downloads/liferay-ce-portal-7.0-ga3/deploy</liferay.auto.deploy.dir>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+        <maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>
+        <gwt.version>2.7.0</gwt.version>
         <war.plugin.version>2.6</war.plugin.version>
-        <springframework.version>4.2.5.RELEASE</springframework.version>
-        <hibernate.version>4.2.0.Final</hibernate.version>
-        <mysql.connector.version>5.1.38</mysql.connector.version>
-        <joda-time.version>2.9.2</joda-time.version>
         <slf4j.version>1.7.5</slf4j.version>
+        <java.source>1.7</java.source>
+        <java.target>1.7</java.target>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-        <dependency>
-            <groupId>com.liferay.portal</groupId>
-            <artifactId>portal-service</artifactId>
-            <version>${liferay.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.liferay.portal</groupId>
-            <artifactId>util-bridges</artifactId>
-            <version>${liferay.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.liferay.portal</groupId>
-            <artifactId>util-taglib</artifactId>
-            <version>${liferay.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.liferay.portal</groupId>
-            <artifactId>util-java</artifactId>
-            <version>${liferay.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.portlet</groupId>
-            <artifactId>portlet-api</artifactId>
-            <version>2.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.4</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>jsp-api</artifactId>
-            <version>2.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-            <version>${springframework.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${springframework.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${springframework.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${springframework.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-expression</artifactId>
-            <version>${springframework.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${springframework.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${springframework.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc-portlet</artifactId>
-            <version>${springframework.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>${springframework.version}</version>
-        </dependency>
-    </dependencies>
+        </dependencies>
     </dependencyManagement>
 </project>

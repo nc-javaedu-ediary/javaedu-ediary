@@ -12,22 +12,9 @@
     <!-- This script is required bootstrap stuff.   -->
     <!--                                            -->
     <script type="text/javascript" language="javascript"
-            src="/ediary.nocache.js"></script>
+            src="ediary/ediary.nocache.js"></script>
 </head>
 
-<!--                                           -->
-<!-- The body can have arbitrary html, or      -->
-<!-- you can leave the body empty if you want  -->
-<!-- to create a completely dynamic ui         -->
-<!--                                           -->
 <body>
-<h1 id="icon">eDiary</h1>
-<div id="exit_button"></div>
-<div id="wrapper">
-    <div id="slot1"></div>
-    <div id="slot2"></div>
-    <div id="slot3"></div>
-    <div id="slot4"></div>
-</div>
 </body>
 </html>
