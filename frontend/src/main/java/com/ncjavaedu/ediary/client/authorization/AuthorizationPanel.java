@@ -6,10 +6,14 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.ncjavaedu.ediary.client.async.UserServiceCallback;
+import com.ncjavaedu.ediary.services.UserService;
+import com.ncjavaedu.ediary.services.UserServiceAsync;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.PasswordField;
 import com.sencha.gxt.widget.core.client.form.TextField;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class AuthorizationPanel implements IsWidget {
 
@@ -42,6 +46,11 @@ public class AuthorizationPanel implements IsWidget {
         loginField.setText("");
         passField.setText("");
     }
+
+//    @UiHandler({"submitButton"})
+//    public void onSubmitClick(SelectEvent event){
+//        userService.getUsers(new UserServiceCallback());
+//    }
 
     @Override
     public Widget asWidget() {

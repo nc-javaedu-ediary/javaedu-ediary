@@ -1,5 +1,6 @@
 package com.ncjavaedu.ediary.services.impl;
 
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.ncjavaedu.ediary.dao.UserDao;
 import com.ncjavaedu.ediary.model.User;
 import com.ncjavaedu.ediary.services.UserService;
@@ -12,7 +13,7 @@ import java.util.List;
  * Created by abogdanov on 24.03.17.
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends RemoteServiceServlet implements UserService {
 
     @Autowired
     private UserDao dao;

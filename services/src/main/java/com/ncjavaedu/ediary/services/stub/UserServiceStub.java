@@ -3,14 +3,16 @@ package com.ncjavaedu.ediary.services.stub; /**
  */
 
 import com.google.gson.reflect.TypeToken;
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.ncjavaedu.ediary.model.User;
 import com.ncjavaedu.ediary.services.UserService;
 import com.ncjavaedu.ediary.utils.JSONUtils;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
-public class UserServiceStub implements UserService {
+public class UserServiceStub extends RemoteServiceServlet implements UserService{
 
     private JSONUtils jsonUtils = JSONUtils.getInstance();
 

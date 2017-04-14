@@ -13,6 +13,15 @@
         <url-pattern>/ediary</url-pattern>
     </servlet-mapping>-->
 
+    <servlet>
+        <servlet-name>UserServiceStub</servlet-name>
+        <servlet-class>com.ncjavaedu.ediary.services.stub.UserServiceStub</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserServiceStub</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
