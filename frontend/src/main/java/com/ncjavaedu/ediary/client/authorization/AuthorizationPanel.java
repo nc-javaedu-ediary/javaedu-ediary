@@ -5,8 +5,11 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.ncjavaedu.ediary.client.admin.AdminMenu;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.container.Viewport;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.PasswordField;
 import com.sencha.gxt.widget.core.client.form.TextField;
@@ -43,10 +46,23 @@ public class AuthorizationPanel implements IsWidget {
         passField.setText("");
     }
 
+    @UiHandler({"submitButton"})
+    public void onClick(SelectEvent event) {
+//        widget.setVisible(false);
+        Viewport vp = new Viewport();
+        vp.add(new AdminMenu().asWidget());
+//        TODO RootPanel.get("content")
+        RootLayoutPanel.get().clear();
+        RootLayoutPanel.get().add(vp);
+    }
+
+
+
     @Override
     public Widget asWidget() {
-        if (widget == null){
+        if (widget == null) {
             widget = uiBinder.createAndBindUi(this);
+//            loginField.focus();
         }
         return widget;
     }
