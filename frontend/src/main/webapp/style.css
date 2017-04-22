@@ -29,3 +29,15 @@ div {
 #exit_button{
     right: 5px;
 }
+
+.warning-text {
+    color: red;
+    size: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-align: right;
+}
+
+.login-form-field {
+    width: 150px;
+}

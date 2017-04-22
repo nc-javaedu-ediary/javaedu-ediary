@@ -21,4 +21,17 @@ public class UserServiceStub implements UserService {
 
     public void saveUser(User user) {
     }
+
+    public User getUser(String login, String password){
+        if (login == null || password == null)
+            return null;
+
+        List<User> users = getUsers();
+        for (User user : users){
+            if (login.equals(user.getLogin()) && password.equals(user.getPassword())){
+                return user;
+            }
+        }
+        return null;
+    }
 }

@@ -4,30 +4,38 @@
              xmlns:button="urn:import:com.sencha.gxt.widget.core.client.button"
              xmlns:form="urn:import:com.sencha.gxt.widget.core.client.form">
 
-    <gxt:ContentPanel headingText="Authorization" pixelSize="300, 150"  bodyStyle="padding: 20px" >
+    <ui:with type="com.sencha.gxt.core.client.util.Margins" field="margins">
+        <ui:attributes top="0" right="0" bottom="0" left="0" />
+    </ui:with>
+
+    <ui:with type="com.sencha.gxt.widget.core.client.container.BoxLayoutContainer.BoxLayoutData" field="fieldLayoutData">
+        <ui:attributes margins="{margins}" />
+    </ui:with>
+
+    <gxt:ContentPanel headingText="Authorization" height="170" pixelSize="300, 170"  bodyStyle="padding: 20px" >
         <container:VBoxLayoutContainer VBoxLayoutAlign="STRETCH">
-            <container:HBoxLayoutContainer >
+            <container:HBoxLayoutContainer pack="END">
                 <!--Login-->
                 <container:child>
                     <form:FieldLabel text="Login"  />
                 </container:child>
-                <container:child>
-                    <form:TextField  ui:field="loginField" />
+                <container:child layoutData="{fieldLayoutData}">
+                    <form:TextField  ui:field="loginField" styleName="login-form-field" />
                 </container:child>
             </container:HBoxLayoutContainer>
 
             <!--Password-->
-            <container:HBoxLayoutContainer >
+            <container:HBoxLayoutContainer pack="END">
                 <container:child>
                     <form:FieldLabel text="Password" />
                 </container:child>
-                <container:child>
-                    <form:PasswordField  ui:field="passField" />
+                <container:child layoutData="{fieldLayoutData}">
+                    <form:PasswordField  ui:field="passField" styleName="login-form-field" />
                 </container:child>
             </container:HBoxLayoutContainer>
 
             <!--Buttons-->
-            <container:HBoxLayoutContainer pack="CENTER">
+            <container:HBoxLayoutContainer pack="END">
                 <container:child >
                     <button:TextButton ui:field="submitButton" text="Submit"  />
                 </container:child>
@@ -35,6 +43,8 @@
                     <button:TextButton ui:field="clearButton" text="Clear" />
                 </container:child>
             </container:HBoxLayoutContainer>
+
+            <form:FieldLabel ui:field="infoLabel" visible="false" styleName="warning-text"  />
 
         </container:VBoxLayoutContainer>
     </gxt:ContentPanel>
