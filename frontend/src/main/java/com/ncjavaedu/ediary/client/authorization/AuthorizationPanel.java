@@ -48,7 +48,6 @@ public class AuthorizationPanel implements IsWidget {
 
     @UiHandler({"submitButton"})
     public void onClick(SelectEvent event) {
-//        widget.setVisible(false);
         Viewport vp = new Viewport();
         vp.add(new AdminMenu().asWidget());
 //        TODO RootPanel.get("content")
