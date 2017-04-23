@@ -25,14 +25,6 @@
         <java.target>1.7</java.target>
     </properties>
 
-    <distributionManagement>
-        <repository>
-            <id>webappdir</id>
-            <name>webappdir</name>
-            <url>E:\Programs\Libs\apache-tomcat-8.5.13\webapps</url>
-        </repository>
-    </distributionManagement>
-
     <dependencyManagement>
         <dependencies>
         </dependencies>
