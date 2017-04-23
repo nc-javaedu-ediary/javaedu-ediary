@@ -5,9 +5,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 @Entity
 @Table(name = "LECTURES")
@@ -29,11 +27,15 @@ public class Lecture implements Serializable{
     @Column(name = "HOMEWORK")
     private String homework;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "COURSE_LECTURES", joinColumns = {
-            @JoinColumn(name = "LECTURE_ID")}, inverseJoinColumns = {
-            @JoinColumn(name = "COURSE_ID")})
-   private  List<Course> courses = new ArrayList<>();
+//    @ManyToMany(cascade = CascadeType.ALL)
+//    @JoinTable(name = "COURSE_LECTURES", joinColumns = {
+//            @JoinColumn(name = "LECTURE_ID")}, inverseJoinColumns = {
+//            @JoinColumn(name = "COURSE_ID")})
+//   private  List<Course> courses = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "COURSE_ID", nullable = false)
+    private Course course;
 
     public Lecture() {}
 
@@ -70,6 +72,10 @@ public class Lecture implements Serializable{
 
     public GregorianCalendar getDate() {
         return date;
+    }
+
+    public String getStringDate() {
+        return dateFormat.format(date);
     }
 
     public void setDate(GregorianCalendar date) {

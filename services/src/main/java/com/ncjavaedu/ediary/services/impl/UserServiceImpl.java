@@ -21,6 +21,11 @@ public class UserServiceImpl implements UserService {
         return dao.list();
     }
 
+    @Override
+    public User getUser(String login, String password) {
+        return dao.getUser(login, password);
+    }
+
     public void saveUser(User user) {
        dao.save(user);
     }

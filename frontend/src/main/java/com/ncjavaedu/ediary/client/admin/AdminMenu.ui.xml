@@ -84,7 +84,7 @@
                         <container:VerticalLayoutContainer>
                             <container:child layoutData="{courseLayoutData}">
                                 <grid:Grid ui:field="coursesGrid" view="{coursesView}" cm="{coursesCM}"
-                                           store="{coursesStore}"/>
+                                           store="{coursesStore}" />
                             </container:child>
                         </container:VerticalLayoutContainer>
                     </gxt:ContentPanel>
