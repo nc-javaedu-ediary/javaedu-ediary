@@ -34,24 +34,24 @@
                 </configuration>
             </plugin>
             <!-- GWT Maven Plugin -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <version>2.7.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generateAsync</goal>
-                            <goal>resources</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <modules>
-                        <module>com.ncjavaedu.ediary</module>
-                    </modules>
-                </configuration>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>gwt-maven-plugin</artifactId>-->
+                <!--<version>2.7.0</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<goals>-->
+                            <!--<goal>generateAsync</goal>-->
+                            <!--<goal>resources</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+                <!--<configuration>-->
+                    <!--<modules>-->
+                        <!--<module>com.ncjavaedu.ediary</module>-->
+                    <!--</modules>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 

@@ -1,9 +1,10 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:container='urn:import:com.sencha.gxt.widget.core.client.container'
              xmlns:el='urn:import:com.google.gwt.user.client.ui'
-             xmlns:form="urn:import:com.sencha.gxt.widget.core.client.form"
-             xmlns:button='urn:import:com.sencha.gxt.widget.core.client.button'
-             xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'>
+             xmlns:form='urn:import:com.sencha.gxt.widget.core.client.form'
+             xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'
+             xmlns:grid='urn:import:com.sencha.gxt.widget.core.client.grid'
+             xmlns:button='urn:import:com.sencha.gxt.widget.core.client.button'>
     <!--<ui:style src="style.css" />-->
     <!--<gxt:TabPanel styleName="{style.pretty}">-->
 
@@ -77,16 +78,6 @@
             display: block;
         }
     </ui:style>
-    <!--<ui:with type="com.sencha.gxt.core.client.util.Margins" field="sideMargins">-->
-    <!--<ui:attributes top="10" right="5" bottom="10" left="5"/>-->
-    <!--</ui:with>-->
-    <!--<ui:with type="com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer.HorizontalLayoutData"-->
-    <!--field="sideLayoutData">-->
-    <!--<ui:attributes width="0.5" height="1" margins="{sideMargins}"/>-->
-    <!--</ui:with>-->
-    <!--<ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="layoutData">-->
-    <!--<ui:attributes width="1" height="1" />-->
-    <!--</ui:with>-->
 
     <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData"
              field="week">
@@ -97,8 +88,6 @@
         <ui:attributes width="1" height="0.8"/>
     </ui:with>
 
-
-    <!--Разметка страницы-->
     <gxt:ContentPanel bodyStyle="padding: 20px">
         <container:VBoxLayoutContainer VBoxLayoutAlign="CENTER">
             <gxt:PlainTabPanel width="800">

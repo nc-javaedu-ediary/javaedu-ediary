@@ -84,9 +84,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     private static final UserProps userProps = GWT.create(UserProps.class);
     private static final LectureProps lecturesProps = GWT.create(LectureProps.class);
     private static final CourseProps coursesProps = GWT.create(CourseProps.class);
-public class AdminMenu implements IsWidget {
-    //    @UiField
-//    DateLabel dateLabel;
+
     @UiField(provided = true)
     DateField dateBox1;
     @UiField(provided = true)
@@ -190,6 +188,31 @@ public class AdminMenu implements IsWidget {
 
             coursesStore = new ListStore<>(coursesProps.key());
             coursesStore.addAll(courses);
+
+            // Расписание
+            schedule = new FlexTable();
+            schedule.setText(0, 1, "Понедельник");
+            schedule.setText(0, 2, "Вторник");
+            schedule.setText(0, 3, "Среда");
+            schedule.setText(0, 4, "Четверг");
+            schedule.setText(0, 5, "Пятница");
+            schedule.setText(1, 0, "15:00");
+            schedule.setText(2, 0, "19:00");
+            for (int j = 1; j < 3; j++)
+                for (int i = 1; i < 6; i++)
+                    schedule.setText(j, i, "нет занятий");
+            schedule.setWidget(1, 3, lectCell("Лекция1", "Иванов", "55"));
+            schedule.setWidget(2, 2, lectCell("Лекция1", "Иванов", "55"));
+
+            // dateBox1 = new DateBox();
+            // dateBox1.setValue(new Date());
+            DateCell dateCell = new DateCell();
+            dateCell.setPropertyEditor(new DateTimePropertyEditor(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT)));
+            dateBox1 = new DateField(dateCell);
+            dateBox2 = new DateField(dateCell);
+            dateBox1.setValue(new Date());
+            dateBox2.setValue(new Date());
+
 
             panel = uiBinder.createAndBindUi(this);
 
@@ -319,34 +342,6 @@ public class AdminMenu implements IsWidget {
         coursesStore.replaceAll(courses);
         coursesStore.commitChanges();
         coursesView.refresh(false);
-        if (widget == null) {
-//            Расписание
-            schedule = new FlexTable();
-            schedule.setText(0, 1, "Понедельник");
-            schedule.setText(0, 2, "Вторник");
-            schedule.setText(0, 3, "Среда");
-            schedule.setText(0, 4, "Четверг");
-            schedule.setText(0, 5, "Пятница");
-            schedule.setText(1, 0, "15:00");
-            schedule.setText(2, 0, "19:00");
-            for (int j = 1; j < 3; j++)
-                for (int i = 1; i < 6; i++)
-                    schedule.setText(j, i, "нет занятий");
-            schedule.setWidget(1, 3, lectCell("Лекция1", "Иванов", "55"));
-            schedule.setWidget(2, 2, lectCell("Лекция1", "Иванов", "55"));
-
-//            dateBox1 = new DateBox();
-//            dateBox1.setValue(new Date());
-            DateCell dateCell = new DateCell();
-            dateCell.setPropertyEditor(new DateTimePropertyEditor(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT)));
-            dateBox1 = new DateField(dateCell);
-            dateBox2 = new DateField(dateCell);
-            dateBox1.setValue(new Date());
-            dateBox2.setValue(new Date());
-
-            widget = uiBinder.createAndBindUi(this);
-        }
-        return widget;
     }
 
     private Widget lectCell(String title, String lecturer, String cab) {
