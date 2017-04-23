@@ -83,7 +83,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 //    DateLabel dateLabel;
 //    @UiField(provided = true)
 //    FieldLabel dateBox1;
-    @UiField
+    @UiField(provided = true)
     DateField dateBox1;
     @UiField(provided = true)
     DateField dateBox2;
@@ -93,9 +93,9 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     private ContentPanel panel;
     private static AdminMenuUiBinder uiBinder = GWT.create(AdminMenuUiBinder.class);
 
-    List<User> users;
-    List<Lecture> lectures;
-    List<Course> courses;
+    private List<User> users;
+    private List<Lecture> lectures;
+    private List<Course> courses;
 
     @UiTemplate("AdminMenu.ui.xml")
     interface AdminMenuUiBinder extends UiBinder<ContentPanel, AdminMenu> {
@@ -134,7 +134,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
             generateCourseTab();
 
             // Расписание
-            generateShedule();
+            generateSchedule();
 
 
             panel = uiBinder.createAndBindUi(this);
@@ -354,7 +354,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         return lecture;
     }
 
-    private void generateShedule() {
+    private void generateSchedule() {
 //            Расписание
         generateTimetableHead();
         schedule.setText(1, 0, "15:00");
