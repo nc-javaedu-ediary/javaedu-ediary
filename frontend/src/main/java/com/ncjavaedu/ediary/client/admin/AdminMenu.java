@@ -11,32 +11,27 @@ import com.ncjavaedu.ediary.client.admin.popups.AdminPopupCallbacks;
 import com.ncjavaedu.ediary.client.admin.popups.CoursePopup;
 import com.ncjavaedu.ediary.client.admin.popups.LecturePopup;
 import com.ncjavaedu.ediary.client.admin.popups.UserPopup;
-import com.ncjavaedu.ediary.client.props.CourseProps;
-import com.ncjavaedu.ediary.client.props.LectureProps;
-import com.ncjavaedu.ediary.client.props.UserProps;
 import com.ncjavaedu.ediary.client.model.Course;
 import com.ncjavaedu.ediary.client.model.Lecture;
 import com.ncjavaedu.ediary.client.model.User;
+import com.ncjavaedu.ediary.client.props.CourseProps;
+import com.ncjavaedu.ediary.client.props.LectureProps;
+import com.ncjavaedu.ediary.client.props.UserProps;
+import com.sencha.gxt.cell.core.client.form.DateCell;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.state.client.GridStateHandler;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.form.DateField;
+import com.sencha.gxt.widget.core.client.form.DateTimePropertyEditor;
 import com.sencha.gxt.widget.core.client.grid.*;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.cell.core.client.form.DateCell;
-import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
-import com.sencha.gxt.widget.core.client.form.DateField;
-import com.sencha.gxt.widget.core.client.form.DateTimePropertyEditor;
-
-import java.util.Date;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -54,9 +49,9 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     @UiField
     TextButton editCourseButton;
 
-    @UiField(provided=true)
+    @UiField(provided = true)
     ColumnModel<User> usersCM;
-    @UiField(provided=true)
+    @UiField(provided = true)
     ListStore<User> usersStore;
     @UiField
     GridView<User> usersView;
@@ -85,15 +80,16 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     private static final LectureProps lecturesProps = GWT.create(LectureProps.class);
     private static final CourseProps coursesProps = GWT.create(CourseProps.class);
 
-    @UiField(provided = true)
+//    DateLabel dateLabel;
+//    @UiField(provided = true)
+//    FieldLabel dateBox1;
+    @UiField
     DateField dateBox1;
     @UiField(provided = true)
     DateField dateBox2;
     @UiField(provided = true)
     FlexTable schedule;
 
-
-    private Widget widget;
     private ContentPanel panel;
     private static AdminMenuUiBinder uiBinder = GWT.create(AdminMenuUiBinder.class);
 
@@ -110,7 +106,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 
     @Override
     public Widget asWidget() {
-        if(panel == null) {
+        if (panel == null) {
             // TODO: remove this test values
             users = new ArrayList<>();
             users.add(new User("login", "pass",
@@ -129,89 +125,16 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
             courses.add(new Course("Course 2"));
 
             // Users tab
-            ColumnConfig<User, Integer> idCol = new ColumnConfig<>(userProps.userId(), 20, "ID");
-            ColumnConfig<User, String> loginCol = new ColumnConfig<>(userProps.login(), 50, "Логин");
-            ColumnConfig<User, String> passCol = new ColumnConfig<>(userProps.password(), 50, "Пароль");
-            ColumnConfig<User, String> fnCol = new ColumnConfig<>(userProps.firstName(), 80, "Имя");
-            ColumnConfig<User, String> lnCol = new ColumnConfig<>(userProps.lastName(), 100, "Фамилия");
-            ColumnConfig<User, String> uniCol = new ColumnConfig<>(userProps.university(), 80, "Университет");
-            ColumnConfig<User, String> mailCol = new ColumnConfig<>(userProps.email(), 150, "Email");
-
-            List<ColumnConfig<User, ?>> userColumns = new ArrayList<>();
-            userColumns.add(idCol);
-            userColumns.add(loginCol);
-            userColumns.add(passCol);
-            userColumns.add(fnCol);
-            userColumns.add(lnCol);
-            userColumns.add(uniCol);
-            userColumns.add(mailCol);
-
-            usersCM = new ColumnModel<>(userColumns);
-
-            usersStore = new ListStore<>(userProps.key());
-            usersStore.addAll(users);
+            generateUsersTab();
 
             // Lectures tab
-            ColumnConfig<Lecture, Integer> lectureIdCol = new ColumnConfig<>(lecturesProps.lectureId(), 30,
-                    "ID");
-            ColumnConfig<Lecture, String> titleCol = new ColumnConfig<>(lecturesProps.title(), 250,
-                    "Название");
-            ColumnConfig<Lecture, String> classroomCol = new ColumnConfig<>(lecturesProps.classroom(), 100,
-                    "Аудитория");
-            ColumnConfig<Lecture, String> descriptionCol = new ColumnConfig<>(lecturesProps.description(),
-                    350, "Описание");
-            ColumnConfig<Lecture, String> homeworkCol = new ColumnConfig<>(lecturesProps.homework(), 300,
-                    "Домашнее задание");
-
-            List<ColumnConfig<Lecture, ?>> lectureColumns = new ArrayList<>();
-            lectureColumns.add(lectureIdCol);
-            lectureColumns.add(titleCol);
-            lectureColumns.add(classroomCol);
-            lectureColumns.add(descriptionCol);
-            lectureColumns.add(homeworkCol);
-
-            lecturesCM = new ColumnModel<>(lectureColumns);
-
-            lecturesStore = new ListStore<>(lecturesProps.key());
-            lecturesStore.addAll(lectures);
+            generateLecturesTab();
 
             // Course tab
-            ColumnConfig<Course, Integer> courseIdCol = new ColumnConfig<>(coursesProps.courseId(),30, "ID");
-            ColumnConfig<Course, String> courseTitleCol = new ColumnConfig<>(coursesProps.title(), 100,
-                    "Название");
-
-            List<ColumnConfig<Course,?>> coursesColumns = new ArrayList<>();
-            coursesColumns.add(courseIdCol);
-            coursesColumns.add(courseTitleCol);
-
-            coursesCM = new ColumnModel<>(coursesColumns);
-
-            coursesStore = new ListStore<>(coursesProps.key());
-            coursesStore.addAll(courses);
+            generateCourseTab();
 
             // Расписание
-            schedule = new FlexTable();
-            schedule.setText(0, 1, "Понедельник");
-            schedule.setText(0, 2, "Вторник");
-            schedule.setText(0, 3, "Среда");
-            schedule.setText(0, 4, "Четверг");
-            schedule.setText(0, 5, "Пятница");
-            schedule.setText(1, 0, "15:00");
-            schedule.setText(2, 0, "19:00");
-            for (int j = 1; j < 3; j++)
-                for (int i = 1; i < 6; i++)
-                    schedule.setText(j, i, "нет занятий");
-            schedule.setWidget(1, 3, lectCell("Лекция1", "Иванов", "55"));
-            schedule.setWidget(2, 2, lectCell("Лекция1", "Иванов", "55"));
-
-            // dateBox1 = new DateBox();
-            // dateBox1.setValue(new Date());
-            DateCell dateCell = new DateCell();
-            dateCell.setPropertyEditor(new DateTimePropertyEditor(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT)));
-            dateBox1 = new DateField(dateCell);
-            dateBox2 = new DateField(dateCell);
-            dateBox1.setValue(new Date());
-            dateBox2.setValue(new Date());
+            generateShedule();
 
 
             panel = uiBinder.createAndBindUi(this);
@@ -227,20 +150,20 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
             GridSelectionModel<Lecture> lectureSelectionModel = new GridSelectionModel<>();
             lectureSelectionModel.addSelectionChangedHandler(
                     new SelectionChangedEvent.SelectionChangedHandler<Lecture>() {
-                @Override
-                public void onSelectionChanged(SelectionChangedEvent<Lecture> selectionChangedEvent) {
-                    editLectureButton.setEnabled(true);
-                }
-            });
+                        @Override
+                        public void onSelectionChanged(SelectionChangedEvent<Lecture> selectionChangedEvent) {
+                            editLectureButton.setEnabled(true);
+                        }
+                    });
 
             GridSelectionModel<Course> courseSelectionModel = new GridSelectionModel<>();
             courseSelectionModel.addSelectionChangedHandler(
                     new SelectionChangedEvent.SelectionChangedHandler<Course>() {
-                @Override
-                public void onSelectionChanged(SelectionChangedEvent<Course> selectionChangedEvent) {
-                    editCourseButton.setEnabled(true);
-                }
-            });
+                        @Override
+                        public void onSelectionChanged(SelectionChangedEvent<Course> selectionChangedEvent) {
+                            editCourseButton.setEnabled(true);
+                        }
+                    });
 
             usersGrid.setSelectionModel(gridSelectionModel);
             lecturesGrid.setSelectionModel(lectureSelectionModel);
@@ -264,7 +187,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     }
 
     @UiHandler({"addUserButton"})
-    public void addUserButtonClick(SelectEvent selectEvent){
+    public void addUserButtonClick(SelectEvent selectEvent) {
         final UserPopup popup = new UserPopup(courses);
 
         popup.ShowUserPopup(this);
@@ -278,7 +201,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     }
 
     @UiHandler({"addLectureButton"})
-    public void addLectureButtonClick(SelectEvent selectEvent){
+    public void addLectureButtonClick(SelectEvent selectEvent) {
         final LecturePopup popup = new LecturePopup();
 
         popup.ShowLecturePopup(this);
@@ -292,7 +215,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     }
 
     @UiHandler({"addCourseButton"})
-    public void addCourseButtonClick(SelectEvent selectEvent){
+    public void addCourseButtonClick(SelectEvent selectEvent) {
         final CoursePopup popup = new CoursePopup();
 
         popup.ShowCoursePopup(this);
@@ -305,9 +228,34 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         popup.ShowCoursePopup(this);
     }
 
-    public void userPopupValidated(User user, boolean newUser){
-        if(newUser == false)
-        {
+    //-------User Management Tab---------//
+
+    private void generateUsersTab() {
+        ColumnConfig<User, Integer> idCol = new ColumnConfig<>(userProps.userId(), 20, "ID");
+        ColumnConfig<User, String> loginCol = new ColumnConfig<>(userProps.login(), 50, "Логин");
+        ColumnConfig<User, String> passCol = new ColumnConfig<>(userProps.password(), 50, "Пароль");
+        ColumnConfig<User, String> fnCol = new ColumnConfig<>(userProps.firstName(), 80, "Имя");
+        ColumnConfig<User, String> lnCol = new ColumnConfig<>(userProps.lastName(), 100, "Фамилия");
+        ColumnConfig<User, String> uniCol = new ColumnConfig<>(userProps.university(), 80, "Университет");
+        ColumnConfig<User, String> mailCol = new ColumnConfig<>(userProps.email(), 150, "Email");
+
+        List<ColumnConfig<User, ?>> userColumns = new ArrayList<>();
+        userColumns.add(idCol);
+        userColumns.add(loginCol);
+        userColumns.add(passCol);
+        userColumns.add(fnCol);
+        userColumns.add(lnCol);
+        userColumns.add(uniCol);
+        userColumns.add(mailCol);
+
+        usersCM = new ColumnModel<>(userColumns);
+
+        usersStore = new ListStore<>(userProps.key());
+        usersStore.addAll(users);
+    }
+
+    public void userPopupValidated(User user, boolean newUser) {
+        if (newUser == false) {
             users.remove(usersGrid.getSelectionModel().getSelectedItem());
             usersGrid.getSelectionModel().deselect(usersGrid.getSelectionModel().getSelectedItem());
             editUserButton.setEnabled(false);
@@ -318,9 +266,35 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         usersView.refresh(false);
     }
 
-    public void lecturePopupValidated(Lecture lecture, boolean newLecture){
-        if(newLecture == false)
-        {
+    //-------Lecture Management Tab---------//
+
+    private void generateLecturesTab() {
+        ColumnConfig<Lecture, Integer> lectureIdCol = new ColumnConfig<>(lecturesProps.lectureId(), 30,
+                "ID");
+        ColumnConfig<Lecture, String> titleCol = new ColumnConfig<>(lecturesProps.title(), 250,
+                "Название");
+        ColumnConfig<Lecture, String> classroomCol = new ColumnConfig<>(lecturesProps.classroom(), 100,
+                "Аудитория");
+        ColumnConfig<Lecture, String> descriptionCol = new ColumnConfig<>(lecturesProps.description(),
+                350, "Описание");
+        ColumnConfig<Lecture, String> homeworkCol = new ColumnConfig<>(lecturesProps.homework(), 300,
+                "Домашнее задание");
+
+        List<ColumnConfig<Lecture, ?>> lectureColumns = new ArrayList<>();
+        lectureColumns.add(lectureIdCol);
+        lectureColumns.add(titleCol);
+        lectureColumns.add(classroomCol);
+        lectureColumns.add(descriptionCol);
+        lectureColumns.add(homeworkCol);
+
+        lecturesCM = new ColumnModel<>(lectureColumns);
+
+        lecturesStore = new ListStore<>(lecturesProps.key());
+        lecturesStore.addAll(lectures);
+    }
+
+    public void lecturePopupValidated(Lecture lecture, boolean newLecture) {
+        if (newLecture == false) {
             lectures.remove(lecturesGrid.getSelectionModel().getSelectedItem());
             lecturesGrid.getSelectionModel().deselect(lecturesGrid.getSelectionModel().getSelectedItem());
             editLectureButton.setEnabled(false);
@@ -331,9 +305,25 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         lecturesView.refresh(false);
     }
 
-    public void coursePopupValidated(Course course, boolean newCourse){
-        if(newCourse == false)
-        {
+    //-------Course Management Tab---------//
+
+    private void generateCourseTab() {
+        ColumnConfig<Course, Integer> courseIdCol = new ColumnConfig<>(coursesProps.courseId(), 30, "ID");
+        ColumnConfig<Course, String> courseTitleCol = new ColumnConfig<>(coursesProps.title(), 100,
+                "Название");
+
+        List<ColumnConfig<Course, ?>> coursesColumns = new ArrayList<>();
+        coursesColumns.add(courseIdCol);
+        coursesColumns.add(courseTitleCol);
+
+        coursesCM = new ColumnModel<>(coursesColumns);
+
+        coursesStore = new ListStore<>(coursesProps.key());
+        coursesStore.addAll(courses);
+    }
+
+    public void coursePopupValidated(Course course, boolean newCourse) {
+        if (newCourse == false) {
             courses.remove(coursesGrid.getSelectionModel().getSelectedItem());
             coursesGrid.getSelectionModel().deselect(coursesGrid.getSelectionModel().getSelectedItem());
             editCourseButton.setEnabled(false);
@@ -344,12 +334,47 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         coursesView.refresh(false);
     }
 
-    private Widget lectCell(String title, String lecturer, String cab) {
+    //----------Timetable Tab-----------//
+
+    private void generateTimetableHead() {
+        schedule = new FlexTable();
+        schedule.setText(0, 1, "Понедельник");
+        schedule.setText(0, 2, "Вторник");
+        schedule.setText(0, 3, "Среда");
+        schedule.setText(0, 4, "Четверг");
+        schedule.setText(0, 5, "Пятница");
+    }
+
+    private Widget generateTimetableCell(String title, String lecturer, String cab) {
         VerticalLayoutContainer lecture = new VerticalLayoutContainer();
         lecture.add(new Label(title));
         lecture.add(new Label(lecturer));
         lecture.add(new Label("Кабинет №" + cab));
 //        lecture.add(new Label("" + l.getDay()));
         return lecture;
+    }
+
+    private void generateShedule() {
+//            Расписание
+        generateTimetableHead();
+        schedule.setText(1, 0, "15:00");
+        schedule.setText(2, 0, "19:00");
+        for (int j = 1; j < 3; j++)
+            for (int i = 1; i < 6; i++)
+                schedule.setText(j, i, "нет занятий");
+        schedule.setWidget(1, 3, generateTimetableCell("Лекция1", "Иванов", "55"));
+        schedule.setWidget(2, 2, generateTimetableCell("Лекция1", "Иванов", "55"));
+
+//            dateBox1 = new DateBox();
+//            dateBox1.setValue(new Date());
+        DateCell dateCell = new DateCell();
+        dateCell.setPropertyEditor(new DateTimePropertyEditor(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT)));
+//            dateBox1 = new FieldLabel();
+        dateBox1 = new DateField(dateCell);
+        dateBox2 = new DateField(dateCell);
+        dateBox1.setValue(new Date());
+        dateBox2.setValue(new Date()); //DateBox
+//            dateBox1.setText(dateBox2.getText());
+
     }
 }

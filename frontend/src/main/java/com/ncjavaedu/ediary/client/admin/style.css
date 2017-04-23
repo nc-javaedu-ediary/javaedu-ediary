@@ -1,0 +1,20 @@
+.table-style {
+    margin: 10px auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.table-style td {
+    padding: 5px;
+    border-bottom-width: 1px;
+    border-color: #7ba1d2;
+}
+
+.table-style tbody tr:first-child {
+    background-color: #abc7ec;
+}
+
+.week {
+    margin: 10px;
+    display: block;
+}
