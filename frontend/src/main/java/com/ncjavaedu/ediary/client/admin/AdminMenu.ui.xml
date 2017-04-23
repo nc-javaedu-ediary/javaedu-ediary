@@ -8,14 +8,13 @@
     <!--<ui:style src="style.css" />-->
     <!--<gxt:TabPanel styleName="{style.pretty}">-->
 
-    <!--Названия вкладок-->
-    <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="courseManagment">
+    <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="courseManagement">
         <ui:attributes text="Список курсов"/>
     </ui:with>
-    <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="userManagment">
+    <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="userManagement">
         <ui:attributes text="Управление пользователями"/>
     </ui:with>
-    <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="lectureManagment">
+    <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="lectureManagement">
         <ui:attributes text="Управление лекциями"/>
     </ui:with>
     <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="timetable">
@@ -25,12 +24,35 @@
         <ui:attributes text="Отчеты"/>
     </ui:with>
 
-    <!--<ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="cm" />-->
-    <!--<ui:with type="com.sencha.gxt.data.shared.ListStore" field="store" />-->
-    <!--<ui:with type="com.sencha.gxt.widget.core.client.grid.GridSelectionModel" field="sm" />-->
-    <!--<ui:with type="com.sencha.gxt.widget.core.client.grid.GridView" field="view">-->
-        <!--<ui:attributes stripeRows="true" autoFill="true" />-->
-    <!--</ui:with>-->
+    <ui:with field="userLayoutData"
+             type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
+        <ui:attributes width="1" height="1"/>
+    </ui:with>
+    <ui:with type="com.sencha.gxt.widget.core.client.grid.GridView" field="usersView">
+        <ui:attributes stripeRows="true"></ui:attributes>
+    </ui:with>
+    <ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="usersCM" />
+    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="usersStore" />
+
+    <ui:with field="lectureLayoutData"
+             type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
+        <ui:attributes width="1" height="1"/>
+    </ui:with>
+    <ui:with type="com.sencha.gxt.widget.core.client.grid.GridView" field="lecturesView">
+        <ui:attributes stripeRows="true"></ui:attributes>
+    </ui:with>
+    <ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="lecturesCM" />
+    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="lecturesStore" />
+
+    <ui:with field="courseLayoutData"
+             type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
+        <ui:attributes width="1" height="1"/>
+    </ui:with>
+    <ui:with type="com.sencha.gxt.widget.core.client.grid.GridView" field="coursesView">
+        <ui:attributes stripeRows="true"></ui:attributes>
+    </ui:with>
+    <ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="coursesCM" />
+    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="coursesStore" />
 
     <!--css TODO Вынести в отдельный класс-->
     <ui:with type="com.sencha.gxt.core.client.util.Margins" field="sideMargins">
@@ -41,89 +63,65 @@
         <ui:attributes width="0.5" height="1" margins="{sideMargins}"/>
     </ui:with>
 
-    <!--<ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData" field="layoutData">-->
-        <!--<ui:attributes width="1" height="1" />-->
-    <!--</ui:with>-->
-
-
-    <!--Разметка страницы-->
     <gxt:ContentPanel bodyStyle="padding: 20px">
         <container:VBoxLayoutContainer VBoxLayoutAlign="STRETCH">
             <gxt:PlainTabPanel>
 
-                <gxt:child config="{courseManagment}">
-                    <!--<container:VerticalLayoutContainer deferHeight="true" height="500px">-->
-                        <!--<container:child>-->
-                            <!--<container:HorizontalLayoutContainer width="100%">-->
-                                <!--<container:child layoutData="{sideLayoutData}">-->
-                                    <!--<el:Label text="Список курсов"/>-->
-                                <!--</container:child>-->
-                                <!--<container:child layoutData="{sideLayoutData}">-->
-                                    <!--<button:TextButton>Добавить курс</button:TextButton>-->
-                                <!--</container:child>-->
-                            <!--</container:HorizontalLayoutContainer>-->
-                        <!--</container:child>-->
-                        <!--<container:child>-->
-                            <!--<container:VerticalLayoutContainer>-->
-                                <!--<el:ListBox ui:fieuserListtBox" visibleItemCount="5">-->
-                                <!--</el:ListBox>-->
-                            <!--</container:VerticalLayoutContainer>-->
-                        <!--</container:child>-->
-                    <!--</container:VerticalLayoutContainer>-->
+                <gxt:child config="{courseManagement}">
                     <gxt:ContentPanel headingText="Список курсов">
                         <gxt:button>
-                            <button:TextButton>Добавить курс</button:TextButton>
+                            <button:TextButton ui:field="addCourseButton" text="Добавить курс"/>
                         </gxt:button>
-                        <container:VerticalLayoutContainer > <!--TODO Перекрывает другие контейнеры-->
-                            <!--TODO Подобрать болеее подходящий элемент для вывода списка-->
-                            <el:ListBox ui:field="courseList" visibleItemCount="5"/>
+                        <gxt:button>
+                            <button:TextButton ui:field="editCourseButton" text="Редактировать курс"
+                                               enabled="false"/>
+                        </gxt:button>
+                        <container:VerticalLayoutContainer>
+                            <container:child layoutData="{courseLayoutData}">
+                                <grid:Grid ui:field="coursesGrid" view="{coursesView}" cm="{coursesCM}"
+                                           store="{coursesStore}"/>
+                            </container:child>
                         </container:VerticalLayoutContainer>
                     </gxt:ContentPanel>
                 </gxt:child>
 
-                <gxt:child config="{userManagment}">
+                <gxt:child config="{userManagement}">
                     <gxt:ContentPanel headingText="Список пользователей">
                         <gxt:button>
-                            <button:TextButton>Добавить пользователя</button:TextButton>
+                            <button:TextButton ui:field="addUserButton" text="Добавить пользователя"/>
+                        </gxt:button>
+                        <gxt:button>
+                            <button:TextButton ui:field="editUserButton" text="Редактировать пользователя"
+                                               enabled="false"/>
                         </gxt:button>
                         <container:VerticalLayoutContainer >
-                            <el:ListBox ui:field="userList" visibleItemCount="5"/>
+                            <container:child layoutData="{userLayoutData}">
+                                <grid:Grid ui:field="usersGrid" view="{usersView}" cm="{usersCM}" store="{usersStore}"
+                                    stateful="true" stateId="usersGridUiBinder"/>
+                            </container:child>
                         </container:VerticalLayoutContainer>
                     </gxt:ContentPanel>
                 </gxt:child>
 
-                <gxt:child config="{lectureManagment}">
+                <gxt:child config="{lectureManagement}">
                     <gxt:ContentPanel headingText="Список лекций">
-                        <!--<gxt:button>-->
-                            <!--<button:TextButton>Добавить лекцию</button:TextButton>-->
-                        <!--</gxt:button>-->
-                        <!--<container:VerticalLayoutContainer>-->
-                            <!--<container:child>-->
-                                <!--<toolbar:ToolBar>-->
-                                    <!--<toolbar:FillToolItem />-->
-                                    <!--<button:TextButton ui:field="button" text="Button" />-->
-                                <!--</toolbar:ToolBar>-->
-                            <!--</container:child>-->
-                            <!--<container:child layoutData="{layoutData}">-->
-                                <!--<grid:Grid ui:field="grid" cm="{cm}" store="{store}" view="{view}" selectionModel="{sm}" borders="false" />-->
-                            <!--</container:child>-->
-                            <!--<container:child>-->
-                                <!--<toolbar:PagingToolBar ui:field="pagingToolBar" pageSize="100" />-->
-                            <!--</container:child>-->
-                        <!--</container:VerticalLayoutContainer>-->
+                        <gxt:button>
+                            <button:TextButton ui:field="addLectureButton" text="Добавить лекцию"/>
+                        </gxt:button>
+                        <gxt:button>
+                            <button:TextButton ui:field="editLectureButton" text="Редактировать лекцию"
+                                               enabled="false"/>
+                        </gxt:button>
+                        <container:VerticalLayoutContainer>
+                            <container:child layoutData="{lectureLayoutData}">
+                                <grid:Grid ui:field="lecturesGrid" view="{lecturesView}" cm="{lecturesCM}"
+                                           store="{lecturesStore}"/>
+                            </container:child>
+                        </container:VerticalLayoutContainer>
                     </gxt:ContentPanel>
                 </gxt:child>
-
-                <!--<gxt:child config="{timetable}">-->
-                    <!--&lt;!&ndash;<gxt:ContentPanel headingText="Расписание">&ndash;&gt;-->
-                        <!--&lt;!&ndash;&lt;!&ndash;<gxt:button>&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;&lt;!&ndash;<button:TextButton>Добавить курс</button:TextButton>&ndash;&gt;&ndash;&gt;-->
-                        <!--&lt;!&ndash;&lt;!&ndash;</gxt:button>&ndash;&gt;&ndash;&gt;-->
-                    <!--&lt;!&ndash;</gxt:ContentPanel>&ndash;&gt;-->
-                <!--</gxt:child>-->
             </gxt:PlainTabPanel>
         </container:VBoxLayoutContainer>
     </gxt:ContentPanel>
-
 
 </ui:UiBinder>

@@ -15,5 +15,7 @@
     <!-- Specify the app entry point class.                   -->
     <entry-point class='com.ncjavaedu.ediary.client.MainApplication'/>
 
+    <set-property name="user.agent" value="safari" />
+
     <add-linker name="xsiframe" />
 </module>
