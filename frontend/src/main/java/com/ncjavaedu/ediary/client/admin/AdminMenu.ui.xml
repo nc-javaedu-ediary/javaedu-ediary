@@ -5,7 +5,7 @@
              xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'
              xmlns:grid='urn:import:com.sencha.gxt.widget.core.client.grid'
              xmlns:button='urn:import:com.sencha.gxt.widget.core.client.button'>
-    <ui:style src="style.css"/>
+    <ui:style src="../../../resources/style.css"/>
 
     <!--Названия вкладок-->
     <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="courseManagement">

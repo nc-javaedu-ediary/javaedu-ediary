@@ -12,6 +12,7 @@ import com.ncjavaedu.ediary.client.admin.AdminMenu;
 import com.ncjavaedu.ediary.client.model.RoleDTO;
 import com.ncjavaedu.ediary.client.model.UserDTO;
 import com.ncjavaedu.ediary.client.services.ClientUserService;
+import com.ncjavaedu.ediary.client.userpages.UserPage;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.Viewport;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -74,14 +75,33 @@ public class AuthorizationPanel implements IsWidget {
         if (dto == null){
             Info.display("Ошибка", "Неправильное имя пользователя или пароль");
         } else {
-        //TODO implement logic
             Info.display("Вы вошли", "Здравствуйте, " + dto.getFirstName());
-            Viewport vp = new Viewport();
-            vp.add(new AdminMenu().asWidget());
-        //TODO RootPanel.get("content")
-            RootLayoutPanel.get().clear();
-            RootLayoutPanel.get().add(vp);
+            if(dto.getRole() != null)
+            {
+                if(dto.getRole() == RoleDTO.Admin)
+                    displayAdminMenu();
+                else
+                    displayUserPage();
+            }
+            else
+                displayUserPage();
         }
+    }
+
+    public void displayAdminMenu(){
+        Viewport vp = new Viewport();
+        vp.add(new AdminMenu().asWidget());
+        //TODO RootPanel.get("content")
+        RootLayoutPanel.get().clear();
+        RootLayoutPanel.get().add(vp);
+    }
+
+    public void displayUserPage(){
+        Viewport vp = new Viewport();
+        vp.add(new UserPage().asWidget());
+        //TODO RootPanel.get("content")
+        RootLayoutPanel.get().clear();
+        RootLayoutPanel.get().add(vp);
     }
 
     @Override
