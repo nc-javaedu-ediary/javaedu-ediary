@@ -1,8 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder
         xmlns:authorization='urn:import:com.ncjavaedu.ediary.client.authorization'
-        xmlns:admin='urn:import:com.ncjavaedu.ediary.client.admin'
-        xmlns:tt='urn:import:com.ncjavaedu.ediary.client.schedule'
         xmlns:ui='urn:ui:com.google.gwt.uibinder'
         xmlns:container="urn:import:com.sencha.gxt.widget.core.client.container"
         xmlns:gxt="urn:import:com.sencha.gxt.widget.core.client"
@@ -12,8 +10,6 @@
     <gxt:ContentPanel bodyStyle="none" headerVisible="false">
         <container:CenterLayoutContainer>
             <authorization:AuthorizationPanel  />
-            <!--<admin:AdminMenu/>-->
-            <!--<tt:Schedule/>-->
         </container:CenterLayoutContainer>
     </gxt:ContentPanel>
 </ui:UiBinder>

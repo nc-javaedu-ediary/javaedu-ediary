@@ -1,4 +1,4 @@
-package com.ncjavaedu.ediary.server.services.impl;
+package com.ncjavaedu.ediary.server.services;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;

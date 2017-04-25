@@ -1,4 +1,4 @@
-package com.ncjavaedu.ediary.server.services;
+package com.ncjavaedu.ediary.client.services;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;

@@ -20,7 +20,7 @@
 
     <servlet>
         <servlet-name>userService</servlet-name>
-        <servlet-class>com.ncjavaedu.ediary.server.services.impl.ClientUserServiceImpl</servlet-class>
+        <servlet-class>com.ncjavaedu.ediary.server.services.ClientUserServiceImpl</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 

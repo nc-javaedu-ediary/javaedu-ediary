@@ -1,8 +1,10 @@
-package com.ncjavaedu.ediary.server.services.impl;
+package com.ncjavaedu.ediary.server.services;
 
-
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.ncjavaedu.ediary.client.model.RoleDTO;
 import com.ncjavaedu.ediary.client.model.UserDTO;
-import com.ncjavaedu.ediary.server.services.ClientUserService;
+import com.ncjavaedu.ediary.client.services.ClientUserService;
+import com.ncjavaedu.ediary.model.Role;
 import com.ncjavaedu.ediary.model.User;
 import com.ncjavaedu.ediary.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,11 @@ public class ClientUserServiceImpl extends BaseServiceImpl implements ClientUser
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
         dto.setUniversity(user.getUniversity());
+        if(user.getRole() != null) {
+            dto.setRole(RoleDTO.values()[user.getRole().ordinal()]);
+        }
+        dto.setLogin(user.getLogin());
+        dto.setPassword(user.getPassword());
         return dto;
     }
 
@@ -61,6 +68,11 @@ public class ClientUserServiceImpl extends BaseServiceImpl implements ClientUser
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
         user.setUniversity(dto.getUniversity());
+        if(dto.getRole() != null){
+            user.setRole(Role.values()[dto.getRole().ordinal()]);
+        }
+        user.setLogin(dto.getLogin());
+        user.setPassword(dto.getPassword());
         return user;
     }
 }

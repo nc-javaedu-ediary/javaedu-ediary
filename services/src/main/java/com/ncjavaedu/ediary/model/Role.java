@@ -1,5 +1,20 @@
 package com.ncjavaedu.ediary.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public enum Role {
-    Student, Lecturer
+    @SerializedName("0")
+    Student(0),
+
+    @SerializedName("1")
+    Lecturer(1);
+
+    private final int value;
+    public int getValue() {
+        return value;
+    }
+
+    private Role(int value) {
+        this.value = value;
+    }
 }

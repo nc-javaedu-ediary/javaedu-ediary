@@ -1,8 +1,9 @@
-package com.ncjavaedu.ediary.server.services.impl;
+package com.ncjavaedu.ediary.server.services;
 
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.ncjavaedu.ediary.client.model.CourseDTO;
 import com.ncjavaedu.ediary.model.Course;
-import com.ncjavaedu.ediary.server.services.ClientCourseService;
+import com.ncjavaedu.ediary.client.services.ClientCourseService;
 import com.ncjavaedu.ediary.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 
