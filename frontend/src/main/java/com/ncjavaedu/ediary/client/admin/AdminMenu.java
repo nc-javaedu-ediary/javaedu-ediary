@@ -1,12 +1,12 @@
 package com.ncjavaedu.ediary.client.admin;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.i18n.shared.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 import com.ncjavaedu.ediary.client.admin.popups.AdminPopupCallbacks;
 import com.ncjavaedu.ediary.client.admin.popups.CoursePopup;
 import com.ncjavaedu.ediary.client.admin.popups.LecturePopup;
@@ -17,21 +17,14 @@ import com.ncjavaedu.ediary.client.model.User;
 import com.ncjavaedu.ediary.client.props.CourseProps;
 import com.ncjavaedu.ediary.client.props.LectureProps;
 import com.ncjavaedu.ediary.client.props.UserProps;
-import com.sencha.gxt.cell.core.client.form.DateCell;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.state.client.GridStateHandler;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
-import com.sencha.gxt.widget.core.client.form.DateField;
-import com.sencha.gxt.widget.core.client.form.DateTimePropertyEditor;
 import com.sencha.gxt.widget.core.client.grid.*;
-import com.sencha.gxt.widget.core.client.grid.Grid;
-import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -83,12 +76,12 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 //    DateLabel dateLabel;
 //    @UiField(provided = true)
 //    FieldLabel dateBox1;
-    @UiField(provided = true)
-    DateField dateBox1;
-    @UiField(provided = true)
-    DateField dateBox2;
-    @UiField(provided = true)
-    FlexTable schedule;
+//    @UiField(provided = true)
+//    DateField dateBox1;
+//    @UiField(provided = true)
+//    DateField dateBox2;
+//    @UiField(provided = true)
+//    FlexTable schedule;
 
     private ContentPanel panel;
     private static AdminMenuUiBinder uiBinder = GWT.create(AdminMenuUiBinder.class);
@@ -134,36 +127,19 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
             generateCourseTab();
 
             // Расписание
-            generateSchedule();
 
 
             panel = uiBinder.createAndBindUi(this);
 
             GridSelectionModel<User> gridSelectionModel = new GridSelectionModel<>();
-            gridSelectionModel.addSelectionChangedHandler(new SelectionChangedEvent.SelectionChangedHandler<User>() {
-                @Override
-                public void onSelectionChanged(SelectionChangedEvent<User> selectionChangedEvent) {
-                    editUserButton.setEnabled(true);
-                }
-            });
+            gridSelectionModel.addSelectionChangedHandler(selectionChangedEvent -> editUserButton.setEnabled(true));
 
             GridSelectionModel<Lecture> lectureSelectionModel = new GridSelectionModel<>();
             lectureSelectionModel.addSelectionChangedHandler(
-                    new SelectionChangedEvent.SelectionChangedHandler<Lecture>() {
-                        @Override
-                        public void onSelectionChanged(SelectionChangedEvent<Lecture> selectionChangedEvent) {
-                            editLectureButton.setEnabled(true);
-                        }
-                    });
+                    selectionChangedEvent -> editLectureButton.setEnabled(true));
 
             GridSelectionModel<Course> courseSelectionModel = new GridSelectionModel<>();
-            courseSelectionModel.addSelectionChangedHandler(
-                    new SelectionChangedEvent.SelectionChangedHandler<Course>() {
-                        @Override
-                        public void onSelectionChanged(SelectionChangedEvent<Course> selectionChangedEvent) {
-                            editCourseButton.setEnabled(true);
-                        }
-                    });
+            courseSelectionModel.addSelectionChangedHandler(event -> editCourseButton.setEnabled(true));
 
             usersGrid.setSelectionModel(gridSelectionModel);
             lecturesGrid.setSelectionModel(lectureSelectionModel);
@@ -255,7 +231,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     }
 
     public void userPopupValidated(User user, boolean newUser) {
-        if (newUser == false) {
+        if (!newUser) {
             users.remove(usersGrid.getSelectionModel().getSelectedItem());
             usersGrid.getSelectionModel().deselect(usersGrid.getSelectionModel().getSelectedItem());
             editUserButton.setEnabled(false);
@@ -294,7 +270,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     }
 
     public void lecturePopupValidated(Lecture lecture, boolean newLecture) {
-        if (newLecture == false) {
+        if (!newLecture) {
             lectures.remove(lecturesGrid.getSelectionModel().getSelectedItem());
             lecturesGrid.getSelectionModel().deselect(lecturesGrid.getSelectionModel().getSelectedItem());
             editLectureButton.setEnabled(false);
@@ -323,7 +299,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     }
 
     public void coursePopupValidated(Course course, boolean newCourse) {
-        if (newCourse == false) {
+        if (!newCourse) {
             courses.remove(coursesGrid.getSelectionModel().getSelectedItem());
             coursesGrid.getSelectionModel().deselect(coursesGrid.getSelectionModel().getSelectedItem());
             editCourseButton.setEnabled(false);
@@ -336,45 +312,4 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 
     //----------Timetable Tab-----------//
 
-    private void generateTimetableHead() {
-        schedule = new FlexTable();
-        schedule.setText(0, 1, "Понедельник");
-        schedule.setText(0, 2, "Вторник");
-        schedule.setText(0, 3, "Среда");
-        schedule.setText(0, 4, "Четверг");
-        schedule.setText(0, 5, "Пятница");
-    }
-
-    private Widget generateTimetableCell(String title, String lecturer, String cab) {
-        VerticalLayoutContainer lecture = new VerticalLayoutContainer();
-        lecture.add(new Label(title));
-        lecture.add(new Label(lecturer));
-        lecture.add(new Label("Кабинет №" + cab));
-//        lecture.add(new Label("" + l.getDay()));
-        return lecture;
-    }
-
-    private void generateSchedule() {
-//            Расписание
-        generateTimetableHead();
-        schedule.setText(1, 0, "15:00");
-        schedule.setText(2, 0, "19:00");
-        for (int j = 1; j < 3; j++)
-            for (int i = 1; i < 6; i++)
-                schedule.setText(j, i, "нет занятий");
-        schedule.setWidget(1, 3, generateTimetableCell("Лекция1", "Иванов", "55"));
-        schedule.setWidget(2, 2, generateTimetableCell("Лекция1", "Иванов", "55"));
-
-//            dateBox1 = new DateBox();
-//            dateBox1.setValue(new Date());
-        DateCell dateCell = new DateCell();
-        dateCell.setPropertyEditor(new DateTimePropertyEditor(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT)));
-//            dateBox1 = new FieldLabel();
-        dateBox1 = new DateField(dateCell);
-        dateBox2 = new DateField(dateCell);
-        dateBox1.setValue(new Date());
-        dateBox2.setValue(new Date()); //DateBox
-//            dateBox1.setText(dateBox2.getText());
-
-    }
 }
