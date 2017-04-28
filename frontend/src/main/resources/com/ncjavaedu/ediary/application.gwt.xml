@@ -7,6 +7,7 @@
     <inherits name='com.sencha.gxt.ui.GXT' />
     <inherits name='com.google.gwt.uibinder.UiBinder' />
     <inherits name="com.ncjavaedu.resources.Resources" />
+    <inherits name="com.google.gwt.logging.Logging"/>
 
     <!-- GXT Stylesheet -->
     <stylesheet src="reset.css" />

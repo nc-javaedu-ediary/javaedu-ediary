@@ -23,6 +23,7 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.grid.*;
+import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -132,14 +133,28 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
             panel = uiBinder.createAndBindUi(this);
 
             GridSelectionModel<User> gridSelectionModel = new GridSelectionModel<>();
-            gridSelectionModel.addSelectionChangedHandler(selectionChangedEvent -> editUserButton.setEnabled(true));
+            gridSelectionModel.addSelectionChangedHandler(new SelectionChangedEvent.SelectionChangedHandler<User>() {
+                @Override
+                public void onSelectionChanged(SelectionChangedEvent<User> event) {
+                    editUserButton.setEnabled(true);
+                }
+            });
 
             GridSelectionModel<Lecture> lectureSelectionModel = new GridSelectionModel<>();
-            lectureSelectionModel.addSelectionChangedHandler(
-                    selectionChangedEvent -> editLectureButton.setEnabled(true));
+            lectureSelectionModel.addSelectionChangedHandler(new SelectionChangedEvent.SelectionChangedHandler<Lecture>() {
+                @Override
+                public void onSelectionChanged(SelectionChangedEvent<Lecture> event) {
+                    editLectureButton.setEnabled(true);
+                }
+            });
 
             GridSelectionModel<Course> courseSelectionModel = new GridSelectionModel<>();
-            courseSelectionModel.addSelectionChangedHandler(event -> editCourseButton.setEnabled(true));
+            courseSelectionModel.addSelectionChangedHandler(new SelectionChangedEvent.SelectionChangedHandler<Course>() {
+                @Override
+                public void onSelectionChanged(SelectionChangedEvent<Course> event) {
+                    editCourseButton.setEnabled(true);
+                }
+            });
 
             usersGrid.setSelectionModel(gridSelectionModel);
             lecturesGrid.setSelectionModel(lectureSelectionModel);
