@@ -24,9 +24,31 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <servlet>
+        <servlet-name>lectureService</servlet-name>
+        <servlet-class>com.ncjavaedu.ediary.server.services.ClientLectureServiceImpl</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>courseService</servlet-name>
+        <servlet-class>com.ncjavaedu.ediary.server.services.ClientCourseServiceImpl</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>userService</servlet-name>
         <url-pattern>/ediary/userService</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>lectureService</servlet-name>
+        <url-pattern>/ediary/lectureService</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>courseService</servlet-name>
+        <url-pattern>/ediary/courseService</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

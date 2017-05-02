@@ -1,12 +1,17 @@
 package com.ncjavaedu.ediary.server.services;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.ncjavaedu.ediary.client.model.CourseDTO;
 import com.ncjavaedu.ediary.client.model.RoleDTO;
 import com.ncjavaedu.ediary.client.model.UserDTO;
+import com.ncjavaedu.ediary.client.services.ClientCourseService;
 import com.ncjavaedu.ediary.client.services.ClientUserService;
+import com.ncjavaedu.ediary.model.Course;
 import com.ncjavaedu.ediary.model.Role;
 import com.ncjavaedu.ediary.model.User;
 import com.ncjavaedu.ediary.services.UserService;
+import com.sencha.gxt.widget.core.client.info.Info;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -24,7 +29,7 @@ public class ClientUserServiceImpl extends BaseServiceImpl implements ClientUser
         List<User> remoteUsers = userService.getUsers();
         List<UserDTO> users = new ArrayList<>();
         for (User user : remoteUsers){
-            UserDTO dto = userToDto(user);
+            UserDTO dto = ServiceUtils.userToDto(user);
             users.add(dto);
         }
         return users;
@@ -32,7 +37,7 @@ public class ClientUserServiceImpl extends BaseServiceImpl implements ClientUser
 
     @Override
     public UserDTO saveUser(UserDTO dto) {
-        User user = userDtoToUser(dto);
+        User user = ServiceUtils.userDtoToUser(dto);
         userService.saveUser(user);
 
         //Update userId after save
@@ -43,36 +48,6 @@ public class ClientUserServiceImpl extends BaseServiceImpl implements ClientUser
     @Override
     public UserDTO getUser(String login, String password) {
         User user = userService.getUser(login, password);
-        return (user == null) ? null : userToDto(user);
-    }
-
-    private UserDTO userToDto(User user){
-        UserDTO dto = new UserDTO();
-        dto.setUserId(user.getUserId());
-        dto.setFirstName(user.getFirstName());
-        dto.setLastName(user.getLastName());
-        dto.setEmail(user.getEmail());
-        dto.setUniversity(user.getUniversity());
-        if(user.getRole() != null) {
-            dto.setRole(RoleDTO.values()[user.getRole().ordinal()]);
-        }
-        dto.setLogin(user.getLogin());
-        dto.setPassword(user.getPassword());
-        return dto;
-    }
-
-    private User userDtoToUser(UserDTO dto){
-        User user = new User();
-        user.setUserId(dto.getUserId());
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
-        user.setEmail(dto.getEmail());
-        user.setUniversity(dto.getUniversity());
-        if(dto.getRole() != null){
-            user.setRole(Role.values()[dto.getRole().ordinal()]);
-        }
-        user.setLogin(dto.getLogin());
-        user.setPassword(dto.getPassword());
-        return user;
+        return (user == null) ? null : ServiceUtils.userToDto(user);
     }
 }

@@ -17,10 +17,8 @@ public class Course implements Serializable{
     @Transient
     private Lecturer lecturer;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "COURSE_LECTURES", joinColumns = {
-            @JoinColumn(name = "COURSE_ID")}, inverseJoinColumns = {
-            @JoinColumn(name = "LECTURE_ID")})
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="LECTURE_ID",nullable = false)
     private List<Lecture> lectures = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)

@@ -1,6 +1,8 @@
 package com.ncjavaedu.ediary.client.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 //import java.util.ArrayList;
 //import java.util.List;
 
@@ -13,7 +15,23 @@ public class UserDTO implements Serializable {
     private String university;
     private String email;
     private RoleDTO role;
-//    private List<Course> courses = new ArrayList<>();
+    private List<CourseDTO> courses = new ArrayList<>();
+
+    public UserDTO(){
+
+    }
+
+    public UserDTO(String login, String password, String firstName, String lastName, String university, String email,
+                   RoleDTO role, List<CourseDTO> courseDTOS){
+        setLogin(login);
+        setPassword(password);
+        setFirstName(firstName);
+        setLastName(lastName);
+        setUniversity(university);
+        setEmail(email);
+        setRole(role);
+        setCourses(courseDTOS);
+    }
 
     public Integer getUserId() {
         return userId;
@@ -83,11 +101,11 @@ public class UserDTO implements Serializable {
         this.role = role;
     }
 
-//    public List<Course> getCourses() {
-//        return courses;
-//    }
-//
-//    public void setCourses(List<Course> courses) {
-//        this.courses = courses;
-//    }
+    public List<CourseDTO> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<CourseDTO> courses) {
+        this.courses = courses;
+    }
 }

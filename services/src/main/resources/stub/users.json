@@ -1,12 +1,24 @@
 [
-  {"id": 1, "firstName": "root", "lastName": "root", "email": "admin@ediary.com",
-    "login": "root", "password": "55256636", "role":"0"},
-  {"id": 2, "firstName": "Jack", "lastName": "Nicholson", "email": "j.nicholson@gmaiil.com",
-    "login": "jnicholson", "password": "123321", "role":"1"},
-  {"id": 3, "firstName": "Marlon", "lastName": "Brando", "email": "m.brando@gmaiil.com",
-    "login": "mbrando", "password": "123456", "role":"1"},
-  {"id": 4, "firstName": "Al", "lastName": "Pacino", "email": "a.pacino@gmaiil.com",
-    "login": "apacino", "password": "qwerty", "role":"1"},
-  {"id": 5, "firstName": "Dustin", "lastName": "Hoffman", "email": "d.hoffman@gmaiil.com",
-    "login": "dhoffman", "password": "dhoff123", "role":"2"}
+  { "userId": 1,
+    "firstName": "root",
+    "lastName": "root",
+    "email": "admin@ediary.com",
+    "login": "root",
+    "password": "55256636",
+    "role":"0",
+    "university":"ITMO",
+    "courses": [
+      {
+        "courseId" : 1,
+        "title" : "Course 1"
+      }
+    ]},
+  {"userId": 2, "firstName": "Jack", "lastName": "Nicholson", "email": "j.nicholson@gmaiil.com",
+    "login": "jnicholson", "password": "123321", "role":"1", "university":"ITMO"},
+  {"userId": 3, "firstName": "Marlon", "lastName": "Brando", "email": "m.brando@gmaiil.com",
+    "login": "mbrando", "password": "123456", "role":"1", "university":"ITMO"},
+  {"userId": 4, "firstName": "Al", "lastName": "Pacino", "email": "a.pacino@gmaiil.com",
+    "login": "apacino", "password": "qwerty", "role":"1", "university":"ITMO"},
+  {"userId": 5, "firstName": "Dustin", "lastName": "Hoffman", "email": "d.hoffman@gmaiil.com",
+    "login": "dhoffman", "password": "dhoff123", "role":"2", "university":"ITMO"}
 ]

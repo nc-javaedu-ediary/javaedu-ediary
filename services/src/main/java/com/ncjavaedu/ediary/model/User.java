@@ -25,7 +25,7 @@ public class User implements Serializable{
     @Column(name = "EMAIL")
     private String email;
 
-    @Transient
+    @Enumerated
     private Role role;
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -113,6 +113,8 @@ public class User implements Serializable{
     public List<Course> getCourses(){
         return courses;
     }
+
+    public void setCourses(List<Course> courses) { this.courses = courses; }
 
     public void addCourse(Course course)
     {

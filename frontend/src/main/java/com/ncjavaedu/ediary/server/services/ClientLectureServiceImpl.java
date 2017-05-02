@@ -19,10 +19,10 @@ public class ClientLectureServiceImpl extends BaseServiceImpl implements ClientL
 
     @Override
     public List<LectureDTO> getLectures() {
-        List<Lecture> remoteUsers = lectureService.getLectures();
+        List<Lecture> remoteLectures = lectureService.getLectures();
         List<LectureDTO> lectures = new ArrayList<>();
-        for (Lecture lecture : remoteUsers){
-            LectureDTO dto = lectureToDto(lecture);
+        for (Lecture lecture : remoteLectures){
+            LectureDTO dto = ServiceUtils.lectureToDto(lecture);
             lectures.add(dto);
         }
         return lectures;
@@ -30,31 +30,11 @@ public class ClientLectureServiceImpl extends BaseServiceImpl implements ClientL
 
     @Override
     public LectureDTO saveLecture(LectureDTO dto) {
-        Lecture lecture = lectureDtoToUser(dto);
+        Lecture lecture = ServiceUtils.lectureDtoToLecture(dto);
         lectureService.saveLecture(lecture);
 
         //Update userId after save
         dto.setLectureId(lecture.getLectureId());
         return dto;
-    }
-
-    private LectureDTO lectureToDto(Lecture lecture){
-        LectureDTO dto = new LectureDTO();
-        dto.setLectureId(lecture.getLectureId());
-        dto.setTitle(lecture.getTitle());
-        dto.setClassroom(lecture.getClassroom());
-        dto.setDescription(lecture.getDescription());
-        dto.setHomework(lecture.getHomework());
-        return dto;
-    }
-
-    private Lecture lectureDtoToUser(LectureDTO dto){
-        Lecture lecture = new Lecture();
-        lecture.setLectureId(dto.getLectureId());
-        lecture.setTitle(dto.getTitle());
-        lecture.setClassroom(dto.getClassroom());
-        lecture.setDescription(dto.getDescription());
-        lecture.setHomework(dto.getHomework());
-        return lecture;
     }
 }

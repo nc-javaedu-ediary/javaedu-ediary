@@ -6,20 +6,22 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.ncjavaedu.ediary.client.admin.popups.AdminPopupCallbacks;
 import com.ncjavaedu.ediary.client.admin.popups.CoursePopup;
 import com.ncjavaedu.ediary.client.admin.popups.LecturePopup;
 import com.ncjavaedu.ediary.client.admin.popups.UserPopup;
-import com.ncjavaedu.ediary.client.model.Course;
-import com.ncjavaedu.ediary.client.model.Lecture;
-import com.ncjavaedu.ediary.client.model.User;
+import com.ncjavaedu.ediary.client.model.*;
 import com.ncjavaedu.ediary.client.props.CourseProps;
 import com.ncjavaedu.ediary.client.props.LectureProps;
+import com.ncjavaedu.ediary.client.props.RoleValueProvider;
 import com.ncjavaedu.ediary.client.props.UserProps;
+import com.ncjavaedu.ediary.client.services.ClientCourseService;
+import com.ncjavaedu.ediary.client.services.ClientLectureService;
+import com.ncjavaedu.ediary.client.services.ClientUserService;
 import com.sencha.gxt.cell.core.client.form.DateCell;
 import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.state.client.GridStateHandler;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
@@ -28,11 +30,13 @@ import com.sencha.gxt.widget.core.client.form.DateField;
 import com.sencha.gxt.widget.core.client.form.DateTimePropertyEditor;
 import com.sencha.gxt.widget.core.client.grid.*;
 import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.info.Info;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 
 public class AdminMenu implements IsWidget, AdminPopupCallbacks {
@@ -50,31 +54,31 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     TextButton editCourseButton;
 
     @UiField(provided = true)
-    ColumnModel<User> usersCM;
+    ColumnModel<UserDTO> usersCM;
     @UiField(provided = true)
-    ListStore<User> usersStore;
+    ListStore<UserDTO> usersStore;
     @UiField
-    GridView<User> usersView;
+    GridView<UserDTO> usersView;
     @UiField
-    Grid<User> usersGrid;
+    Grid<UserDTO> usersGrid;
 
     @UiField(provided = true)
-    ColumnModel<Lecture> lecturesCM;
+    ColumnModel<LectureDTO> lecturesCM;
     @UiField(provided = true)
-    ListStore<Lecture> lecturesStore;
+    ListStore<LectureDTO> lecturesStore;
     @UiField
-    GridView<Lecture> lecturesView;
+    GridView<LectureDTO> lecturesView;
     @UiField
-    Grid<Lecture> lecturesGrid;
+    Grid<LectureDTO> lecturesGrid;
 
     @UiField(provided = true)
-    ColumnModel<Course> coursesCM;
+    ColumnModel<CourseDTO> coursesCM;
     @UiField(provided = true)
-    ListStore<Course> coursesStore;
+    ListStore<CourseDTO> coursesStore;
     @UiField
-    GridView<Course> coursesView;
+    GridView<CourseDTO> coursesView;
     @UiField
-    Grid<Course> coursesGrid;
+    Grid<CourseDTO> coursesGrid;
 
     private static final UserProps userProps = GWT.create(UserProps.class);
     private static final LectureProps lecturesProps = GWT.create(LectureProps.class);
@@ -90,12 +94,14 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     @UiField(provided = true)
     FlexTable schedule;
 
-    private ContentPanel panel;
+    private Widget widget;
     private static AdminMenuUiBinder uiBinder = GWT.create(AdminMenuUiBinder.class);
 
-    private List<User> users;
-    private List<Lecture> lectures;
-    private List<Course> courses;
+    private List<UserDTO> users;
+    private List<LectureDTO> lectures;
+    private List<CourseDTO> courses;
+
+    private static final Logger logger = Logger.getLogger(AdminMenu.class.getName());
 
     @UiTemplate("AdminMenu.ui.xml")
     interface AdminMenuUiBinder extends UiBinder<ContentPanel, AdminMenu> {
@@ -106,23 +112,15 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 
     @Override
     public Widget asWidget() {
-        if (panel == null) {
-            // TODO: remove this test values
+        if (widget == null) {
             users = new ArrayList<>();
-            users.add(new User("login", "pass",
-                    "Name", "LName", "Univ", "Mail"));
-            users.add(new User("login2", "password",
-                    "Name", "LastName", "ITMO", "somemail@gmail.com"));
+            getUsers();
 
             lectures = new ArrayList<>();
-            lectures.add(new Lecture("Lecture 1", "466",
-                    "Some description here", "Some homework"));
-            lectures.add(new Lecture("Lecture 2", "403", "Some description",
-                    "Homework"));
+            getLectures();
 
             courses = new ArrayList<>();
-            courses.add(new Course("Course 1"));
-            courses.add(new Course("Course 2"));
+            getCourses();
 
             // Users tab
             generateUsersTab();
@@ -136,31 +134,30 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
             // Расписание
             generateSchedule();
 
+            widget = uiBinder.createAndBindUi(this);
 
-            panel = uiBinder.createAndBindUi(this);
-
-            GridSelectionModel<User> gridSelectionModel = new GridSelectionModel<>();
-            gridSelectionModel.addSelectionChangedHandler(new SelectionChangedEvent.SelectionChangedHandler<User>() {
+            GridSelectionModel<UserDTO> gridSelectionModel = new GridSelectionModel<>();
+            gridSelectionModel.addSelectionChangedHandler(new SelectionChangedEvent.SelectionChangedHandler<UserDTO>() {
                 @Override
-                public void onSelectionChanged(SelectionChangedEvent<User> selectionChangedEvent) {
+                public void onSelectionChanged(SelectionChangedEvent<UserDTO> selectionChangedEvent) {
                     editUserButton.setEnabled(true);
                 }
             });
 
-            GridSelectionModel<Lecture> lectureSelectionModel = new GridSelectionModel<>();
+            GridSelectionModel<LectureDTO> lectureSelectionModel = new GridSelectionModel<>();
             lectureSelectionModel.addSelectionChangedHandler(
-                    new SelectionChangedEvent.SelectionChangedHandler<Lecture>() {
+                    new SelectionChangedEvent.SelectionChangedHandler<LectureDTO>() {
                         @Override
-                        public void onSelectionChanged(SelectionChangedEvent<Lecture> selectionChangedEvent) {
+                        public void onSelectionChanged(SelectionChangedEvent<LectureDTO> selectionChangedEvent) {
                             editLectureButton.setEnabled(true);
                         }
                     });
 
-            GridSelectionModel<Course> courseSelectionModel = new GridSelectionModel<>();
+            GridSelectionModel<CourseDTO> courseSelectionModel = new GridSelectionModel<>();
             courseSelectionModel.addSelectionChangedHandler(
-                    new SelectionChangedEvent.SelectionChangedHandler<Course>() {
+                    new SelectionChangedEvent.SelectionChangedHandler<CourseDTO>() {
                         @Override
-                        public void onSelectionChanged(SelectionChangedEvent<Course> selectionChangedEvent) {
+                        public void onSelectionChanged(SelectionChangedEvent<CourseDTO> selectionChangedEvent) {
                             editCourseButton.setEnabled(true);
                         }
                     });
@@ -172,18 +169,9 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
             usersGrid.getView().setAutoFill(true);
             lecturesGrid.getView().setAutoFill(true);
             coursesGrid.getView().setAutoFill(true);
-
-            GridStateHandler<User> userState = new GridStateHandler<>(usersGrid);
-            userState.loadState();
-
-            GridStateHandler<Lecture> lectureState = new GridStateHandler<>(lecturesGrid);
-            lectureState.loadState();
-
-            GridStateHandler<Course> courseState = new GridStateHandler<>(coursesGrid);
-            courseState.loadState();
         }
 
-        return panel;
+        return widget;
     }
 
     @UiHandler({"addUserButton"})
@@ -195,7 +183,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 
     @UiHandler({"editUserButton"})
     public void editUserButtonClick(SelectEvent selectEvent) {
-        final UserPopup popup = new UserPopup(usersGrid.getSelectionModel().getSelectedItem(), courses);
+        final UserPopup popup = new UserPopup(usersGrid.getSelectionModel().getSelectedItem(),courses);
 
         popup.ShowUserPopup(this);
     }
@@ -231,15 +219,17 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     //-------User Management Tab---------//
 
     private void generateUsersTab() {
-        ColumnConfig<User, Integer> idCol = new ColumnConfig<>(userProps.userId(), 20, "ID");
-        ColumnConfig<User, String> loginCol = new ColumnConfig<>(userProps.login(), 50, "Логин");
-        ColumnConfig<User, String> passCol = new ColumnConfig<>(userProps.password(), 50, "Пароль");
-        ColumnConfig<User, String> fnCol = new ColumnConfig<>(userProps.firstName(), 80, "Имя");
-        ColumnConfig<User, String> lnCol = new ColumnConfig<>(userProps.lastName(), 100, "Фамилия");
-        ColumnConfig<User, String> uniCol = new ColumnConfig<>(userProps.university(), 80, "Университет");
-        ColumnConfig<User, String> mailCol = new ColumnConfig<>(userProps.email(), 150, "Email");
+        ColumnConfig<UserDTO, Integer> idCol = new ColumnConfig<>(userProps.userId(), 20, "ID");
+        ColumnConfig<UserDTO, String> loginCol = new ColumnConfig<>(userProps.login(), 50, "Логин");
+        ColumnConfig<UserDTO, String> passCol = new ColumnConfig<>(userProps.password(), 50, "Пароль");
+        ColumnConfig<UserDTO, String> fnCol = new ColumnConfig<>(userProps.firstName(), 80, "Имя");
+        ColumnConfig<UserDTO, String> lnCol = new ColumnConfig<>(userProps.lastName(), 100, "Фамилия");
+        ColumnConfig<UserDTO, String> uniCol = new ColumnConfig<>(userProps.university(), 80, "Университет");
+        ColumnConfig<UserDTO, String> mailCol = new ColumnConfig<>(userProps.email(), 150, "Email");
+        RoleValueProvider rvp = new RoleValueProvider();
+        ColumnConfig<UserDTO, String> roleCol = new ColumnConfig<>(rvp, 150, "Роль");
 
-        List<ColumnConfig<User, ?>> userColumns = new ArrayList<>();
+        List<ColumnConfig<UserDTO, ?>> userColumns = new ArrayList<>();
         userColumns.add(idCol);
         userColumns.add(loginCol);
         userColumns.add(passCol);
@@ -247,6 +237,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         userColumns.add(lnCol);
         userColumns.add(uniCol);
         userColumns.add(mailCol);
+        userColumns.add(roleCol);
 
         usersCM = new ColumnModel<>(userColumns);
 
@@ -254,7 +245,11 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         usersStore.addAll(users);
     }
 
-    public void userPopupValidated(User user, boolean newUser) {
+    public void userPopupValidated(UserDTO user, boolean newUser) {
+        //TODO: remove
+        for(CourseDTO c: user.getCourses()){
+            Info.display(c.getTitle().toString(),c.getCourseId().toString());
+        }
         if (newUser == false) {
             users.remove(usersGrid.getSelectionModel().getSelectedItem());
             usersGrid.getSelectionModel().deselect(usersGrid.getSelectionModel().getSelectedItem());
@@ -262,25 +257,43 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         }
         users.add(user);
         usersStore.replaceAll(users);
-        usersStore.commitChanges();
-        usersView.refresh(false);
+        usersGrid.getView().refresh(true);
+        // TODO: Fix saving
+//        else{
+//            AsyncCallback<UserDTO> callback = new AsyncCallback<UserDTO>() {
+//                @Override
+//                public void onFailure(Throwable throwable) {
+//                    Info.display("Ошибка", "Не удалось сохранить пользователя в базе");
+//                    Info.display("Error", throwable.getMessage().toString());
+//                }
+//
+//                @Override
+//                public void onSuccess(UserDTO userDTO) {
+//                    Info.display("Успешно", "Пользователь сохранен в базе");
+//                    users.add(userDTO);
+//                    usersStore.replaceAll(users);
+//                    usersGrid.getView().refresh(true);
+//                }
+//            };
+//            ClientUserService.App.getInstance().saveUser(user,callback);
+//        }
     }
 
     //-------Lecture Management Tab---------//
 
     private void generateLecturesTab() {
-        ColumnConfig<Lecture, Integer> lectureIdCol = new ColumnConfig<>(lecturesProps.lectureId(), 30,
+        ColumnConfig<LectureDTO, Integer> lectureIdCol = new ColumnConfig<>(lecturesProps.lectureId(), 30,
                 "ID");
-        ColumnConfig<Lecture, String> titleCol = new ColumnConfig<>(lecturesProps.title(), 250,
+        ColumnConfig<LectureDTO, String> titleCol = new ColumnConfig<>(lecturesProps.title(), 250,
                 "Название");
-        ColumnConfig<Lecture, String> classroomCol = new ColumnConfig<>(lecturesProps.classroom(), 100,
+        ColumnConfig<LectureDTO, String> classroomCol = new ColumnConfig<>(lecturesProps.classroom(), 100,
                 "Аудитория");
-        ColumnConfig<Lecture, String> descriptionCol = new ColumnConfig<>(lecturesProps.description(),
+        ColumnConfig<LectureDTO, String> descriptionCol = new ColumnConfig<>(lecturesProps.description(),
                 350, "Описание");
-        ColumnConfig<Lecture, String> homeworkCol = new ColumnConfig<>(lecturesProps.homework(), 300,
+        ColumnConfig<LectureDTO, String> homeworkCol = new ColumnConfig<>(lecturesProps.homework(), 300,
                 "Домашнее задание");
 
-        List<ColumnConfig<Lecture, ?>> lectureColumns = new ArrayList<>();
+        List<ColumnConfig<LectureDTO, ?>> lectureColumns = new ArrayList<>();
         lectureColumns.add(lectureIdCol);
         lectureColumns.add(titleCol);
         lectureColumns.add(classroomCol);
@@ -293,7 +306,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         lecturesStore.addAll(lectures);
     }
 
-    public void lecturePopupValidated(Lecture lecture, boolean newLecture) {
+    public void lecturePopupValidated(LectureDTO lecture, boolean newLecture) {
         if (newLecture == false) {
             lectures.remove(lecturesGrid.getSelectionModel().getSelectedItem());
             lecturesGrid.getSelectionModel().deselect(lecturesGrid.getSelectionModel().getSelectedItem());
@@ -301,18 +314,17 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         }
         lectures.add(lecture);
         lecturesStore.replaceAll(lectures);
-        lecturesStore.commitChanges();
-        lecturesView.refresh(false);
+        lecturesGrid.getView().refresh(true);
     }
 
     //-------Course Management Tab---------//
 
     private void generateCourseTab() {
-        ColumnConfig<Course, Integer> courseIdCol = new ColumnConfig<>(coursesProps.courseId(), 30, "ID");
-        ColumnConfig<Course, String> courseTitleCol = new ColumnConfig<>(coursesProps.title(), 100,
+        ColumnConfig<CourseDTO, Integer> courseIdCol = new ColumnConfig<>(coursesProps.courseId(), 30, "ID");
+        ColumnConfig<CourseDTO, String> courseTitleCol = new ColumnConfig<>(coursesProps.title(), 100,
                 "Название");
 
-        List<ColumnConfig<Course, ?>> coursesColumns = new ArrayList<>();
+        List<ColumnConfig<CourseDTO, ?>> coursesColumns = new ArrayList<>();
         coursesColumns.add(courseIdCol);
         coursesColumns.add(courseTitleCol);
 
@@ -322,7 +334,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         coursesStore.addAll(courses);
     }
 
-    public void coursePopupValidated(Course course, boolean newCourse) {
+    public void coursePopupValidated(CourseDTO course, boolean newCourse) {
         if (newCourse == false) {
             courses.remove(coursesGrid.getSelectionModel().getSelectedItem());
             coursesGrid.getSelectionModel().deselect(coursesGrid.getSelectionModel().getSelectedItem());
@@ -330,8 +342,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         }
         courses.add(course);
         coursesStore.replaceAll(courses);
-        coursesStore.commitChanges();
-        coursesView.refresh(false);
+        coursesGrid.getView().refresh(true);
     }
 
     //----------Timetable Tab-----------//
@@ -376,5 +387,67 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         dateBox2.setValue(new Date()); //DateBox
 //            dateBox1.setText(dateBox2.getText());
 
+    }
+
+    private void getUsers(){
+        AsyncCallback<List<UserDTO>> callback = new AsyncCallback<List<UserDTO>>() {
+            public void onFailure(Throwable caught) {
+                Info.display("Ошибка", "Не удалось получить список пользователей");
+            }
+
+            @Override
+            public void onSuccess(List<UserDTO> users) {
+                onGetUsers(users);
+                usersStore.replaceAll(users);
+                usersGrid.getView().refresh(true);
+            }
+        };
+        ClientUserService.App.getInstance().getUsers(callback);
+    }
+
+    private void onGetUsers(List<UserDTO> users){
+        this.users.addAll(users);
+    }
+
+    private void getLectures(){
+        AsyncCallback<List<LectureDTO>> callback = new AsyncCallback<List<LectureDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                Info.display("Ошибка", "Не удалось получить список лекций");
+            }
+
+            @Override
+            public void onSuccess(List<LectureDTO> lectures) {
+                onGetLectures(lectures);
+                lecturesStore.replaceAll(lectures);
+                lecturesGrid.getView().refresh(true);
+            }
+        };
+        ClientLectureService.App.getInstance().getLectures(callback);
+    }
+
+    private void onGetLectures(List<LectureDTO> lectures){
+        this.lectures.addAll(lectures);
+    }
+
+    private void getCourses(){
+        AsyncCallback<List<CourseDTO>> callback = new AsyncCallback<List<CourseDTO>>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                Info.display("Ошибка", "Не удалось получить список курсов");
+            }
+
+            @Override
+            public void onSuccess(List<CourseDTO> courses) {
+                onGetCourses(courses);
+                coursesStore.replaceAll(courses);
+                coursesGrid.getView().refresh(true);
+            }
+        };
+        ClientCourseService.App.getInstance().getCourses(callback);
+    }
+
+    private void onGetCourses(List<CourseDTO> courses){
+        this.courses.addAll(courses);
     }
 }

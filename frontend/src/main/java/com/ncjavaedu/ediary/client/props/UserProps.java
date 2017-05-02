@@ -1,7 +1,8 @@
 package com.ncjavaedu.ediary.client.props;
 
 import com.google.gwt.editor.client.Editor;
-import com.ncjavaedu.ediary.client.model.User;
+import com.ncjavaedu.ediary.client.model.RoleDTO;
+import com.ncjavaedu.ediary.client.model.UserDTO;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.PropertyAccess;
@@ -9,15 +10,17 @@ import com.sencha.gxt.data.shared.PropertyAccess;
 /**
  * Created by abogdanov on 20.04.17.
  */
-public interface UserProps extends PropertyAccess<User>{
+public interface UserProps extends PropertyAccess<UserDTO>{
     @Editor.Path("userId")
-    ModelKeyProvider<User> key();
+    ModelKeyProvider<UserDTO> key();
 
-    ValueProvider<User, Integer> userId();
-    ValueProvider<User, String> login();
-    ValueProvider<User, String> password();
-    ValueProvider<User, String> firstName();
-    ValueProvider<User, String> lastName();
-    ValueProvider<User, String> university();
-    ValueProvider<User, String> email();
+    ValueProvider<UserDTO, Integer> userId();
+    ValueProvider<UserDTO, String> login();
+    ValueProvider<UserDTO, String> password();
+    ValueProvider<UserDTO, String> firstName();
+    ValueProvider<UserDTO, String> lastName();
+    ValueProvider<UserDTO, String> university();
+    ValueProvider<UserDTO, String> email();
+    ValueProvider<UserDTO, RoleDTO> role();
 }
+

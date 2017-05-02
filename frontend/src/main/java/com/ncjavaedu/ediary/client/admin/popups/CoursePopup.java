@@ -7,7 +7,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.ncjavaedu.ediary.client.model.Course;
+import com.ncjavaedu.ediary.client.model.CourseDTO;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.info.Info;
@@ -23,7 +23,7 @@ public class CoursePopup extends PopupPanel {
 
     private static CoursePopupUiBinder uiBinder = GWT.create(CoursePopupUiBinder.class);
 
-    private Course courseToEdit;
+    private CourseDTO courseToEdit;
 
     @UiTemplate("CoursePopup.ui.xml")
     interface CoursePopupUiBinder extends UiBinder<Widget, CoursePopup> {
@@ -35,7 +35,7 @@ public class CoursePopup extends PopupPanel {
         add(uiBinder.createAndBindUi(this));
     }
 
-    public CoursePopup(Course courseToEdit){
+    public CoursePopup(CourseDTO courseToEdit){
         super(false);
 
         add(uiBinder.createAndBindUi(this));
@@ -55,10 +55,10 @@ public class CoursePopup extends PopupPanel {
         if(cb != null){
             if(title.isValid()){
                 if(courseToEdit == null) {
-                    cb.coursePopupValidated(new Course(title.getText()),true);
+                    cb.coursePopupValidated(new CourseDTO(title.getText()),true);
                 }
                 else{
-                    cb.coursePopupValidated(new Course(title.getText()),false);
+                    cb.coursePopupValidated(new CourseDTO(title.getText()),false);
                 }
                 Info.display("Редактирование курса", "Изменения сохранены успешно");
                 super.hide();

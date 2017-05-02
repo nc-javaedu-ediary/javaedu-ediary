@@ -14,7 +14,16 @@
         <ui:attributes width="1" height="1" />
     </ui:with>
 
-    <gxt:ContentPanel headingText="Информация о пользователе" pixelSize="300,300" bodyStyle="padding: 20px">
+    <ui:with type="com.sencha.gxt.widget.core.client.container.BoxLayoutContainer.BoxLayoutData" field="nostretch">
+        <ui:attributes maxSize="-1" />
+    </ui:with>
+
+    <ui:with type="com.google.gwt.cell.client.Cell" field="textCell"/>
+    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="allCoursesStore"/>
+    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="userCoursesStore"/>
+    <ui:with type="com.sencha.gxt.core.client.ValueProvider" field="courseValueProvider"/>
+
+    <gxt:ContentPanel headingText="Информация о пользователе" pixelSize="300,500" bodyStyle="padding: 20px">
         <container:VBoxLayoutContainer VBoxLayoutAlign="STRETCH">
             <!--First Name-->
             <container:HBoxLayoutContainer>
@@ -75,6 +84,23 @@
                     <form:TextField ui:field="password" allowBlank="false"/>
                 </container:child>
             </container:HBoxLayoutContainer>
+
+            <!--Role-->
+            <container:HBoxLayoutContainer>
+                <container:child>
+                    <form:FieldLabel text="Роль"/>
+                </container:child>
+                <g:VerticalPanel>
+                    <form:Radio ui:field="roleAdmin" boxLabel="Админ"/>
+                    <form:Radio ui:field="roleStudent" boxLabel="Студент" value="true"/>
+                    <form:Radio ui:field="roleLecturer" boxLabel="Лектор"/>
+                </g:VerticalPanel>
+            </container:HBoxLayoutContainer>
+
+            <g:VerticalPanel>
+                <form:DualListField ui:field="coursesList" cell="{textCell}" fromStore="{allCoursesStore}"
+                                    toStore="{userCoursesStore}" valueProvider="{courseValueProvider}"/>
+            </g:VerticalPanel>
 
             <!--Buttons-->
             <container:HBoxLayoutContainer pack="CENTER">

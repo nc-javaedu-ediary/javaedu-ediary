@@ -7,7 +7,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.ncjavaedu.ediary.client.model.Lecture;
+import com.ncjavaedu.ediary.client.model.LectureDTO;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.info.Info;
@@ -29,7 +29,7 @@ public class LecturePopup extends PopupPanel {
 
     private static LecturePopupUiBinder uiBinder = GWT.create(LecturePopupUiBinder.class);
 
-    private Lecture lectureToEdit;
+    private LectureDTO lectureToEdit;
 
     @UiTemplate("LecturePopup.ui.xml")
     interface LecturePopupUiBinder extends UiBinder<Widget, LecturePopup> {
@@ -41,7 +41,7 @@ public class LecturePopup extends PopupPanel {
         add(uiBinder.createAndBindUi(this));
     }
 
-    public LecturePopup(Lecture lectureToEdit){
+    public LecturePopup(LectureDTO lectureToEdit){
         super(false);
 
         add(uiBinder.createAndBindUi(this));
@@ -61,11 +61,11 @@ public class LecturePopup extends PopupPanel {
         if(cb != null){
             if(title.isValid()){
                 if(lectureToEdit == null) {
-                    cb.lecturePopupValidated(new Lecture(title.getText(), classroom.getText(),
+                    cb.lecturePopupValidated(new LectureDTO(title.getText(), classroom.getText(),
                             description.getText(), homework.getText()),true);
                 }
                 else{
-                    cb.lecturePopupValidated(new Lecture(title.getText(), classroom.getText(),
+                    cb.lecturePopupValidated(new LectureDTO(title.getText(), classroom.getText(),
                             description.getText(), homework.getText()),false);
                 }
                 Info.display("Редактирование лекции", "Изменения сохранены успешно");

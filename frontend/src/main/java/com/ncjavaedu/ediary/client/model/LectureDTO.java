@@ -19,6 +19,17 @@ public class LectureDTO implements Serializable{
     private String homework;
     private CourseDTO course;
 
+    public LectureDTO(){
+
+    }
+
+    public LectureDTO(String title, String classroom, String description, String homework){
+        this.title = title;
+        this.classroom = classroom;
+        this.description = description;
+        this.homework = homework;
+    }
+
     public Integer getLectureId() {
         return lectureId;
     }

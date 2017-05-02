@@ -8,6 +8,9 @@
     <ui:style src="../../../resources/style.css"/>
 
     <!--Названия вкладок-->
+    <!--<ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="ctab1">-->
+        <!--<ui:attributes text="1"/>-->
+    <!--</ui:with>-->
     <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="courseManagement">
         <ui:attributes text="Список курсов"/>
     </ui:with>
@@ -71,6 +74,12 @@
     <gxt:ContentPanel bodyStyle="padding: 20px">
         <container:VBoxLayoutContainer VBoxLayoutAlign="CENTER">
             <gxt:PlainTabPanel width="800">
+
+                <!--<gxt:child config="{ctab1}">-->
+                    <!--<gxt:ContentPanel headingText="1">-->
+
+                    <!--</gxt:ContentPanel>-->
+                <!--</gxt:child>-->
 
                 <gxt:child config="{courseManagement}">
                     <gxt:ContentPanel headingText="Список курсов">

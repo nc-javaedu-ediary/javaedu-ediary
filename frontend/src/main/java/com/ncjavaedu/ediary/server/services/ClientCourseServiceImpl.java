@@ -20,7 +20,7 @@ public class ClientCourseServiceImpl extends BaseServiceImpl implements ClientCo
         List<Course> remoteCourses = courseService.getCourses();
         List<CourseDTO> courses = new ArrayList<>();
         for (Course course : remoteCourses){
-            CourseDTO dto = courseToDto(course);
+            CourseDTO dto = ServiceUtils.courseToDto(course);
             courses.add(dto);
         }
         return courses;
@@ -28,26 +28,11 @@ public class ClientCourseServiceImpl extends BaseServiceImpl implements ClientCo
 
     @Override
     public CourseDTO saveCourse(CourseDTO dto) {
-        Course course = courseDtoToUser(dto);
+        Course course = ServiceUtils.courseDtoToCourse(dto);
         courseService.saveCourse(course);
 
         //Update userId after save
         dto.setCourseId(course.getCourseId());
         return dto;
-    }
-
-    private CourseDTO courseToDto( Course course){
-        CourseDTO dto = new CourseDTO();
-        dto.setCourseId(course.getCourseId());
-        dto.setTitle(course.getTitle());
-//        dto.setLectures(course.getLectures());
-        return dto;
-    }
-
-    private Course courseDtoToUser(CourseDTO dto){
-        Course course = new Course();
-        course.setCourseId(dto.getCourseId());
-        course.setTitle(dto.getTitle());
-        return course;
     }
 }
