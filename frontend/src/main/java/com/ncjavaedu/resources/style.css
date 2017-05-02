@@ -1,20 +1,38 @@
-.table-style {
+
+.schedule{
+    margin: 20px auto;
+}
+
+.schedule .table-style {
     margin: 10px auto;
     border-collapse: collapse;
     border-spacing: 0;
 }
 
-.table-style td {
+.schedule .table-style td {
     padding: 5px;
     border-bottom-width: 1px;
     border-color: #7ba1d2;
 }
 
-.table-style tbody tr:first-child {
+.schedule .table-style tbody tr:first-child {
     background-color: #abc7ec;
 }
 
 .week {
-    margin: 10px;
-    display: block;
+    /*margin: 10px !important;*/
+    top: 10px;
+    bottom: 10px;
+}
+
+.day{
+    padding: 5px !important;
+}
+.buttonPrev{
+
+}
+
+.buttonNext {
+    padding-left: 30px !important;
+    /*display: block !important;*/
 }

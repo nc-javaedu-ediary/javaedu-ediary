@@ -20,8 +20,6 @@ import com.sencha.gxt.widget.core.client.form.PasswordField;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.info.Info;
 
-import java.util.List;
-
 public class AuthorizationPanel implements IsWidget {
 
     @UiField
@@ -59,8 +57,8 @@ public class AuthorizationPanel implements IsWidget {
         AsyncCallback<UserDTO> callback = new AsyncCallback<UserDTO>() {
             @Override
             public void onFailure(Throwable throwable) {
-                Info.display("Ошибка", "Произошла ошибкак при отправке запроса на сервер"
-                        + throwable.getMessage().toString());
+                Info.display("Ошибка", "Произошла ошибка при отправке запроса на сервер"
+                        + throwable.getMessage());
             }
 
             @Override
@@ -108,7 +106,6 @@ public class AuthorizationPanel implements IsWidget {
     public Widget asWidget() {
         if (widget == null) {
             widget = uiBinder.createAndBindUi(this);
-//            loginField.focus();
         }
         return widget;
     }
