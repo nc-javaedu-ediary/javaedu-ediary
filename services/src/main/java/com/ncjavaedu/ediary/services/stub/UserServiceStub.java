@@ -19,6 +19,20 @@ public class UserServiceStub implements UserService {
                 new TypeToken<List<User>>(){}.getType(), UserServiceStub.class);
     }
 
+    @Override
+    public User getUser(String login, String password) {
+        if (login == null || password == null)
+            return null;
+
+        List<User> users = getUsers();
+        for (User user : users){
+            if (login.equals(user.getLogin()) && password.equals(user.getPassword())){
+                return user;
+            }
+        }
+        return null;
+    }
+
     public void saveUser(User user) {
     }
 }

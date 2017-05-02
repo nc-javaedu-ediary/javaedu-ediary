@@ -5,5 +5,6 @@ import java.util.List;
 
 public interface UserDao {
     List<User> list();
+    User getUser(String login, String password);
     void save(User user);
 }

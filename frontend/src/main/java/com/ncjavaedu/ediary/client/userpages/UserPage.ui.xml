@@ -1,0 +1,56 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:schedule='urn:import:com.ncjavaedu.ediary.client.schedule'
+             xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'>
+    <ui:style src="../../../resources/style.css"/>
+
+    <gxt:ContentPanel>
+        <schedule:Schedule/>
+    </gxt:ContentPanel>
+
+    <!--&lt;!&ndash;Названия вкладок&ndash;&gt;-->
+    <!--<ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="timetable">-->
+        <!--<ui:attributes text="Расписание лекций"/>-->
+    <!--</ui:with>-->
+
+    <!--&lt;!&ndash;TimeTable&ndash;&gt;-->
+
+    <!--<ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData"-->
+             <!--field="week">-->
+        <!--<ui:attributes width="1" height="0.2"/>-->
+    <!--</ui:with>-->
+    <!--<ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData"-->
+             <!--field="ttable">-->
+        <!--<ui:attributes width="1" height="0.8"/>-->
+    <!--</ui:with>-->
+
+    <!--&lt;!&ndash;**********Menu*********&ndash;&gt;-->
+    <!--<gxt:ContentPanel bodyStyle="padding: 20px">-->
+        <!--<container:VBoxLayoutContainer VBoxLayoutAlign="CENTER">-->
+            <!--<gxt:PlainTabPanel width="800">-->
+
+                <!--<gxt:child config="{timetable}">-->
+                    <!--<gxt:ContentPanel headingText="Расписание">-->
+                        <!--<container:VerticalLayoutContainer>-->
+                            <!--<container:child layoutData="{week}">-->
+                                <!--<container:HorizontalLayoutContainer styleName="{style.week}">-->
+                                    <!--<element:Button title="Previous Week" text="←"/>-->
+                                    <!--<form:DateField ui:field="dateBox1" editable="false" enabled="false"/>-->
+                                    <!--&lt;!&ndash;<form:FieldLabel ui:field="dateBox1" enabled="false"/>&ndash;&gt;-->
+                                    <!--<element:Label text=" - "/>-->
+                                    <!--<form:DateField ui:field="dateBox2" editable="false" enabled="false"/>-->
+                                    <!--<element:Button title="Next Week" text="→"/>-->
+                                <!--</container:HorizontalLayoutContainer>-->
+                            <!--</container:child>-->
+                            <!--<container:child layoutData="{ttable}">-->
+                                <!--<element:FlexTable ui:field="schedule" borderWidth="1" width="0.9"-->
+                                                   <!--styleName="{style.table-style}"/>-->
+                            <!--</container:child>-->
+                        <!--</container:VerticalLayoutContainer>-->
+                    <!--</gxt:ContentPanel>-->
+                <!--</gxt:child>-->
+
+            <!--</gxt:PlainTabPanel>-->
+        <!--</container:VBoxLayoutContainer>-->
+    <!--</gxt:ContentPanel>-->
+
+</ui:UiBinder>
