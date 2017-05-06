@@ -99,14 +99,8 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     public Widget asWidget() {
         if (widget == null) {
             users = new ArrayList<>();
-            getUsers();
-
             lectures = new ArrayList<>();
-            getLectures();
-
             courses = new ArrayList<>();
-            getCourses();
-
             // Users tab
             generateUsersTab();
 
@@ -151,6 +145,10 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
             usersGrid.getView().setAutoFill(true);
             lecturesGrid.getView().setAutoFill(true);
             coursesGrid.getView().setAutoFill(true);
+
+            getUsers();
+            getLectures();
+            getCourses();
         }
 
         return widget;
@@ -338,6 +336,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
                 onGetUsers(users);
                 usersStore.replaceAll(users);
                 usersGrid.getView().refresh(true);
+                usersGrid.reconfigure(usersGrid.getStore(),usersGrid.getColumnModel());
             }
         };
         ClientUserService.App.getInstance().getUsers(callback);
@@ -359,6 +358,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
                 onGetLectures(lectures);
                 lecturesStore.replaceAll(lectures);
                 lecturesGrid.getView().refresh(true);
+                lecturesGrid.reconfigure(lecturesGrid.getStore(),lecturesGrid.getColumnModel());
             }
         };
         ClientLectureService.App.getInstance().getLectures(callback);
@@ -380,6 +380,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
                 onGetCourses(courses);
                 coursesStore.replaceAll(courses);
                 coursesGrid.getView().refresh(true);
+                coursesGrid.reconfigure(coursesGrid.getStore(),coursesGrid.getColumnModel());
             }
         };
         ClientCourseService.App.getInstance().getCourses(callback);

@@ -17,11 +17,10 @@ public class Course implements Serializable{
     @Transient
     private Lecturer lecturer;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="LECTURE_ID",nullable = false)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Lecture> lectures = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "USER_COURSES", joinColumns = {
             @JoinColumn(name = "COURSE_ID")}, inverseJoinColumns = {
             @JoinColumn(name = "USER_ID")})

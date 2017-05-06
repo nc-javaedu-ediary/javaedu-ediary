@@ -17,6 +17,7 @@ public class UserDaoImpl extends BaseDao<Integer, User> implements UserDao {
         return (List<User>) criteria.list();
     }
 
+    @Transactional
     @Override
     public User getUser(String login, String password) {
         Criteria criteria = createEntityCriteria();

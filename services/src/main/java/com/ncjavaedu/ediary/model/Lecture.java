@@ -33,8 +33,7 @@ public class Lecture implements Serializable{
 //            @JoinColumn(name = "COURSE_ID")})
 //   private  List<Course> courses = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "COURSE_ID", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
     private Course course;
 
     public Lecture() {}

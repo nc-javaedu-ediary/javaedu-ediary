@@ -8,6 +8,8 @@ import com.ncjavaedu.ediary.model.Course;
 import com.ncjavaedu.ediary.model.Lecture;
 import com.ncjavaedu.ediary.model.Role;
 import com.ncjavaedu.ediary.model.User;
+import com.sencha.gxt.widget.core.client.info.Info;
+import org.hibernate.LazyInitializationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +32,15 @@ public final class ServiceUtils {
         dto.setLogin(user.getLogin());
         dto.setPassword(user.getPassword());
 
+        List<Course> rcvCourses = user.getCourses();
         List<CourseDTO> courseDTOS = new ArrayList<>();
-        for(Course c : user.getCourses()){
-            courseDTOS.add(courseToDto(c));
+        try{
+            for (Course c : rcvCourses) {
+                courseDTOS.add(courseToDto(c));
+            }
+        }
+        catch(LazyInitializationException e){
+            Info.display("Error", "Failed to retrieve courses list from DB");
         }
         dto.setCourses(courseDTOS);
 
