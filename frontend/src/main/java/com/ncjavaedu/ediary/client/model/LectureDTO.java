@@ -1,29 +1,25 @@
 package com.ncjavaedu.ediary.client.model;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
+
 import java.io.Serializable;
-
-//import java.text.DateFormat;
-//import java.text.SimpleDateFormat;
-//import java.util.GregorianCalendar;
+import java.util.Date;
 
 
-public class LectureDTO implements Serializable{
+public class LectureDTO implements Serializable {
     private Integer lectureId;
     private String title;
-//    @Column(name = "DATE")
-//    private GregorianCalendar date = new GregorianCalendar();
-//    @Transient
-//    private DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+    private Date date;
     private String classroom;
     private String description;
     private String homework;
     private CourseDTO course;
 
-    public LectureDTO(){
+    public LectureDTO() {
 
     }
 
-    public LectureDTO(String title, String classroom, String description, String homework){
+    public LectureDTO(String title, String classroom, String description, String homework) {
         this.title = title;
         this.classroom = classroom;
         this.description = description;
@@ -45,18 +41,6 @@ public class LectureDTO implements Serializable{
     public void setTitle(String title) {
         this.title = title;
     }
-
-//    public GregorianCalendar getDate() {
-//        return date;
-//    }
-
-//    public void setDate(GregorianCalendar date) {
-//        this.date = date;
-//    }
-
-//    public void setDate(String date) {
-//        parseDate(date);
-//    }
 
     public String getClassroom() {
         return classroom;
@@ -80,6 +64,26 @@ public class LectureDTO implements Serializable{
 
     public void setHomework(String homework) {
         this.homework = homework;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getLectureTime() {
+        return DateTimeFormat.getFormat("HH:mm").format(date);
+    }
+
+    public CourseDTO getCourse() {
+        return course;
+    }
+
+    public void setCourse(CourseDTO course) {
+        this.course = course;
     }
 
 //    private void parseDate(String date) {

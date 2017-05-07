@@ -14,19 +14,16 @@ import org.hibernate.LazyInitializationException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by abogdanov on 01.05.17.
- */
-public final class ServiceUtils {
+final class ServiceUtils {
 
-    public static final UserDTO userToDto(User user){
+    static UserDTO userToDto(User user) {
         UserDTO dto = new UserDTO();
         dto.setUserId(user.getUserId());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
         dto.setUniversity(user.getUniversity());
-        if(user.getRole() != null) {
+        if (user.getRole() != null) {
             dto.setRole(RoleDTO.values()[user.getRole().ordinal()]);
         }
         dto.setLogin(user.getLogin());
@@ -34,34 +31,32 @@ public final class ServiceUtils {
 
         List<Course> rcvCourses = user.getCourses();
         List<CourseDTO> courseDTOS = new ArrayList<>();
-        try{
+        try {
             for (Course c : rcvCourses) {
                 courseDTOS.add(courseToDto(c));
             }
-        }
-        catch(LazyInitializationException e){
+        } catch (LazyInitializationException e) {
             Info.display("Error", "Failed to retrieve courses list from DB");
         }
         dto.setCourses(courseDTOS);
-
         return dto;
     }
 
-    public static final User userDtoToUser(UserDTO dto){
+    static User userDtoToUser(UserDTO dto) {
         User user = new User();
         user.setUserId(dto.getUserId());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
         user.setUniversity(dto.getUniversity());
-        if(dto.getRole() != null){
+        if (dto.getRole() != null) {
             user.setRole(Role.values()[dto.getRole().ordinal()]);
         }
         user.setLogin(dto.getLogin());
         user.setPassword(dto.getPassword());
 
         List<Course> courses = new ArrayList<>();
-        for(CourseDTO c : dto.getCourses()){
+        for (CourseDTO c : dto.getCourses()) {
             courses.add(courseDtoToCourse(c));
         }
         user.setCourses(courses);
@@ -69,38 +64,63 @@ public final class ServiceUtils {
         return user;
     }
 
-    public static final LectureDTO lectureToDto(Lecture lecture){
+    static LectureDTO lectureToDto(Lecture lecture) {
         LectureDTO dto = new LectureDTO();
         dto.setLectureId(lecture.getLectureId());
         dto.setTitle(lecture.getTitle());
+
+        dto.setDate(lecture.getDate());
+        dto.setCourse(courseToDto(lecture.getCourse()));
+
         dto.setClassroom(lecture.getClassroom());
         dto.setDescription(lecture.getDescription());
         dto.setHomework(lecture.getHomework());
         return dto;
     }
 
-    public static final Lecture lectureDtoToLecture(LectureDTO dto){
+    static Lecture lectureDtoToLecture(LectureDTO dto) {
         Lecture lecture = new Lecture();
         lecture.setLectureId(dto.getLectureId());
         lecture.setTitle(dto.getTitle());
+
+        lecture.setDate(dto.getDate());
+//        course
+
         lecture.setClassroom(dto.getClassroom());
         lecture.setDescription(dto.getDescription());
         lecture.setHomework(dto.getHomework());
         return lecture;
     }
 
-    public static final CourseDTO courseToDto( Course course){
+    static CourseDTO courseToDto(Course course) {
         CourseDTO dto = new CourseDTO();
         dto.setCourseId(course.getCourseId());
         dto.setTitle(course.getTitle());
-//        dto.setLectures(course.getLectures());
+
+//        dto.setLecturer(userToDto(course.getLecturer()));
+//        List<LectureDTO> lectures = new ArrayList<>();
+//        for(Lecture l : course.getLectures()){
+//            lectures.add(lectureToDto(l));
+//        }
+//        dto.setLectures(lectures);
+//        List<UserDTO>
+
         return dto;
     }
 
-    public static final Course courseDtoToCourse(CourseDTO dto){
+    static Course courseDtoToCourse(CourseDTO dto) {
         Course course = new Course();
         course.setCourseId(dto.getCourseId());
         course.setTitle(dto.getTitle());
+
+//        course.setLecturer((Lecturer)userDtoToUser(dto.getLecturer()));
+//        List<Lecture> lectures = new ArrayList<>();
+//        for(LectureDTO l : dto.getLectures()){
+//            lectures.add(lectureDtoToLecture(l));
+//        }
+//        course.setLectures(lectures);
+//        List<User>
+
         return course;
     }
 }

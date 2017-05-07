@@ -7,9 +7,6 @@
     <ui:style src="../../../resources/style.css"/>
 
     <!--Названия вкладок-->
-    <!--<ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="ctab1">-->
-        <!--<ui:attributes text="1"/>-->
-    <!--</ui:with>-->
     <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="courseManagement">
         <ui:attributes text="Список курсов"/>
     </ui:with>
@@ -32,7 +29,7 @@
         <ui:attributes width="1" height="1"/>
     </ui:with>
     <ui:with type="com.sencha.gxt.widget.core.client.grid.GridView" field="usersView">
-        <ui:attributes stripeRows="true"></ui:attributes>
+        <ui:attributes stripeRows="true"/>
     </ui:with>
     <ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="usersCM"/>
     <ui:with type="com.sencha.gxt.data.shared.ListStore" field="usersStore"/>
@@ -58,7 +55,7 @@
     <ui:with type="com.sencha.gxt.data.shared.ListStore" field="coursesStore"/>
 
     <!--**********Menu*********-->
-    <gxt:ContentPanel bodyStyle="padding: 20px">
+    <gxt:ContentPanel bodyStyle="padding: 20px" headerVisible="false">
         <container:VBoxLayoutContainer VBoxLayoutAlign="CENTER">
             <gxt:PlainTabPanel width="800">
 
@@ -123,9 +120,9 @@
                 </gxt:child>
 
                 <gxt:child config="{timetable}">
-                    <!--<gxt:ContentPanel headingText="Расписание">-->
-                        <schedule:Schedule/>
-                    <!--</gxt:ContentPanel>-->
+                    <gxt:ContentPanel headerVisible="false" ui:field="timeTable">
+                        <!--<schedule:Schedule/>-->
+                    </gxt:ContentPanel>
                 </gxt:child>
                 <gxt:child config="{reports}">
                     <gxt:ContentPanel headingText="Отчеты">

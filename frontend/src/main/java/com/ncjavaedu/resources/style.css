@@ -1,6 +1,7 @@
 
 .schedule{
     margin: 20px auto;
+    min-height: 200px;
 }
 
 .schedule .table-style {
@@ -23,6 +24,7 @@
     /*margin: 10px !important;*/
     top: 10px;
     bottom: 10px;
+    display: block;
 }
 
 .day{
@@ -36,3 +38,8 @@
     padding-left: 30px !important;
     /*display: block !important;*/
 }
+
+.lecture{
+
+}
+

@@ -33,7 +33,7 @@
                 <element:Label text=" - " styleName="{style.day}"/>
             </container:child>
             <container:child>
-                <element:DateLabel ui:field="sunday" styleName="{style.day}"/>
+                <element:DateLabel ui:field="friday" styleName="{style.day}"/>
             </container:child>
 
             <container:child>

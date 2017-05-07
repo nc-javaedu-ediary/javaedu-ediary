@@ -1,17 +1,9 @@
 package com.ncjavaedu.ediary.server.services;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.ncjavaedu.ediary.client.model.CourseDTO;
-import com.ncjavaedu.ediary.client.model.RoleDTO;
 import com.ncjavaedu.ediary.client.model.UserDTO;
-import com.ncjavaedu.ediary.client.services.ClientCourseService;
 import com.ncjavaedu.ediary.client.services.ClientUserService;
-import com.ncjavaedu.ediary.model.Course;
-import com.ncjavaedu.ediary.model.Role;
 import com.ncjavaedu.ediary.model.User;
 import com.ncjavaedu.ediary.services.UserService;
-import com.sencha.gxt.widget.core.client.info.Info;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;

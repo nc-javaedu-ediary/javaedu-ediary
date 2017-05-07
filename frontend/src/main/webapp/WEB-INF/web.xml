@@ -39,6 +39,14 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <servlet>
+        <servlet-name>remoteLoggingService</servlet-name>
+        <servlet-class>com.google.gwt.logging.server.RemoteLoggingServiceImpl</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!-- Servlet Mapping -->
+
     <servlet-mapping>
         <servlet-name>userService</servlet-name>
         <url-pattern>/ediary/userService</url-pattern>
@@ -52,6 +60,11 @@
     <servlet-mapping>
         <servlet-name>courseService</servlet-name>
         <url-pattern>/ediary/courseService</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>remoteLoggingService</servlet-name>
+        <url-pattern>/ediary/remote_logging</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

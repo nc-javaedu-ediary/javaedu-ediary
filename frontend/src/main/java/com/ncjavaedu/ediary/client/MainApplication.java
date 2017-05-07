@@ -23,8 +23,7 @@ public class MainApplication implements IsWidget, EntryPoint {
         return widget;
     }
 
-    interface ReportingUiBinder extends UiBinder<Widget, MainApplication> {
-    }
+    interface ReportingUiBinder extends UiBinder<Widget, MainApplication> {}
 
     /**
      * This is the entry point method.

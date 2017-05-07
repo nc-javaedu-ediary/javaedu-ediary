@@ -12,11 +12,14 @@ import com.ncjavaedu.ediary.client.admin.popups.AdminPopupCallbacks;
 import com.ncjavaedu.ediary.client.admin.popups.CoursePopup;
 import com.ncjavaedu.ediary.client.admin.popups.LecturePopup;
 import com.ncjavaedu.ediary.client.admin.popups.UserPopup;
-import com.ncjavaedu.ediary.client.model.*;
+import com.ncjavaedu.ediary.client.model.CourseDTO;
+import com.ncjavaedu.ediary.client.model.LectureDTO;
+import com.ncjavaedu.ediary.client.model.UserDTO;
 import com.ncjavaedu.ediary.client.props.CourseProps;
 import com.ncjavaedu.ediary.client.props.LectureProps;
 import com.ncjavaedu.ediary.client.props.RoleValueProvider;
 import com.ncjavaedu.ediary.client.props.UserProps;
+import com.ncjavaedu.ediary.client.schedule.Schedule;
 import com.ncjavaedu.ediary.client.services.ClientCourseService;
 import com.ncjavaedu.ediary.client.services.ClientLectureService;
 import com.ncjavaedu.ediary.client.services.ClientUserService;
@@ -25,7 +28,6 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.grid.*;
-import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.info.Info;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 
@@ -35,18 +37,11 @@ import java.util.logging.Logger;
 
 
 public class AdminMenu implements IsWidget, AdminPopupCallbacks {
+    // Users tab
     @UiField
     TextButton addUserButton;
     @UiField
     TextButton editUserButton;
-    @UiField
-    TextButton addLectureButton;
-    @UiField
-    TextButton editLectureButton;
-    @UiField
-    TextButton addCourseButton;
-    @UiField
-    TextButton editCourseButton;
 
     @UiField(provided = true)
     ColumnModel<UserDTO> usersCM;
@@ -57,6 +52,12 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     @UiField
     Grid<UserDTO> usersGrid;
 
+    // Lectures tab
+    @UiField
+    TextButton addLectureButton;
+    @UiField
+    TextButton editLectureButton;
+
     @UiField(provided = true)
     ColumnModel<LectureDTO> lecturesCM;
     @UiField(provided = true)
@@ -66,6 +67,12 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     @UiField
     Grid<LectureDTO> lecturesGrid;
 
+    // Course tab
+    @UiField
+    TextButton addCourseButton;
+    @UiField
+    TextButton editCourseButton;
+
     @UiField(provided = true)
     ColumnModel<CourseDTO> coursesCM;
     @UiField(provided = true)
@@ -74,6 +81,12 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     GridView<CourseDTO> coursesView;
     @UiField
     Grid<CourseDTO> coursesGrid;
+
+    // Schedule tab
+    @UiField(provided = true)
+//    Schedule timeTable;
+            ContentPanel timeTable;
+
 
     private static final UserProps userProps = GWT.create(UserProps.class);
     private static final LectureProps lecturesProps = GWT.create(LectureProps.class);
@@ -101,14 +114,12 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
             users = new ArrayList<>();
             lectures = new ArrayList<>();
             courses = new ArrayList<>();
-            // Users tab
+
+            // Generate tabs
             generateUsersTab();
-
-            // Lectures tab
             generateLecturesTab();
-
-            // Course tab
             generateCourseTab();
+            generateSchedule();
 
             widget = uiBinder.createAndBindUi(this);
 
@@ -130,13 +141,12 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
                     });
 
             GridSelectionModel<CourseDTO> courseSelectionModel = new GridSelectionModel<>();
-            courseSelectionModel.addSelectionChangedHandler(
-                    new SelectionChangedEvent.SelectionChangedHandler<CourseDTO>() {
-                        @Override
-                        public void onSelectionChanged(SelectionChangedEvent<CourseDTO> selectionChangedEvent) {
-                            editCourseButton.setEnabled(true);
-                        }
-                    });
+            courseSelectionModel.addSelectionChangedHandler(new SelectionChangedEvent.SelectionChangedHandler<CourseDTO>() {
+                @Override
+                public void onSelectionChanged(SelectionChangedEvent<CourseDTO> selectionChangedEvent) {
+                    editCourseButton.setEnabled(true);
+                }
+            });
 
             usersGrid.setSelectionModel(gridSelectionModel);
             lecturesGrid.setSelectionModel(lectureSelectionModel);
@@ -163,7 +173,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 
     @UiHandler({"editUserButton"})
     public void editUserButtonClick(SelectEvent selectEvent) {
-        final UserPopup popup = new UserPopup(usersGrid.getSelectionModel().getSelectedItem(),courses);
+        final UserPopup popup = new UserPopup(usersGrid.getSelectionModel().getSelectedItem(), courses);
 
         popup.ShowUserPopup(this);
     }
@@ -227,10 +237,10 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 
     public void userPopupValidated(UserDTO user, boolean newUser) {
         //TODO: remove
-        for(CourseDTO c: user.getCourses()){
-            Info.display(c.getTitle().toString(),c.getCourseId().toString());
+        for (CourseDTO c : user.getCourses()) {
+            Info.display(c.getTitle(), c.getCourseId().toString());
         }
-        if (newUser == false) {
+        if (!newUser) {
             users.remove(usersGrid.getSelectionModel().getSelectedItem());
             usersGrid.getSelectionModel().deselect(usersGrid.getSelectionModel().getSelectedItem());
             editUserButton.setEnabled(false);
@@ -287,7 +297,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     }
 
     public void lecturePopupValidated(LectureDTO lecture, boolean newLecture) {
-        if (newLecture == false) {
+        if (!newLecture) {
             lectures.remove(lecturesGrid.getSelectionModel().getSelectedItem());
             lecturesGrid.getSelectionModel().deselect(lecturesGrid.getSelectionModel().getSelectedItem());
             editLectureButton.setEnabled(false);
@@ -315,7 +325,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     }
 
     public void coursePopupValidated(CourseDTO course, boolean newCourse) {
-        if (newCourse == false) {
+        if (!newCourse) {
             courses.remove(coursesGrid.getSelectionModel().getSelectedItem());
             coursesGrid.getSelectionModel().deselect(coursesGrid.getSelectionModel().getSelectedItem());
             editCourseButton.setEnabled(false);
@@ -325,7 +335,15 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         coursesGrid.getView().refresh(true);
     }
 
-    private void getUsers(){
+    //----------Timetable Tab-----------//
+
+    private void generateSchedule() {
+        timeTable = new ContentPanel();
+    }
+
+    //----------*****Get data*****-----------//
+
+    private void getUsers() {
         AsyncCallback<List<UserDTO>> callback = new AsyncCallback<List<UserDTO>>() {
             public void onFailure(Throwable caught) {
                 Info.display("Ошибка", "Не удалось получить список пользователей");
@@ -336,17 +354,17 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
                 onGetUsers(users);
                 usersStore.replaceAll(users);
                 usersGrid.getView().refresh(true);
-                usersGrid.reconfigure(usersGrid.getStore(),usersGrid.getColumnModel());
+                usersGrid.reconfigure(usersGrid.getStore(), usersGrid.getColumnModel());
             }
         };
         ClientUserService.App.getInstance().getUsers(callback);
     }
 
-    private void onGetUsers(List<UserDTO> users){
+    private void onGetUsers(List<UserDTO> users) {
         this.users.addAll(users);
     }
 
-    private void getLectures(){
+    private void getLectures() {
         AsyncCallback<List<LectureDTO>> callback = new AsyncCallback<List<LectureDTO>>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -355,20 +373,23 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 
             @Override
             public void onSuccess(List<LectureDTO> lectures) {
+//                logger.log(Level.INFO, "success");
+
                 onGetLectures(lectures);
+                timeTable.add(new Schedule(lectures));
                 lecturesStore.replaceAll(lectures);
                 lecturesGrid.getView().refresh(true);
-                lecturesGrid.reconfigure(lecturesGrid.getStore(),lecturesGrid.getColumnModel());
+                lecturesGrid.reconfigure(lecturesGrid.getStore(), lecturesGrid.getColumnModel());
             }
         };
         ClientLectureService.App.getInstance().getLectures(callback);
     }
 
-    private void onGetLectures(List<LectureDTO> lectures){
+    private void onGetLectures(List<LectureDTO> lectures) {
         this.lectures.addAll(lectures);
     }
 
-    private void getCourses(){
+    private void getCourses() {
         AsyncCallback<List<CourseDTO>> callback = new AsyncCallback<List<CourseDTO>>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -380,13 +401,13 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
                 onGetCourses(courses);
                 coursesStore.replaceAll(courses);
                 coursesGrid.getView().refresh(true);
-                coursesGrid.reconfigure(coursesGrid.getStore(),coursesGrid.getColumnModel());
+                coursesGrid.reconfigure(coursesGrid.getStore(), coursesGrid.getColumnModel());
             }
         };
         ClientCourseService.App.getInstance().getCourses(callback);
     }
 
-    private void onGetCourses(List<CourseDTO> courses){
+    private void onGetCourses(List<CourseDTO> courses) {
         this.courses.addAll(courses);
     }
 }
