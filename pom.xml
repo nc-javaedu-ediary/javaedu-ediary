@@ -15,7 +15,8 @@
     </modules>
 
     <properties>
-        <profileName>local</profileName>
+        <profileName>production</profileName>
+        <!--<profileName>local</profileName>-->
         <springframework.version>4.2.5.RELEASE</springframework.version>
         <gwt.version>2.7.0</gwt.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

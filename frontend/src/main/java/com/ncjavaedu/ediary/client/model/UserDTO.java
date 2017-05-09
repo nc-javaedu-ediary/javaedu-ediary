@@ -3,8 +3,6 @@ package com.ncjavaedu.ediary.client.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-//import java.util.ArrayList;
-//import java.util.List;
 
 public class UserDTO implements Serializable {
     private Integer userId;
@@ -16,6 +14,7 @@ public class UserDTO implements Serializable {
     private String email;
     private RoleDTO role;
     private List<CourseDTO> courses = new ArrayList<>();
+    private List<LectureDTO> lectures = new ArrayList<>();
 
     public UserDTO(){
 
@@ -119,5 +118,11 @@ public class UserDTO implements Serializable {
         this.email = userDTO.getEmail();
         this.role = userDTO.getRole();
         this.courses = userDTO.getCourses();
+    }
+
+    public List<LectureDTO> getAllLectures() {
+        for (CourseDTO course : courses)
+            lectures.addAll(course.getLectures());
+        return lectures;
     }
 }

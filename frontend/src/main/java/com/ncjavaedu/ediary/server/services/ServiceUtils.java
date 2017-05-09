@@ -33,14 +33,14 @@ public final class ServiceUtils {
         return dto;
     }
 
-    public static final User userDtoToUser(UserDTO dto){
+    public static User userDtoToUser(UserDTO dto) {
         User user = new User();
         user.setUserId(dto.getUserId());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
         user.setUniversity(dto.getUniversity());
-        if(dto.getRole() != null){
+        if (dto.getRole() != null) {
             user.setRole(Role.values()[dto.getRole().ordinal()]);
         }
         user.setLogin(dto.getLogin());
@@ -53,6 +53,10 @@ public final class ServiceUtils {
         LectureDTO dto = new LectureDTO();
         dto.setLectureId(lecture.getLectureId());
         dto.setTitle(lecture.getTitle());
+
+        dto.setDate(lecture.getDate());
+        dto.setCourse(courseToDto(lecture.getCourse()));
+
         dto.setClassroom(lecture.getClassroom());
         dto.setDescription(lecture.getDescription());
         dto.setHomework(lecture.getHomework());
@@ -63,6 +67,10 @@ public final class ServiceUtils {
         Lecture lecture = new Lecture();
         lecture.setLectureId(dto.getLectureId());
         lecture.setTitle(dto.getTitle());
+
+        lecture.setDate(dto.getDate());
+//        course
+
         lecture.setClassroom(dto.getClassroom());
         lecture.setDescription(dto.getDescription());
         lecture.setHomework(dto.getHomework());

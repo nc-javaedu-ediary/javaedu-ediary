@@ -79,14 +79,14 @@ public class AuthorizationPanel implements IsWidget {
                 if(dto.getRole() == RoleDTO.Admin)
                     displayAdminMenu();
                 else
-                    displayUserPage();
+                    displayUserPage(dto);
             }
             else
-                displayUserPage();
+                displayUserPage(dto);
         }
     }
 
-    public void displayAdminMenu(){
+    private void displayAdminMenu(){
         Viewport vp = new Viewport();
         vp.add(new AdminMenu().asWidget());
         //TODO RootPanel.get("content")
@@ -94,9 +94,9 @@ public class AuthorizationPanel implements IsWidget {
         RootLayoutPanel.get().add(vp);
     }
 
-    public void displayUserPage(){
+    private void displayUserPage(UserDTO dto){
         Viewport vp = new Viewport();
-        vp.add(new UserPage().asWidget());
+        vp.add(new UserPage(dto).asWidget());
         //TODO RootPanel.get("content")
         RootLayoutPanel.get().clear();
         RootLayoutPanel.get().add(vp);

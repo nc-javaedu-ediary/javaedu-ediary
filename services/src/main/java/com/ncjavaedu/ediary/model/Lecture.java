@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
+import java.util.Date;
 
 @Entity
 @Table(name = "LECTURES")
@@ -19,8 +19,10 @@ public class Lecture implements Serializable{
     private Integer lectureId;
     @Column(name = "TITLE")
     private String title;
+//    @Column(name = "DATE")
+//    private GregorianCalendar date = new GregorianCalendar();
     @Column(name = "DATE")
-    private GregorianCalendar date = new GregorianCalendar();
+    private Date date;
     @Transient
     private DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
     @Column(name = "CLASSROOM")
@@ -77,15 +79,15 @@ public class Lecture implements Serializable{
         this.title = title;
     }
 
-    public GregorianCalendar getDate() {
-        return date;
-    }
-
     public String getStringDate() {
         return dateFormat.format(date);
     }
 
-    public void setDate(GregorianCalendar date) {
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -123,7 +125,7 @@ public class Lecture implements Serializable{
 
     private void parseDate(String date) {
         try {
-            this.date.setTime(dateFormat.parse(date));
+            this.date = dateFormat.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
