@@ -55,7 +55,8 @@ public final class ServiceUtils {
         dto.setTitle(lecture.getTitle());
 
         dto.setDate(lecture.getDate());
-        dto.setCourse(courseToDto(lecture.getCourse()));
+        if(lecture.getCourse() != null)
+            dto.setCourse(courseToDto(lecture.getCourse()));
 
         dto.setClassroom(lecture.getClassroom());
         dto.setDescription(lecture.getDescription());
@@ -69,7 +70,6 @@ public final class ServiceUtils {
         lecture.setTitle(dto.getTitle());
 
         lecture.setDate(dto.getDate());
-//        course
 
         lecture.setClassroom(dto.getClassroom());
         lecture.setDescription(dto.getDescription());

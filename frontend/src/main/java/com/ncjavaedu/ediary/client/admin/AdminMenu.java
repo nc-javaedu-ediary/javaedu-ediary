@@ -374,7 +374,8 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 //                logger.log(Level.INFO, "success");
 
                 onGetLectures(lectures);
-                timeTable.add(new Schedule(lectures));
+                // TODO: Fix timetable
+//                timeTable.add(new Schedule(lectures));
                 lecturesStore.replaceAll(lectures);
                 lecturesGrid.getView().refresh(true);
                 lecturesGrid.reconfigure(lecturesGrid.getStore(), lecturesGrid.getColumnModel());
