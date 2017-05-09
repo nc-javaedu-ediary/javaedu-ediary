@@ -7,9 +7,9 @@
     <ui:style src="../../../resources/style.css"/>
 
     <!--Названия вкладок-->
-    <!--<ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="ctab1">-->
-        <!--<ui:attributes text="1"/>-->
-    <!--</ui:with>-->
+    <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="ctab1">
+        <ui:attributes text="1"/>
+    </ui:with>
     <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="courseManagement">
         <ui:attributes text="Список курсов"/>
     </ui:with>
@@ -62,11 +62,11 @@
         <container:VBoxLayoutContainer VBoxLayoutAlign="CENTER">
             <gxt:PlainTabPanel width="800">
 
-                <!--<gxt:child config="{ctab1}">-->
-                    <!--<gxt:ContentPanel headingText="1">-->
+                <gxt:child config="{ctab1}">
+                    <gxt:ContentPanel headingText="1">
 
-                    <!--</gxt:ContentPanel>-->
-                <!--</gxt:child>-->
+                    </gxt:ContentPanel>
+                </gxt:child>
 
                 <gxt:child config="{courseManagement}">
                     <gxt:ContentPanel headingText="Список курсов">
@@ -123,9 +123,7 @@
                 </gxt:child>
 
                 <gxt:child config="{timetable}">
-                    <!--<gxt:ContentPanel headingText="Расписание">-->
-                        <schedule:Schedule/>
-                    <!--</gxt:ContentPanel>-->
+                    <schedule:Schedule/>
                 </gxt:child>
                 <gxt:child config="{reports}">
                     <gxt:ContentPanel headingText="Отчеты">

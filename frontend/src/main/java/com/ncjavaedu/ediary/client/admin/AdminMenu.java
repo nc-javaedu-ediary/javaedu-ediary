@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-
 public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     @UiField
     TextButton addUserButton;
@@ -184,14 +183,14 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 
     @UiHandler({"addCourseButton"})
     public void addCourseButtonClick(SelectEvent selectEvent) {
-        final CoursePopup popup = new CoursePopup();
+        final CoursePopup popup = new CoursePopup(lectures);
 
         popup.ShowCoursePopup(this);
     }
 
     @UiHandler({"editCourseButton"})
     public void editCourseButtonClick(SelectEvent selectEvent) {
-        final CoursePopup popup = new CoursePopup(coursesGrid.getSelectionModel().getSelectedItem());
+        final CoursePopup popup = new CoursePopup(coursesGrid.getSelectionModel().getSelectedItem(), lectures);
 
         popup.ShowCoursePopup(this);
     }
@@ -225,38 +224,22 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         usersStore.addAll(users);
     }
 
-    public void userPopupValidated(UserDTO user, boolean newUser) {
-        //TODO: remove
-        for(CourseDTO c: user.getCourses()){
-            Info.display(c.getTitle().toString(),c.getCourseId().toString());
+    public void userPopupValidated(UserDTO user) {
+        if(tryUpdateUser(user) == false){
+            users.add(user);
         }
-        if (newUser == false) {
-            users.remove(usersGrid.getSelectionModel().getSelectedItem());
-            usersGrid.getSelectionModel().deselect(usersGrid.getSelectionModel().getSelectedItem());
-            editUserButton.setEnabled(false);
-        }
-        users.add(user);
         usersStore.replaceAll(users);
         usersGrid.getView().refresh(true);
-        // TODO: Fix saving
-//        else{
-//            AsyncCallback<UserDTO> callback = new AsyncCallback<UserDTO>() {
-//                @Override
-//                public void onFailure(Throwable throwable) {
-//                    Info.display("Ошибка", "Не удалось сохранить пользователя в базе");
-//                    Info.display("Error", throwable.getMessage().toString());
-//                }
-//
-//                @Override
-//                public void onSuccess(UserDTO userDTO) {
-//                    Info.display("Успешно", "Пользователь сохранен в базе");
-//                    users.add(userDTO);
-//                    usersStore.replaceAll(users);
-//                    usersGrid.getView().refresh(true);
-//                }
-//            };
-//            ClientUserService.App.getInstance().saveUser(user,callback);
-//        }
+    }
+
+    private boolean tryUpdateUser(UserDTO user){
+        for(UserDTO u : users){
+            if(u.getUserId() == user.getUserId()){
+                u.setUserDTO(user);
+                return true;
+            }
+        }
+        return false;
     }
 
     //-------Lecture Management Tab---------//
@@ -286,15 +269,22 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         lecturesStore.addAll(lectures);
     }
 
-    public void lecturePopupValidated(LectureDTO lecture, boolean newLecture) {
-        if (newLecture == false) {
-            lectures.remove(lecturesGrid.getSelectionModel().getSelectedItem());
-            lecturesGrid.getSelectionModel().deselect(lecturesGrid.getSelectionModel().getSelectedItem());
-            editLectureButton.setEnabled(false);
+    public void lecturePopupValidated(LectureDTO lecture) {
+        if (tryUpdateLecture(lecture) == false) {
+            lectures.add(lecture);
         }
-        lectures.add(lecture);
         lecturesStore.replaceAll(lectures);
         lecturesGrid.getView().refresh(true);
+    }
+
+    private boolean tryUpdateLecture(LectureDTO lecture){
+        for(LectureDTO l : lectures){
+            if(l.getLectureId() == lecture.getLectureId()){
+                l.setLectureDTO(lecture);
+                return true;
+            }
+        }
+        return false;
     }
 
     //-------Course Management Tab---------//
@@ -314,15 +304,22 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         coursesStore.addAll(courses);
     }
 
-    public void coursePopupValidated(CourseDTO course, boolean newCourse) {
-        if (newCourse == false) {
-            courses.remove(coursesGrid.getSelectionModel().getSelectedItem());
-            coursesGrid.getSelectionModel().deselect(coursesGrid.getSelectionModel().getSelectedItem());
-            editCourseButton.setEnabled(false);
+    public void coursePopupValidated(CourseDTO course) {
+        if (tryUpdateCourse(course) == false){
+            courses.add(course);
         }
-        courses.add(course);
         coursesStore.replaceAll(courses);
         coursesGrid.getView().refresh(true);
+    }
+
+    private boolean tryUpdateCourse(CourseDTO course){
+        for(CourseDTO c: courses){
+            if(c.getCourseId() == course.getCourseId()){
+                c.setCourseDTO(course);
+                return true;
+            }
+        }
+        return false;
     }
 
     private void getUsers(){

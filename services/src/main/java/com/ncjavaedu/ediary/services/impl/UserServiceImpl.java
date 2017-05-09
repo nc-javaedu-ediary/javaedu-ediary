@@ -1,6 +1,7 @@
 package com.ncjavaedu.ediary.services.impl;
 
 import com.ncjavaedu.ediary.dao.UserDao;
+import com.ncjavaedu.ediary.model.Course;
 import com.ncjavaedu.ediary.model.User;
 import com.ncjavaedu.ediary.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,8 @@ public class UserServiceImpl implements UserService {
         return dao.getUser(login, password);
     }
 
-    public void saveUser(User user) {
-       dao.save(user);
+    @Override
+    public void saveUser(User user, List<Course> courses){
+        dao.save(user, courses);
     }
 }

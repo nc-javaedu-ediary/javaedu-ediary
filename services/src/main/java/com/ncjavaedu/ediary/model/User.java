@@ -1,5 +1,8 @@
 package com.ncjavaedu.ediary.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,6 +35,7 @@ public class User implements Serializable{
     @JoinTable(name = "USER_COURSES", joinColumns = {
     @JoinColumn(name = "USER_ID")}, inverseJoinColumns = {
     @JoinColumn(name = "COURSE_ID")})
+    @Fetch(value = FetchMode.SELECT)
     private List<Course> courses = new ArrayList<>();
 
     public User() {

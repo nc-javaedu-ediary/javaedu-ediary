@@ -9,6 +9,14 @@
              xmlns:form="urn:import:com.sencha.gxt.widget.core.client.form"
              xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
+    <ui:with type="com.sencha.gxt.data.shared.LabelProvider" field="cbValueProvider"/>
+    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="cbLecturersStore"/>
+
+    <ui:with type="com.google.gwt.cell.client.Cell" field="textCell"/>
+    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="allLecturesStore"/>
+    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="courseLecturesStore"/>
+    <ui:with type="com.sencha.gxt.core.client.ValueProvider" field="lectureValueProvider"/>
+
     <gxt:ContentPanel headingText="Информация о курсе" pixelSize="300,300" bodyStyle="padding: 20px">
         <container:VBoxLayoutContainer VBoxLayoutAlign="STRETCH">
             <!--First Name-->
@@ -20,6 +28,23 @@
                     <form:TextField ui:field="title" allowBlank="false"/>
                 </container:child>
             </container:HBoxLayoutContainer>
+
+            <!--Lecturer-->
+            <container:HBoxLayoutContainer>
+                <container:child>
+                    <form:FieldLabel text="Лектор"/>
+                </container:child>
+                <container:child>
+                    <form:ComboBox ui:field="lecturer" labelProvider="{cbValueProvider}"
+                                         store="{cbLecturersStore}"/>
+                </container:child>
+            </container:HBoxLayoutContainer>
+
+            <!--Lectures-->
+            <g:VerticalPanel>
+                <form:DualListField ui:field="lecturesList" cell="{textCell}" fromStore="{allLecturesStore}"
+                                    toStore="{courseLecturesStore}" valueProvider="{lectureValueProvider}"/>
+            </g:VerticalPanel>
 
             <!--Buttons-->
             <container:HBoxLayoutContainer pack="CENTER">

@@ -1,6 +1,5 @@
 package com.ncjavaedu.ediary.server.services;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.ncjavaedu.ediary.client.model.LectureDTO;
 import com.ncjavaedu.ediary.model.Lecture;
 import com.ncjavaedu.ediary.client.services.ClientLectureService;
@@ -23,6 +22,8 @@ public class ClientLectureServiceImpl extends BaseServiceImpl implements ClientL
         List<LectureDTO> lectures = new ArrayList<>();
         for (Lecture lecture : remoteLectures){
             LectureDTO dto = ServiceUtils.lectureToDto(lecture);
+            if(lecture.getCourse() != null)
+                dto.setCourse(ServiceUtils.courseToDto(lecture.getCourse()));
             lectures.add(dto);
         }
         return lectures;
@@ -31,6 +32,7 @@ public class ClientLectureServiceImpl extends BaseServiceImpl implements ClientL
     @Override
     public LectureDTO saveLecture(LectureDTO dto) {
         Lecture lecture = ServiceUtils.lectureDtoToLecture(dto);
+//        lecture.setCourse(ServiceUtils.courseDtoToCourse(dto.getCourse()));
         lectureService.saveLecture(lecture);
 
         //Update userId after save

@@ -3,6 +3,7 @@ package com.ncjavaedu.ediary.services.stub; /**
  */
 
 import com.google.gson.reflect.TypeToken;
+import com.ncjavaedu.ediary.model.Course;
 import com.ncjavaedu.ediary.model.User;
 import com.ncjavaedu.ediary.services.UserService;
 import com.ncjavaedu.ediary.utils.JSONUtils;
@@ -33,6 +34,8 @@ public class UserServiceStub implements UserService {
         return null;
     }
 
-    public void saveUser(User user) {
+    @Override
+    public void saveUser(User user, List<Course> courses){
+
     }
 }

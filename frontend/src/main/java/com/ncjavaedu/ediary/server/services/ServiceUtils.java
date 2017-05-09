@@ -8,8 +8,6 @@ import com.ncjavaedu.ediary.model.Course;
 import com.ncjavaedu.ediary.model.Lecture;
 import com.ncjavaedu.ediary.model.Role;
 import com.ncjavaedu.ediary.model.User;
-import com.sencha.gxt.widget.core.client.info.Info;
-import org.hibernate.LazyInitializationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,18 +30,6 @@ public final class ServiceUtils {
         dto.setLogin(user.getLogin());
         dto.setPassword(user.getPassword());
 
-        List<Course> rcvCourses = user.getCourses();
-        List<CourseDTO> courseDTOS = new ArrayList<>();
-        try{
-            for (Course c : rcvCourses) {
-                courseDTOS.add(courseToDto(c));
-            }
-        }
-        catch(LazyInitializationException e){
-            Info.display("Error", "Failed to retrieve courses list from DB");
-        }
-        dto.setCourses(courseDTOS);
-
         return dto;
     }
 
@@ -59,12 +45,6 @@ public final class ServiceUtils {
         }
         user.setLogin(dto.getLogin());
         user.setPassword(dto.getPassword());
-
-        List<Course> courses = new ArrayList<>();
-        for(CourseDTO c : dto.getCourses()){
-            courses.add(courseDtoToCourse(c));
-        }
-        user.setCourses(courses);
 
         return user;
     }
@@ -93,7 +73,7 @@ public final class ServiceUtils {
         CourseDTO dto = new CourseDTO();
         dto.setCourseId(course.getCourseId());
         dto.setTitle(course.getTitle());
-//        dto.setLectures(course.getLectures());
+
         return dto;
     }
 
@@ -101,6 +81,25 @@ public final class ServiceUtils {
         Course course = new Course();
         course.setCourseId(dto.getCourseId());
         course.setTitle(dto.getTitle());
+
         return course;
+    }
+
+    public static final void linkUserToCoursesDto(UserDTO dto, User user){
+        List<Course> courses = user.getCourses();
+        List<CourseDTO> courseDTOS = new ArrayList<>();
+        for(Course c: courses){
+            courseDTOS.add(ServiceUtils.courseToDto(c));
+        }
+        dto.setCourses(courseDTOS);
+    }
+
+    public static final void linkCourseToLecturesDto(CourseDTO dto, Course course){
+        List<Lecture> rcvLectures = course.getLectures();
+        List<LectureDTO> lectureDTOS = new ArrayList<>();
+        for (Lecture l : rcvLectures) {
+            lectureDTOS.add(lectureToDto(l));
+        }
+        dto.setLectures(lectureDTOS);
     }
 }

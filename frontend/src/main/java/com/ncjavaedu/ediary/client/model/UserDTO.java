@@ -108,4 +108,16 @@ public class UserDTO implements Serializable {
     public void setCourses(List<CourseDTO> courses) {
         this.courses = courses;
     }
+
+    public void setUserDTO(UserDTO userDTO){
+        this.userId = userDTO.getUserId();
+        this.login = userDTO.getLogin();
+        this.password = userDTO.getPassword();
+        this.firstName = userDTO.getFirstName();
+        this.lastName = userDTO.getLastName();
+        this.university = userDTO.getUniversity();
+        this.email = userDTO.getEmail();
+        this.role = userDTO.getRole();
+        this.courses = userDTO.getCourses();
+    }
 }

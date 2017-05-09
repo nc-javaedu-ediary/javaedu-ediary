@@ -1,5 +1,8 @@
 package com.ncjavaedu.ediary.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -33,7 +36,12 @@ public class Lecture implements Serializable{
 //            @JoinColumn(name = "COURSE_ID")})
 //   private  List<Course> courses = new ArrayList<>();
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name="COURSE_LECTURES", joinColumns = {
+            @JoinColumn(name="LECTURE_ID")}, inverseJoinColumns = {
+            @JoinColumn(name="COURSE_ID")
+    })
+    @Fetch(value = FetchMode.SELECT)
     private Course course;
 
     public Lecture() {}
@@ -108,6 +116,10 @@ public class Lecture implements Serializable{
     public void setHomework(String homework) {
         this.homework = homework;
     }
+
+    public Course getCourse() { return  course; }
+
+    public void setCourse(Course course) { this.course = course; }
 
     private void parseDate(String date) {
         try {

@@ -1,6 +1,5 @@
 package com.ncjavaedu.ediary.client.model;
 
-import javax.jws.soap.SOAPBinding;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,5 +66,12 @@ public class CourseDTO implements Serializable{
 
     public void setUsers(List<UserDTO> users) {
         this.users = users;
+    }
+
+    public void setCourseDTO(CourseDTO courseDTO){
+        this.courseId = courseDTO.getCourseId();
+        this.title = courseDTO.getTitle();
+        this.lecturer = courseDTO.getLecturer();
+        this.lectures = courseDTO.getLectures();
     }
 }

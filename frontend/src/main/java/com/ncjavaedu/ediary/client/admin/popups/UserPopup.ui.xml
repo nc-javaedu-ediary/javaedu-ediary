@@ -97,6 +97,8 @@
                 </g:VerticalPanel>
             </container:HBoxLayoutContainer>
 
+
+            <!--Courses-->
             <g:VerticalPanel>
                 <form:DualListField ui:field="coursesList" cell="{textCell}" fromStore="{allCoursesStore}"
                                     toStore="{userCoursesStore}" valueProvider="{courseValueProvider}"/>

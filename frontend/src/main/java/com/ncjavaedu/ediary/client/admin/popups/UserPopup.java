@@ -9,9 +9,11 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.ncjavaedu.ediary.client.model.*;
 import com.ncjavaedu.ediary.client.props.CourseProps;
+import com.ncjavaedu.ediary.client.services.ClientUserService;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -96,6 +98,7 @@ public class UserPopup extends PopupPanel{
         add(uiBinder.createAndBindUi(this));
 
         createToggleGroup();
+        roleStudent.setValue(true);
     }
 
     public UserPopup(UserDTO user){
@@ -136,23 +139,34 @@ public class UserPopup extends PopupPanel{
             if(firstName.isValid()){
                 if(login.isValid()){
                     if(password.isValid()){
-                        if(userToEdit == null) {
-                            cb.userPopupValidated(new UserDTO(login.getText(),
-                                    password.getText(), firstName.getText(), lastName.getText(),
-                                    university.getText(), email.getText(),radioToRoleDTO(), coursesList.getValue()),
-                                    true);
+                        UserDTO dto = new UserDTO();
+                        if(userToEdit != null){
+                            dto.setUserId(userToEdit.getUserId());
                         }
-                        else{
-                            userToEdit.setLogin(login.getText());
-                            userToEdit.setPassword(password.getText());
-                            userToEdit.setFirstName(firstName.getText());
-                            userToEdit.setLastName(lastName.getText());
-                            userToEdit.setUniversity(university.getText());
-                            userToEdit.setEmail(email.getText());
-                            userToEdit.setRole(radioToRoleDTO());
-                            userToEdit.setCourses(coursesList.getValue());
-                            cb.userPopupValidated(userToEdit, false);
+                        dto.setLogin(login.getText());
+                        dto.setPassword(password.getText());
+                        dto.setFirstName(firstName.getText());
+                        dto.setLastName(lastName.getText());
+                        dto.setEmail(email.getText());
+                        dto.setUniversity(university.getText());
+                        dto.setRole(radioToRoleDTO());
+                        List<CourseDTO> courseDTOList = new ArrayList<>();
+                        for(CourseDTO c: coursesList.getValue()){
+                            courseDTOList.add(c);
                         }
+                        AsyncCallback<UserDTO> callback = new AsyncCallback<UserDTO>() {
+                            @Override
+                            public void onFailure(Throwable throwable) {
+                                Info.display("!","Fail1");
+                            }
+
+                            @Override
+                            public void onSuccess(UserDTO userDTO) {
+                                Info.display("!","Success");
+                                cb.userPopupValidated(userDTO);
+                            }
+                        };
+                        ClientUserService.App.getInstance().saveUser(dto, courseDTOList, callback);
                         Info.display("Редактирование пользователя", "Изменения сохранены");
                         super.hide();
                     }

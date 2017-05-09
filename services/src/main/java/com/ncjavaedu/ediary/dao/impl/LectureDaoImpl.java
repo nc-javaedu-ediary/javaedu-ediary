@@ -23,6 +23,6 @@ public class LectureDaoImpl extends BaseDao<Integer, Lecture> implements Lecture
     @Transactional
     public void save(Lecture lecture)
     {
-        getSession().persist(lecture);
+        getSession().saveOrUpdate(lecture);
     }
 }

@@ -82,6 +82,19 @@ public class LectureDTO implements Serializable{
         this.homework = homework;
     }
 
+    public CourseDTO getCourse() { return course;}
+
+    public void setCourse(CourseDTO course) { this.course = course; }
+
+    public void setLectureDTO(LectureDTO lectureDTO){
+        this.lectureId = lectureDTO.getLectureId();
+        this.title = lectureDTO.getTitle();
+        this.classroom = lectureDTO.getClassroom();
+        this.description = lectureDTO.getDescription();
+        this.homework = lectureDTO.getHomework();
+        this.course = lectureDTO.getCourse();
+    }
+
 //    private void parseDate(String date) {
 //        try {
 //            this.date.setTime(dateFormat.parse(date));

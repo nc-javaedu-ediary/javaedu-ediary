@@ -5,9 +5,11 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.ncjavaedu.ediary.client.model.LectureDTO;
+import com.ncjavaedu.ediary.client.services.ClientLectureService;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.info.Info;
@@ -60,15 +62,28 @@ public class LecturePopup extends PopupPanel {
     public void saveButtonClick(SelectEvent selectEvent){
         if(cb != null){
             if(title.isValid()){
-                if(lectureToEdit == null) {
-                    cb.lecturePopupValidated(new LectureDTO(title.getText(), classroom.getText(),
-                            description.getText(), homework.getText()),true);
+                LectureDTO dto = new LectureDTO();
+                if(lectureToEdit != null){
+                    dto.setLectureId(lectureToEdit.getLectureId());
                 }
-                else{
-                    cb.lecturePopupValidated(new LectureDTO(title.getText(), classroom.getText(),
-                            description.getText(), homework.getText()),false);
-                }
-                Info.display("Редактирование лекции", "Изменения сохранены успешно");
+                dto.setTitle(title.getText());
+                dto.setClassroom(classroom.getText());
+                dto.setDescription(description.getText());
+                dto.setHomework(homework.getText());
+
+                AsyncCallback<LectureDTO> callback = new AsyncCallback<LectureDTO>() {
+                    @Override
+                    public void onFailure(Throwable throwable) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(LectureDTO lectureDTO) {
+                        Info.display("!","Success");
+                        cb.lecturePopupValidated(lectureDTO);
+                    }
+                };
+                ClientLectureService.App.getInstance().saveLecture(dto, callback);
                 super.hide();
             }
             else

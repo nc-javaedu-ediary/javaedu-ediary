@@ -1,5 +1,8 @@
 package com.ncjavaedu.ediary.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,16 +17,28 @@ public class Course implements Serializable{
     private Integer courseId;
     @Column(name = "TITLE")
     private String title;
-    @Transient
-    private Lecturer lecturer;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name="COURSE_LECTURERS", joinColumns = {
+            @JoinColumn(name="COURSE_ID")}, inverseJoinColumns = {
+            @JoinColumn(name="USER_ID")
+    })
+    @Fetch(value = FetchMode.SELECT)
+    private User lecturer;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name="COURSE_LECTURES", joinColumns = {
+            @JoinColumn(name="COURSE_ID")}, inverseJoinColumns = {
+            @JoinColumn(name="LECTURE_ID")
+    })
+    @Fetch(value = FetchMode.SELECT)
     private List<Lecture> lectures = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "USER_COURSES", joinColumns = {
             @JoinColumn(name = "COURSE_ID")}, inverseJoinColumns = {
             @JoinColumn(name = "USER_ID")})
+    @Fetch(value = FetchMode.SELECT)
     private List<User> users = new ArrayList<>();
 
     public Course() {}
@@ -48,11 +63,11 @@ public class Course implements Serializable{
         this.title = title;
     }
 
-    public Lecturer getLecturer() {
+    public User getLecturer() {
         return lecturer;
     }
 
-    public void setLecturer(Lecturer lecturer) {
+    public void setLecturer(User lecturer) {
         this.lecturer = lecturer;
     }
 
@@ -67,4 +82,6 @@ public class Course implements Serializable{
     public void removeLecture(Lecture lecture) {
         lectures.remove(lecture);
     }
+
+    public void setLectures(List<Lecture> lectures) { this.lectures = lectures; }
 }
