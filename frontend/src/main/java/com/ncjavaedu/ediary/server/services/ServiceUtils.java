@@ -55,8 +55,6 @@ public final class ServiceUtils {
         dto.setTitle(lecture.getTitle());
 
         dto.setDate(lecture.getDate());
-        if(lecture.getCourse() != null)
-            dto.setCourse(courseToDto(lecture.getCourse()));
 
         dto.setClassroom(lecture.getClassroom());
         dto.setDescription(lecture.getDescription());
