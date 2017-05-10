@@ -11,4 +11,5 @@ public interface LectureService {
     List<Lecture> getLectures();
 
     void saveLecture(Lecture lecture);
+    void deleteLecture(Lecture lecture);
 }

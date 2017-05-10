@@ -58,4 +58,11 @@ public class ClientUserServiceImpl extends BaseServiceImpl implements ClientUser
         }
         return users;
     }
+
+    @Override
+    public UserDTO deleteUser(UserDTO dto){
+        User user = ServiceUtils.userDtoToUser(dto);
+        userService.deleteUser(user);
+        return dto;
+    }
 }

@@ -13,6 +13,7 @@ public interface UserService {
     List<User> getUsers();
     User getUser(String login, String password);
     void saveUser(User user, List<Course> courses);
+    void deleteUser(User user);
 
     default List<User> getLecturers(){
         return getUsers().stream().filter(u -> u.getRole() == Role.Lecturer).collect(Collectors.toList());

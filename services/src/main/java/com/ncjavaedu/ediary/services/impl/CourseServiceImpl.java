@@ -28,4 +28,8 @@ public class CourseServiceImpl implements CourseService {
     {
         dao.save(course, lecturer, lectures);
     }
+
+    public void deleteCourse(Course course){
+
+    }
 }

@@ -46,4 +46,11 @@ public class ClientCourseServiceImpl extends BaseServiceImpl implements ClientCo
         dto.setCourseId(course.getCourseId());
         return dto;
     }
+
+    @Override
+    public CourseDTO deleteCourse(CourseDTO dto){
+        Course course = ServiceUtils.courseDtoToCourse(dto);
+        courseService.deleteCourse(course);
+        return dto;
+    }
 }

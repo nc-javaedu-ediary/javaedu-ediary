@@ -32,4 +32,9 @@ public class UserDaoImpl extends BaseDao<Integer, User> implements UserDao {
         user.setCourses(courses);
         getSession().saveOrUpdate(user);
     }
+
+    @Transactional
+    public void delete(User user){
+        super.delete(user);
+    }
 }

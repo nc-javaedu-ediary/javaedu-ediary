@@ -25,4 +25,9 @@ public class LectureDaoImpl extends BaseDao<Integer, Lecture> implements Lecture
     {
         getSession().saveOrUpdate(lecture);
     }
+
+    @Transactional
+    public void delete(Lecture lecture){
+        super.delete(lecture);
+    }
 }

@@ -11,6 +11,7 @@ import java.util.List;
 public interface ClientLectureService extends RemoteService {
     List<LectureDTO> getLectures();
     LectureDTO saveLecture(LectureDTO lectureDTO);
+    LectureDTO deleteLecture(LectureDTO dto);
 
     public static class App {
         private static ClientLectureServiceAsync instance = GWT.create(ClientLectureService.class);

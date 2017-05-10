@@ -41,6 +41,8 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     TextButton addUserButton;
     @UiField
     TextButton editUserButton;
+    @UiField
+    TextButton removeUserButton;
 
     @UiField(provided = true)
     ColumnModel<UserDTO> usersCM;
@@ -56,6 +58,8 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     TextButton addLectureButton;
     @UiField
     TextButton editLectureButton;
+    @UiField
+    TextButton removeLectureButton;
 
     @UiField(provided = true)
     ColumnModel<LectureDTO> lecturesCM;
@@ -71,6 +75,8 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     TextButton addCourseButton;
     @UiField
     TextButton editCourseButton;
+    @UiField
+    TextButton removeCourseButton;
 
     @UiField(provided = true)
     ColumnModel<CourseDTO> coursesCM;
@@ -127,6 +133,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
                 @Override
                 public void onSelectionChanged(SelectionChangedEvent<UserDTO> selectionChangedEvent) {
                     editUserButton.setEnabled(true);
+                    removeUserButton.setEnabled(true);
                 }
             });
 
@@ -136,6 +143,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
                         @Override
                         public void onSelectionChanged(SelectionChangedEvent<LectureDTO> selectionChangedEvent) {
                             editLectureButton.setEnabled(true);
+                            removeLectureButton.setEnabled(true);
                         }
                     });
 
@@ -145,6 +153,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
                         @Override
                         public void onSelectionChanged(SelectionChangedEvent<CourseDTO> selectionChangedEvent) {
                             editCourseButton.setEnabled(true);
+                            removeCourseButton.setEnabled(true);
                         }
                     });
 
@@ -178,6 +187,31 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         popup.ShowUserPopup(this);
     }
 
+    @UiHandler({"removeUserButton"})
+    public void removeUserButtonClick(SelectEvent selectEvent){
+        AsyncCallback<UserDTO> callback = new AsyncCallback<UserDTO>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                Info.display("!", "Failed to delete");
+            }
+
+            @Override
+            public void onSuccess(UserDTO dto) {
+                for(UserDTO u : users){
+                    if(u.getUserId() == dto.getUserId()){
+                        users.remove(u);
+                        break;
+                    }
+                }
+                usersStore.replaceAll(users);
+                usersGrid.getView().refresh(true);
+                removeUserButton.setEnabled(false);
+                editUserButton.setEnabled(false);
+            }
+        };
+        ClientUserService.App.getInstance().deleteUser(usersGrid.getSelectionModel().getSelectedItem(), callback);
+    }
+
     @UiHandler({"addLectureButton"})
     public void addLectureButtonClick(SelectEvent selectEvent) {
         final LecturePopup popup = new LecturePopup();
@@ -192,6 +226,32 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         popup.ShowLecturePopup(this);
     }
 
+    @UiHandler({"removeLectureButton"})
+    public void removeLectureButtonClick(SelectEvent selectEvent){
+        AsyncCallback<LectureDTO> callback = new AsyncCallback<LectureDTO>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                Info.display("!", "Failed to delete");
+            }
+
+            @Override
+            public void onSuccess(LectureDTO dto) {
+                for(LectureDTO l : lectures){
+                    if(l.getLectureId() == dto.getLectureId()){
+                        lectures.remove(l);
+                        break;
+                    }
+                }
+                lecturesStore.replaceAll(lectures);
+                lecturesGrid.getView().refresh(true);
+                removeLectureButton.setEnabled(false);
+                editLectureButton.setEnabled(false);
+            }
+        };
+        ClientLectureService.App.getInstance().deleteLecture(lecturesGrid.getSelectionModel().getSelectedItem(),
+                callback);
+    }
+
     @UiHandler({"addCourseButton"})
     public void addCourseButtonClick(SelectEvent selectEvent) {
         final CoursePopup popup = new CoursePopup(lectures);
@@ -204,6 +264,32 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         final CoursePopup popup = new CoursePopup(coursesGrid.getSelectionModel().getSelectedItem(), lectures);
 
         popup.ShowCoursePopup(this);
+    }
+
+    @UiHandler({"removeCourseButton"})
+    public void removeCourseButtonClick(SelectEvent selectEvent){
+        AsyncCallback<CourseDTO> callback = new AsyncCallback<CourseDTO>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                Info.display("!", "Failed to delete");
+            }
+
+            @Override
+            public void onSuccess(CourseDTO dto) {
+                for(CourseDTO c : courses){
+                    if(c.getCourseId() == dto.getCourseId()){
+                        courses.remove(c);
+                        break;
+                    }
+                }
+                coursesStore.replaceAll(courses);
+                coursesGrid.getView().refresh(true);
+                removeCourseButton.setEnabled(false);
+                editCourseButton.setEnabled(false);
+            }
+        };
+        ClientCourseService.App.getInstance().deleteCourse(coursesGrid.getSelectionModel().getSelectedItem(),
+                callback);
     }
 
     //-------User Management Tab---------//

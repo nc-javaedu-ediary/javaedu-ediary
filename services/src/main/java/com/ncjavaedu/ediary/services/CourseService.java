@@ -13,4 +13,5 @@ public interface CourseService {
     List<Course> getCourses();
 
     void saveCourse(Course course, User lecturer, List<Lecture> lectures);
+    void deleteCourse(Course course);
 }

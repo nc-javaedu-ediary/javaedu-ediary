@@ -28,4 +28,9 @@ public class CourseDaoImpl extends BaseDao<Integer, Course> implements CourseDao
         course.setLectures(lectures);
         getSession().saveOrUpdate(course);
     }
+
+    @Transactional
+    public void delete(Course course){
+        super.delete(course);
+    }
 }

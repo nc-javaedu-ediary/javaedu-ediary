@@ -39,4 +39,11 @@ public class ClientLectureServiceImpl extends BaseServiceImpl implements ClientL
         dto.setLectureId(lecture.getLectureId());
         return dto;
     }
+
+    @Override
+    public LectureDTO deleteLecture(LectureDTO dto){
+        Lecture lecture = ServiceUtils.lectureDtoToLecture(dto);
+        lectureService.deleteLecture(lecture);
+        return dto;
+    }
 }

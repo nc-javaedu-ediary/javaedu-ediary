@@ -8,4 +8,5 @@ public interface UserDao {
     List<User> list();
     User getUser(String login, String password);
     void save(User user, List<Course> courses);
+    void delete(User user);
 }
