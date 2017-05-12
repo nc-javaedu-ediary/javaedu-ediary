@@ -14,7 +14,6 @@ public class UserDTO implements Serializable {
     private String email;
     private RoleDTO role;
     private List<CourseDTO> courses = new ArrayList<>();
-    private List<LectureDTO> lectures = new ArrayList<>();
 
     public UserDTO(){
 
@@ -30,6 +29,18 @@ public class UserDTO implements Serializable {
         setEmail(email);
         setRole(role);
         setCourses(courseDTOS);
+    }
+
+    public void setUserDTO(UserDTO userDTO){
+        this.userId = userDTO.getUserId();
+        this.login = userDTO.getLogin();
+        this.password = userDTO.getPassword();
+        this.firstName = userDTO.getFirstName();
+        this.lastName = userDTO.getLastName();
+        this.university = userDTO.getUniversity();
+        this.email = userDTO.getEmail();
+        this.role = userDTO.getRole();
+        this.courses = userDTO.getCourses();
     }
 
     public Integer getUserId() {
@@ -72,6 +83,10 @@ public class UserDTO implements Serializable {
         this.lastName = lastName;
     }
 
+    public String getFullName(){
+        return firstName.substring(0,1) + ". " + lastName;
+    }
+
     public String getUniversity() {
         return university;
     }
@@ -88,10 +103,6 @@ public class UserDTO implements Serializable {
         this.email = email;
     }
 
-    public String getFullName(){
-        return firstName + " " + lastName;
-    }
-
     public RoleDTO getRole() {
         return role;
     }
@@ -106,23 +117,5 @@ public class UserDTO implements Serializable {
 
     public void setCourses(List<CourseDTO> courses) {
         this.courses = courses;
-    }
-
-    public void setUserDTO(UserDTO userDTO){
-        this.userId = userDTO.getUserId();
-        this.login = userDTO.getLogin();
-        this.password = userDTO.getPassword();
-        this.firstName = userDTO.getFirstName();
-        this.lastName = userDTO.getLastName();
-        this.university = userDTO.getUniversity();
-        this.email = userDTO.getEmail();
-        this.role = userDTO.getRole();
-        this.courses = userDTO.getCourses();
-    }
-
-    public List<LectureDTO> getAllLectures() {
-        for (CourseDTO course : courses)
-            lectures.addAll(course.getLectures());
-        return lectures;
     }
 }

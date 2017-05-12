@@ -4,6 +4,8 @@
     <ui:style src="../../../resources/style.css"/>
 
     <gxt:ContentPanel>
-        <schedule:Schedule ui:field="schedule"/>
+        <gxt:ContentPanel headerVisible="false" ui:field="timeTable">
+            <!--<schedule:Schedule/>-->
+        </gxt:ContentPanel>
     </gxt:ContentPanel>
 </ui:UiBinder>

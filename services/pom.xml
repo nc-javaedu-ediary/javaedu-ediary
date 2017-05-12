@@ -13,6 +13,7 @@
     <artifactId>javaedu-ediary.services</artifactId>
     <name>javaedu-ediary.services</name>
     <version>1.0</version>
+
     <build>
         <plugins>
             <plugin>
@@ -32,20 +33,6 @@
         <joda-time.version>2.9.2</joda-time.version>
         <slf4j.version>1.7.5</slf4j.version>
     </properties>
-
-    <!--<build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <source>${java.source}</source>
-                    <target>${java.target}</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>-->
 
     <dependencies>
         <dependency>
@@ -120,18 +107,5 @@
             <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
-
-
-
-        <!--<dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-core</artifactId>
-            <version>2.2.0</version>
-        </dependency>-->
     </dependencies>
 </project>

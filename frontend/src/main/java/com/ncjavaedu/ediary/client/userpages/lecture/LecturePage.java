@@ -4,48 +4,49 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.ncjavaedu.ediary.client.admin.popups.AdminPopupCallbacks;
 import com.ncjavaedu.ediary.client.model.CourseDTO;
 import com.ncjavaedu.ediary.client.model.LectureDTO;
 import com.ncjavaedu.ediary.client.model.UserDTO;
-import com.ncjavaedu.ediary.client.props.RoleValueProvider;
-import com.ncjavaedu.ediary.client.props.UserProps;
-import com.sencha.gxt.data.shared.ListStore;
-import com.sencha.gxt.widget.core.client.form.FieldLabel;
-import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
-import com.sencha.gxt.widget.core.client.grid.ColumnModel;
-import com.sencha.gxt.widget.core.client.grid.Grid;
-import com.sencha.gxt.widget.core.client.grid.GridView;
+import com.ncjavaedu.ediary.client.schedule.Schedule;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class LecturePage extends PopupPanel {
-    @UiField(provided = true)
-    FieldLabel theme;
-    @UiField(provided = true)
-    FieldLabel lectDate;
-    @UiField(provided = true)
-    FieldLabel lecturer;
-    @UiField(provided = true)
-    FieldLabel description;
-    @UiField(provided = true)
-    FieldLabel homework;
-
     @UiField
-    Grid<UserDTO> usersGrid;
+    Label theme;
     @UiField
-    GridView<UserDTO> usersView;
-    @UiField(provided = true)
-    ColumnModel<UserDTO> usersCM;
-    @UiField(provided = true)
-    ListStore<UserDTO> usersStore;
+    Label lectDate;
+    @UiField
+    Label lecturer;
+    @UiField
+    Label description;
+    @UiField
+    Label homework;
 
-    private static final UserProps userProps = GWT.create(UserProps.class);
+//    @UiField
+//    Grid<UserDTO> usersGrid;
+//    @UiField
+//    GridView<UserDTO> usersView;
+//    @UiField(provided = true)
+//    ColumnModel<UserDTO> usersCM;
+//    @UiField(provided = true)
+//    ListStore<UserDTO> usersStore;
+private static final Logger logger = Logger.getLogger(Schedule.class.getName());
+
+
+    private static final LecturePageProps userProps = GWT.create(LecturePageProps.class);
+
     private LectureDTO lecture;
+
+    private UserDTO lector;
     private CourseDTO course;
     private List<UserDTO> users;
 
@@ -62,36 +63,62 @@ public class LecturePage extends PopupPanel {
     }
 
     public LecturePage(LectureDTO lecture) {
-        super(false);
-        add(uiBinder.createAndBindUi(this));
+        super(true);
         this.lecture = lecture;
         course = lecture.getCourse();
-        users = course.getUsers();
+        lector = course.getLecturer();
+        for (UserDTO user : course.getUsers()) {
+            if (user.getUserId() != lector.getUserId())
+                users.add(user);
+        }
+        add(uiBinder.createAndBindUi(this));
+//        try {
+//            generatePage(role);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
-    private void generateUserList(){
-        ColumnConfig<UserDTO, Integer> idCol = new ColumnConfig<>(userProps.userId(), 20, "ID");
-        ColumnConfig<UserDTO, String> fnCol = new ColumnConfig<>(userProps.firstName(), 80, "Имя");
-        ColumnConfig<UserDTO, String> lnCol = new ColumnConfig<>(userProps.lastName(), 100, "Фамилия");
-//        ColumnConfig<UserDTO, String> checkBoxCol = new ColumnConfig<>(userProps.university(), 80, "Университет");
-        RoleValueProvider rvp = new RoleValueProvider();
-        ColumnConfig<UserDTO, String> roleCol = new ColumnConfig<>(rvp, 150, "Роль");
+    private void generatePage(int role) {
+        theme.setText(lecture.getTitle());
+        logger.log(Level.INFO, "lecture.getTitle() ");
 
-        List<ColumnConfig<UserDTO, ?>> userColumns = new ArrayList<>();
-        userColumns.add(idCol);
-        userColumns.add(fnCol);
-        userColumns.add(lnCol);
-//        userColumns.add(checkBoxCol);
-        userColumns.add(roleCol);
-
-        usersCM = new ColumnModel<>(userColumns);
-
-        usersStore = new ListStore<>(userProps.key());
-        if(users != null)
-        usersStore.addAll(users);
+        lectDate.setText(lecture.getLectureDay());
+        try {
+            lecturer.setText(lecture.getCourse().getLecturer().getFullName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        description.setText(lecture.getDescription());
+        if (!Objects.equals(lecture.getHomework(), ""))
+            homework.setText(lecture.getHomework());
+        else
+            homework.setText("Не задано");
+//        if (role == 1)
+//        generateUserList();
     }
 
-    public void ShowLecturePopup(final AdminPopupCallbacks cb){
+//    private void generateUserList() {
+////        IdentityValueProvider<UserDTO> provider = new IdentityValueProvider<>();
+////        final CheckBoxSelectionModel<UserDTO> selectionModel = new CheckBoxSelectionModel<>(provider);
+//        ColumnConfig<UserDTO, Integer> idCol = new ColumnConfig<>(userProps.userId(), 20, "ID");
+//        ColumnConfig<UserDTO, String> fnCol = new ColumnConfig<>(userProps.firstName(), 80, "Имя");
+//        ColumnConfig<UserDTO, String> lnCol = new ColumnConfig<>(userProps.lastName(), 100, "Фамилия");
+//
+//        List<ColumnConfig<UserDTO, ?>> userColumns = new ArrayList<>();
+////        userColumns.add(selectionModel.getColumn());
+//        userColumns.add(idCol);
+//        userColumns.add(fnCol);
+//        userColumns.add(lnCol);
+//
+//        usersCM = new ColumnModel<>(userColumns);
+//
+//        usersStore = new ListStore<>(userProps.key());
+//        if (users != null)
+//            usersStore.addAll(users);
+//    }
+
+    public void ShowLecturePopup(final AdminPopupCallbacks cb) {
         this.cb = cb;
 
         center();

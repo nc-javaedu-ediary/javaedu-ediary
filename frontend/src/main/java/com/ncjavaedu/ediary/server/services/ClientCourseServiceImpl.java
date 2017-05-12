@@ -24,6 +24,7 @@ public class ClientCourseServiceImpl extends BaseServiceImpl implements ClientCo
         List<CourseDTO> courses = new ArrayList<>();
         for (Course course : remoteCourses){
             CourseDTO dto = ServiceUtils.courseToDto(course);
+            ServiceUtils.linkCourseToLecturerDto(dto, course);
             ServiceUtils.linkCourseToLecturesDto(dto, course);
             courses.add(dto);
         }

@@ -32,12 +32,6 @@ public class Lecture implements Serializable{
     @Column(name = "HOMEWORK")
     private String homework;
 
-//    @ManyToMany(cascade = CascadeType.ALL)
-//    @JoinTable(name = "COURSE_LECTURES", joinColumns = {
-//            @JoinColumn(name = "LECTURE_ID")}, inverseJoinColumns = {
-//            @JoinColumn(name = "COURSE_ID")})
-//   private  List<Course> courses = new ArrayList<>();
-
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name="COURSE_LECTURES", joinColumns = {
             @JoinColumn(name="LECTURE_ID")}, inverseJoinColumns = {

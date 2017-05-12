@@ -35,11 +35,15 @@
 }
 
 .buttonNext {
-    padding-left: 30px !important;
+    padding-left: 35px !important;
     /*display: block !important;*/
 }
 
 .lecture{
 
+}
+
+.label{
+    /*font-size: 16px !important;*/
 }
 

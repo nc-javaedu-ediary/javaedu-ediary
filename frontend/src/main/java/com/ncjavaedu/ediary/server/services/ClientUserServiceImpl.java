@@ -41,7 +41,7 @@ public class ClientUserServiceImpl extends BaseServiceImpl implements ClientUser
     @Override
     public UserDTO getUser(String login, String password) {
         User user = userService.getUser(login, password);
-        return (user == null) ? null : ServiceUtils.userToDto(user);
+        return (user == null) ? null : getUserDTO(user);
     }
 
     @Override
@@ -51,12 +51,15 @@ public class ClientUserServiceImpl extends BaseServiceImpl implements ClientUser
 
     private List<UserDTO> rcvUserDTOList(List<User> src){
         List<UserDTO> users = new ArrayList<>();
-        for (User user : src){
-            UserDTO dto = ServiceUtils.userToDto(user);
-            ServiceUtils.linkUserToCoursesDto(dto, user);
-            users.add(dto);
-        }
+        for (User user : src)
+            users.add(getUserDTO(user));
         return users;
+    }
+
+    private UserDTO getUserDTO(User user) {
+        UserDTO dto = ServiceUtils.userToDto(user);
+        ServiceUtils.linkUserToCoursesDto(dto, user);
+        return dto;
     }
 
     @Override

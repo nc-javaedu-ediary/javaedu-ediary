@@ -26,14 +26,14 @@
                 <button:TextButton title="Previous Week" text="←" ui:field="previous" styleName="{style.buttonPrev}"/>
             </container:child>
             <container:child>
-                <element:DateLabel ui:field="monday" styleName="{style.day}"/>
+                <element:Label ui:field="monday" styleName="{style.day}"/>
             </container:child>
             <!--<form:FieldLabel ui:field="dateBox1" enabled="false"/>-->
             <container:child>
                 <element:Label text=" - " styleName="{style.day}"/>
             </container:child>
             <container:child>
-                <element:DateLabel ui:field="friday" styleName="{style.day}"/>
+                <element:Label ui:field="friday" styleName="{style.day}"/>
             </container:child>
 
             <container:child>

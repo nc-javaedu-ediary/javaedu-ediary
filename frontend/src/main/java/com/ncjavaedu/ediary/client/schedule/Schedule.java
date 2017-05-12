@@ -8,12 +8,11 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.ui.DateLabel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.ncjavaedu.ediary.client.model.CourseDTO;
 import com.ncjavaedu.ediary.client.model.LectureDTO;
-import com.ncjavaedu.ediary.client.model.UserDTO;
 import com.ncjavaedu.ediary.client.userpages.lecture.LecturePage;
 import com.sencha.gxt.widget.core.client.Composite;
 import com.sencha.gxt.widget.core.client.button.TextButton;
@@ -29,9 +28,9 @@ public class Schedule extends Composite {
     @UiField
     FlexTable schedule;
     @UiField
-    DateLabel monday;
+    Label monday;
     @UiField
-    DateLabel friday;
+    Label friday;
     @UiField
     TextButton previous;
     @UiField
@@ -43,14 +42,15 @@ public class Schedule extends Composite {
 
     private Date currentDate;
     private List<LectureDTO> allLectures;
+    private List<CourseDTO> allCoursers;
+    private int role;
     private Map<Integer, List<LectureDTO>> weeklectureMap;
-
 
     @UiTemplate("Schedule.ui.xml")
     interface ScheduleUiBinder extends UiBinder<Widget, Schedule> {
     }
 
-    public Schedule() {
+    public Schedule(){
         initWidget(uiBinder.createAndBindUi(this));
         currentDate = new Date();
         generateShedule(true);
@@ -58,6 +58,7 @@ public class Schedule extends Composite {
 
     public Schedule(List<LectureDTO> allLectures) {
         this.allLectures = allLectures;
+//        logger.log(Level.INFO, "lectures in Schedule " + allLectures.size());
         currentDate = new Date();
         initWidget(uiBinder.createAndBindUi(this));
         generateShedule(false);
@@ -68,16 +69,14 @@ public class Schedule extends Composite {
     @UiHandler({"previous"})
     public void toPreviousWeek(SelectEvent event) {
         currentDate.setTime(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-        monday.setValue(getWeekMonday(currentDate));
-        friday.setValue(getWeekFriday(currentDate));
+        setMondayAndFriday();
         weekSchedule();
     }
 
     @UiHandler({"next"})
     public void toNextWeek(SelectEvent event) {
         currentDate.setTime(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000);
-        monday.setValue(getWeekMonday(currentDate));
-        friday.setValue(getWeekFriday(currentDate));
+        setMondayAndFriday();
         weekSchedule();
     }
 
@@ -90,17 +89,6 @@ public class Schedule extends Composite {
             createWeeklectureMap();
             weekSchedule();
         }
-//            dateBox1 = new DateBox();
-//            dateBox1.setValue(new Date());
-//        DateCell dateCell = new DateCell();
-//        dateCell.setPropertyEditor(new DateTimePropertyEditor(DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT)));
-//            dateBox1 = new FieldLabel();
-//        dateBox1 = new DateField(dateCell);
-//        dateBox2 = new DateField(dateCell);
-//        dateBox1.setValue(new Date());
-//        dateBox2.setValue(new Date()); //DateBox
-//            dateBox1.setText(dateBox2.getText());
-
     }
 
     private void generateTimetableHead() {
@@ -121,13 +109,11 @@ public class Schedule extends Composite {
         schedule.setWidget(2, 2, generateTimetableCell("Лекция1", "Иванов", "55"));
 
         currentDate = new Date();
-        monday.setValue(getWeekMonday(currentDate));
-        friday.setValue(getWeekFriday(currentDate));
+        setMondayAndFriday();
     }
 
     private void weekSchedule() {
-        monday.setValue(getWeekMonday(currentDate));
-        friday.setValue(getWeekFriday(currentDate));
+        setMondayAndFriday();
 
         Integer currentWeek = getNumberOfWeek(currentDate) * getYear(currentDate);
 
@@ -156,16 +142,13 @@ public class Schedule extends Composite {
                         }
                 }
             } else {
-//                logger.log(Level.INFO, "i'm in currentWeekLectures.isEmpty() " + currentWeekLectures.isEmpty());
                 noLecturesTable(new String[]{"--:--"});
             }
         } else {
-//            logger.log(Level.INFO, "currentWeek dont exist in map " + currentWeek);
             noLecturesTable(new String[]{"--:--"});
         }
 
-        monday.setValue(getWeekMonday(currentDate));
-        friday.setValue(getWeekFriday(currentDate));
+        setMondayAndFriday();
     }
 
     private void noLecturesTable(String[] timesRow) {
@@ -201,23 +184,12 @@ public class Schedule extends Composite {
         }
     }
 
+    private void setMondayAndFriday() {
+        monday.setText(getWeekMonday(currentDate));
+        friday.setText(getWeekFriday(currentDate));
+    }
+
     private int getDayOfWeek(Date date) {
-//        switch (DateTimeFormat.getFormat("EEEE").format(date)) {
-//            case "Monday":
-//                return 1;
-//            case "Tuesday":
-//                return 2;
-//            case "Wednesday":
-//                return 3;
-//            case "Thursday":
-//                return 4;
-//            case "Friday":
-//                return 5;
-//            case "Saturday":
-//                return 6;
-//            case "Sunday":
-//                return 7;
-//        }
         String s = DateTimeFormat.getFormat("EEEE").format(date).toLowerCase();
         switch (s) {
             case "monday":
@@ -245,12 +217,14 @@ public class Schedule extends Composite {
         return 0;
     }
 
-    private Date getWeekMonday(Date date) {
-        return new Date(date.getTime() - (getDayOfWeek(date) - 1) * 24 * 60 * 60 * 1000);
+    private String getWeekMonday(Date date) {
+        date = new Date(date.getTime() - (getDayOfWeek(date) - 1) * 24 * 60 * 60 * 1000);
+        return DateTimeFormat.getFormat("dd-MM-yyyy").format(date);
     }
 
-    private Date getWeekFriday(Date date) {
-        return new Date(date.getTime() + (5 - getDayOfWeek(date)) * 24 * 60 * 60 * 1000);
+    private String getWeekFriday(Date date) {
+        date = new Date(date.getTime() + (5 - getDayOfWeek(date)) * 24 * 60 * 60 * 1000);
+        return DateTimeFormat.getFormat("dd-MM-yyyy").format(date);
     }
 
     private int getDayOfYear(Date date) {
@@ -297,49 +271,37 @@ public class Schedule extends Composite {
     }
 
     private Widget generateTimetableCell(final LectureDTO lectureDTO) {
+
         Label title = new Label(lectureDTO.getTitle());
-        logger.log(Level.WARNING, "до ");
-
-        Label lecturer = new Label(getLecturer(lectureDTO));
-        logger.log(Level.WARNING, "после ");
-
+        Label lecturer = new Label(lectureDTO.getCourse().getLecturer().getFullName());
         Label classRoom = new Label("Кабинет №" + lectureDTO.getClassroom());
+
+
         title.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                LecturePage lecturePage = new LecturePage(lectureDTO);
+                logger.log(Level.INFO, "до " + lectureDTO.getTitle());
+
+                final LecturePage lecturePage = new LecturePage(lectureDTO);
+                logger.log(Level.INFO, "после ");
+
 //                lecturePage.ShowLecturePopup(this);
                 lecturePage.center();
                 lecturePage.show();
             }
         });
-
-        lecturer.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                //TODO toLecturers lectures
-            }
-
-        });
+//        lecturer.addClickHandler(new ClickHandler() {
+//            @Override
+//            public void onClick(ClickEvent event) {
+//                //TODO toLecturers lectures
+//            }
+//
+//        });
         VerticalLayoutContainer lectureCell = new VerticalLayoutContainer();
         lectureCell.add(title);
         lectureCell.add(lecturer);
         lectureCell.add(classRoom);
-//        lecture.add(new Label("" + l.getDay()));
+//        lectureCell.add(new Label(lectureDTO.getDay()));
         return lectureCell;
-    }
-
-    private String getLecturer(LectureDTO lectureDTO) {
-        logger.log(Level.WARNING, "I'm in getLecturer " + lectureDTO.getTitle());
-        logger.log(Level.WARNING, "lectureDTO.getCourse() " + lectureDTO.getCourse().getTitle());
-        logger.log(Level.WARNING, "lectureDTO.getCourse().getUsers() " + lectureDTO.getCourse().getUsers().size());
-
-        for (UserDTO user : lectureDTO.getCourse().getUsers()) {
-            logger.log(Level.WARNING, " " + user.getFullName());
-
-            if (user.getRole().equals("Lecturer"))
-                return user.getFullName();
-        }
-        return "";
     }
 }

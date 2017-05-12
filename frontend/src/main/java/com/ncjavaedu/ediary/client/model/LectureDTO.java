@@ -87,6 +87,14 @@ public class LectureDTO implements Serializable {
         this.date = date;
     }
 
+    public String getDay(){
+        return DateTimeFormat.getFormat("dd").format(date);
+    }
+
+    public String getLectureDay(){
+        return DateTimeFormat.getFormat("dd-MM-yyyy").format(date);
+    }
+
     public String getLectureTime() {
         return DateTimeFormat.getFormat("HH:mm").format(date);
     }
