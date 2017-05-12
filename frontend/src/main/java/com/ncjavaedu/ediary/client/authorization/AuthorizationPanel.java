@@ -90,7 +90,6 @@ public class AuthorizationPanel implements IsWidget {
                 };
 
                 ClientSessionManagementService.App.getInstance().saveUser(user, callback1);
-                onLogin(user);
             }
         };
         ClientUserService.App.getInstance().getUser(loginField.getText(),passField.getText(),callback);

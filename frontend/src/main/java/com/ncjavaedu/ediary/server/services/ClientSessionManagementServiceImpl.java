@@ -17,16 +17,18 @@ public class ClientSessionManagementServiceImpl extends BaseServiceImpl implemen
 
     @Override
     public UserDTO saveUser(UserDTO dto){
-        User u = ServiceUtils.userDtoToUser(dto);
-        User rcvUser = sessionManagementService.setUser(u);
-        UserDTO retUser;
-        if(rcvUser != null)
-        {
-            retUser = ServiceUtils.userToDto(rcvUser);
+        if(dto !=  null) {
+            User u = ServiceUtils.userDtoToUser(dto);
+            User rcvUser = sessionManagementService.setUser(u);
+            UserDTO retUser;
+            if (rcvUser != null) {
+                retUser = ServiceUtils.userToDto(rcvUser);
+            } else
+                retUser = null;
+            return retUser;
         }
-        else
-            retUser = null;
-        return retUser;
+        sessionManagementService.setUser(null);
+        return null;
     }
 
     @Override

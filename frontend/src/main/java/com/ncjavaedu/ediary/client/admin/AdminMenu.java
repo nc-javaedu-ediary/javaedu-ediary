@@ -7,11 +7,14 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.ncjavaedu.ediary.client.MainApplication;
 import com.ncjavaedu.ediary.client.admin.popups.AdminPopupCallbacks;
 import com.ncjavaedu.ediary.client.admin.popups.CoursePopup;
 import com.ncjavaedu.ediary.client.admin.popups.LecturePopup;
 import com.ncjavaedu.ediary.client.admin.popups.UserPopup;
+import com.ncjavaedu.ediary.client.authorization.AuthorizationPanel;
 import com.ncjavaedu.ediary.client.model.CourseDTO;
 import com.ncjavaedu.ediary.client.model.LectureDTO;
 import com.ncjavaedu.ediary.client.model.UserDTO;
@@ -22,10 +25,12 @@ import com.ncjavaedu.ediary.client.props.UserProps;
 import com.ncjavaedu.ediary.client.schedule.Schedule;
 import com.ncjavaedu.ediary.client.services.ClientCourseService;
 import com.ncjavaedu.ediary.client.services.ClientLectureService;
+import com.ncjavaedu.ediary.client.services.ClientSessionManagementService;
 import com.ncjavaedu.ediary.client.services.ClientUserService;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.container.Viewport;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.grid.*;
 import com.sencha.gxt.widget.core.client.info.Info;
@@ -91,6 +96,9 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     @UiField(provided = true)
     ContentPanel timeTable;
 //    Schedule timeTable;
+
+    @UiField
+    TextButton logoutButton;
 
 
     private static final UserProps userProps = GWT.create(UserProps.class);
@@ -507,5 +515,24 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 
     private void onGetCourses(List<CourseDTO> courses) {
         this.courses.addAll(courses);
+    }
+
+    @UiHandler({"logoutButton"})
+    public void logoutButtonClick(SelectEvent selectEvent) {
+        AsyncCallback<UserDTO> callback1 = new AsyncCallback<UserDTO>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                Info.display("!", "Failed to store user in session");
+            }
+
+            @Override
+            public void onSuccess(UserDTO userDTO) {
+                Viewport vp = new Viewport();
+                vp.add(new MainApplication().asWidget());
+                RootLayoutPanel.get().clear();
+                RootLayoutPanel.get().add(vp);
+            }
+        };
+        ClientSessionManagementService.App.getInstance().saveUser(null, callback1);
     }
 }

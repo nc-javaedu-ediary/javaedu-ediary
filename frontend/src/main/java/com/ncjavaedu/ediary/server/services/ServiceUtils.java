@@ -116,14 +116,18 @@ public final class ServiceUtils {
 
     public static final void linkCourseToLecturerDto(CourseDTO dto, Course course){
         User rcvUser = course.getLecturer();
-        UserDTO userDTO = userToDto(rcvUser);
-        dto.setLecturer(userDTO);
+        if(rcvUser != null) {
+            UserDTO userDTO = userToDto(rcvUser);
+            dto.setLecturer(userDTO);
+        }
     }
 
     public static final void linkLectureToCourseDto(LectureDTO dto, Lecture lecture){
         Course rcvCourse = lecture.getCourse();
-        CourseDTO courseDTO = courseToDto(rcvCourse);
-        ServiceUtils.linkCourseToLecturerDto(courseDTO, rcvCourse);
-        dto.setCourse(courseDTO);
+        if(rcvCourse != null) {
+            CourseDTO courseDTO = courseToDto(rcvCourse);
+            ServiceUtils.linkCourseToLecturerDto(courseDTO, rcvCourse);
+            dto.setCourse(courseDTO);
+        }
     }
 }

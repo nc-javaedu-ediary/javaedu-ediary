@@ -9,7 +9,9 @@
              xmlns:form="urn:import:com.sencha.gxt.widget.core.client.form"
              xmlns:g="urn:import:com.google.gwt.user.client.ui">
 
-    <gxt:ContentPanel headingText="Информация о лекции" pixelSize="300,300" bodyStyle="padding: 20px">
+    <ui:with field="minDate" type="java.util.Date" />
+
+    <gxt:ContentPanel headingText="Информация о лекции" pixelSize="300,700" bodyStyle="padding: 20px">
         <container:VBoxLayoutContainer VBoxLayoutAlign="STRETCH">
             <!--First Name-->
             <container:HBoxLayoutContainer>
@@ -50,6 +52,14 @@
                     <form:TextField ui:field="homework"/>
                 </container:child>
             </container:HBoxLayoutContainer>
+
+            <!--Date-->
+            <gxt:DatePicker ui:field="picker" minDate="{minDate}" />
+
+            <!--Time-->
+            <form:FieldLabel text="Время"/>
+            <form:TextField ui:field="hr"/>
+            <form:TextField ui:field="mm"/>
 
             <!--Buttons-->
             <container:HBoxLayoutContainer pack="CENTER">

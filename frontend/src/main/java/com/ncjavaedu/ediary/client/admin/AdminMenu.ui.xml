@@ -136,6 +136,9 @@
                 <!--</gxt:child>-->
             </gxt:PlainTabPanel>
         </container:VBoxLayoutContainer>
+        <gxt:button>
+            <button:TextButton ui:field="logoutButton" text="Выход"/>
+        </gxt:button>
     </gxt:ContentPanel>
 
 </ui:UiBinder>
