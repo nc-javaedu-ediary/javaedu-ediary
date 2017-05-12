@@ -20,4 +20,6 @@ public class LectureServiceImpl implements LectureService {
     public List<Lecture> getLectures() { return dao.list(); }
 
     public void saveLecture(Lecture lecture) { dao.save(lecture); }
+
+    public void deleteLecture(Lecture lecture){}
 }

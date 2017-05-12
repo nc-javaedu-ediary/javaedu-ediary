@@ -38,4 +38,9 @@ public class UserServiceStub implements UserService {
     public void saveUser(User user, List<Course> courses){
 
     }
+
+    @Override
+    public void deleteUser(User user){
+
+    }
 }

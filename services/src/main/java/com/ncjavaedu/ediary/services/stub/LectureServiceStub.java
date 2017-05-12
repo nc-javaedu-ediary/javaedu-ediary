@@ -25,4 +25,8 @@ public class LectureServiceStub implements LectureService {
     {
 
     }
+
+    public void deleteLecture(Lecture lecture){
+
+    }
 }

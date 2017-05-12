@@ -77,6 +77,10 @@
                             <button:TextButton ui:field="editCourseButton" text="Редактировать курс"
                                                enabled="false"/>
                         </gxt:button>
+                        <gxt:button>
+                            <button:TextButton ui:field="removeCourseButton" text="Удалить курс"
+                                               enabled="false"/>
+                        </gxt:button>
                         <container:VerticalLayoutContainer>
                             <container:child layoutData="{courseLayoutData}">
                                 <grid:Grid ui:field="coursesGrid" view="{coursesView}" cm="{coursesCM}"
@@ -95,6 +99,10 @@
                             <button:TextButton ui:field="editUserButton" text="Редактировать пользователя"
                                                enabled="false"/>
                         </gxt:button>
+                        <gxt:button>
+                            <button:TextButton ui:field="removeUserButton" text="Удалить пользователя"
+                                               enabled="false"/>
+                        </gxt:button>
                         <container:VerticalLayoutContainer>
                             <container:child layoutData="{userLayoutData}">
                                 <grid:Grid ui:field="usersGrid" view="{usersView}" cm="{usersCM}" store="{usersStore}"
@@ -111,6 +119,10 @@
                         </gxt:button>
                         <gxt:button>
                             <button:TextButton ui:field="editLectureButton" text="Редактировать лекцию"
+                                               enabled="false"/>
+                        </gxt:button>
+                        <gxt:button>
+                            <button:TextButton ui:field="removeLectureButton" text="Удалить лекцию"
                                                enabled="false"/>
                         </gxt:button>
                         <container:VerticalLayoutContainer>

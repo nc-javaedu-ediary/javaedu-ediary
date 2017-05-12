@@ -27,4 +27,8 @@ public class CourseSeviceStub implements CourseService{
     {
 
     }
+
+    public void deleteCourse(Course course){
+
+    }
 }

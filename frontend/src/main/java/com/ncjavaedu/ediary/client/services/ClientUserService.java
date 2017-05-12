@@ -14,6 +14,7 @@ public interface ClientUserService extends RemoteService {
     UserDTO getUser(String login, String password);
     List<UserDTO> getLecturers();
     UserDTO saveUser(UserDTO dto, List<CourseDTO> courseDTOs);
+    UserDTO deleteUser(UserDTO dto);
 
     public static class App {
         private static ClientUserServiceAsync instance = GWT.create(ClientUserService.class);

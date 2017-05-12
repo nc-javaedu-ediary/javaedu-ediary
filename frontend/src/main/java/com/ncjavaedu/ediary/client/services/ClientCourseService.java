@@ -13,6 +13,7 @@ import java.util.List;
 public interface ClientCourseService extends RemoteService {
     List<CourseDTO> getCourses();
     CourseDTO saveCourse(CourseDTO courseDTO, UserDTO lecturer, List<LectureDTO> lecturesDTO);
+    CourseDTO deleteCourse(CourseDTO dto);
 
     public static class App {
         private static ClientCourseServiceAsync instance = GWT.create(ClientCourseService.class);

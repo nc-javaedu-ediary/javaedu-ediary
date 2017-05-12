@@ -32,4 +32,9 @@ public class UserServiceImpl implements UserService {
     public void saveUser(User user, List<Course> courses){
         dao.save(user, courses);
     }
+
+    @Override
+    public void deleteUser(User user){
+        dao.delete(user);
+    }
 }

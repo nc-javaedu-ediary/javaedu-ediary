@@ -61,4 +61,11 @@ public class ClientUserServiceImpl extends BaseServiceImpl implements ClientUser
         ServiceUtils.linkUserToCoursesDto(dto, user);
         return dto;
     }
+
+    @Override
+    public UserDTO deleteUser(UserDTO dto){
+        User user = ServiceUtils.userDtoToUser(dto);
+        userService.deleteUser(user);
+        return dto;
+    }
 }

@@ -10,4 +10,5 @@ import java.util.List;
 public interface LectureDao {
     List<Lecture> list();
     void save(Lecture lecture);
+    void delete(Lecture lecture);
 }

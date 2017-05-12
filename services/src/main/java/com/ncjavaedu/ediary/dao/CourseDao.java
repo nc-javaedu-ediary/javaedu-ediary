@@ -12,4 +12,5 @@ import java.util.List;
 public interface CourseDao {
     List<Course> list();
     void save(Course course, User lecturer, List<Lecture> lectures);
+    void delete(Course course);
 }
