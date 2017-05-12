@@ -31,7 +31,7 @@
                     <form:FieldLabel text="Имя"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="firstName" allowBlank="false"/>
+                    <form:TextField ui:field="firstName"/>
                 </container:child>
             </container:HBoxLayoutContainer>
 
@@ -41,7 +41,7 @@
                     <form:FieldLabel text="Фамилия"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="lastName" allowBlank="true"/>
+                    <form:TextField ui:field="lastName"/>
                 </container:child>
             </container:HBoxLayoutContainer>
 
@@ -51,7 +51,7 @@
                     <form:FieldLabel text="Университет"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="university" allowBlank="true"/>
+                    <form:TextField ui:field="university"/>
                 </container:child>
             </container:HBoxLayoutContainer>
 
@@ -61,7 +61,7 @@
                     <form:FieldLabel text="E-mail"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="email" allowBlank="true"/>
+                    <form:TextField ui:field="email"/>
                 </container:child>
             </container:HBoxLayoutContainer>
 
@@ -71,7 +71,7 @@
                     <form:FieldLabel text="Логин"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="login" allowBlank="false"/>
+                    <form:TextField ui:field="login"/>
                 </container:child>
             </container:HBoxLayoutContainer>
 
@@ -81,7 +81,7 @@
                     <form:FieldLabel text="Пароль"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="password" allowBlank="false"/>
+                    <form:TextField ui:field="password"/>
                 </container:child>
             </container:HBoxLayoutContainer>
 

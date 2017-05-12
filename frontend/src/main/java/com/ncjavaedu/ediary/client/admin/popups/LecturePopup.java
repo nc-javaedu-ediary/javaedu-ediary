@@ -61,7 +61,7 @@ public class LecturePopup extends PopupPanel {
     @UiHandler({"saveButton"})
     public void saveButtonClick(SelectEvent selectEvent){
         if(cb != null){
-            if(title.isValid()){
+            if(title.getText() != ""){
                 LectureDTO dto = new LectureDTO();
                 if(lectureToEdit != null){
                     dto.setLectureId(lectureToEdit.getLectureId());

@@ -12,6 +12,7 @@ import com.ncjavaedu.ediary.client.admin.AdminMenu;
 import com.ncjavaedu.ediary.client.model.RoleDTO;
 import com.ncjavaedu.ediary.client.model.UserDTO;
 import com.ncjavaedu.ediary.client.services.ClientUserService;
+import com.ncjavaedu.ediary.client.services.ClientSessionManagementService;
 import com.ncjavaedu.ediary.client.userpages.UserPage;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.Viewport;
@@ -44,6 +45,19 @@ public class AuthorizationPanel implements IsWidget {
      * Constructor
      */
     public AuthorizationPanel() {
+        AsyncCallback<UserDTO> callback = new AsyncCallback<UserDTO>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                Info.display("!", "Failed to get user from session");
+            }
+
+            @Override
+            public void onSuccess(UserDTO userDTO) {
+                if(userDTO != null)
+                    onLogin(userDTO);
+            }
+        };
+        ClientSessionManagementService.App.getInstance().getUser(callback);
     }
 
     @UiHandler({"clearButton"})
@@ -63,6 +77,19 @@ public class AuthorizationPanel implements IsWidget {
 
             @Override
             public void onSuccess(UserDTO user) {
+                AsyncCallback<UserDTO> callback1 = new AsyncCallback<UserDTO>() {
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        Info.display("!", "Failed to store user in session");
+                    }
+
+                    @Override
+                    public void onSuccess(UserDTO userDTO) {
+                        onLogin(userDTO);
+                    }
+                };
+
+                ClientSessionManagementService.App.getInstance().saveUser(user, callback1);
                 onLogin(user);
             }
         };

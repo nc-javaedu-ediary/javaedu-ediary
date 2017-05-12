@@ -136,9 +136,9 @@ public class UserPopup extends PopupPanel{
     @UiHandler({"saveButton"})
     public void saveButtonClick(SelectEvent selectEvent){
         if(cb != null){
-            if(firstName.isValid()){
-                if(login.isValid()){
-                    if(password.isValid()){
+            if(firstName.getText() != ""){
+                if(login.getText() != ""){
+                    if(password.getText() != ""){
                         UserDTO dto = new UserDTO();
                         if(userToEdit != null){
                             dto.setUserId(userToEdit.getUserId());

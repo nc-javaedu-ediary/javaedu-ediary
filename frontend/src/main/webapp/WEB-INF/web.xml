@@ -40,6 +40,12 @@
     </servlet>
 
     <servlet>
+        <servlet-name>sessionManagementService</servlet-name>
+        <servlet-class>com.ncjavaedu.ediary.server.services.ClientSessionManagementServiceImpl</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
         <servlet-name>remoteLoggingService</servlet-name>
         <servlet-class>com.google.gwt.logging.server.RemoteLoggingServiceImpl</servlet-class>
         <load-on-startup>1</load-on-startup>
@@ -60,6 +66,11 @@
     <servlet-mapping>
         <servlet-name>courseService</servlet-name>
         <url-pattern>/ediary/courseService</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>sessionManagementService</servlet-name>
+        <url-pattern>/ediary/sessionManagementService</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

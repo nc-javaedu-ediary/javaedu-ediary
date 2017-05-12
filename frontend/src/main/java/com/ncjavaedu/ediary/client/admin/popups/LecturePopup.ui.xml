@@ -17,7 +17,7 @@
                     <form:FieldLabel text="Название"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="title" allowBlank="false"/>
+                    <form:TextField ui:field="title"/>
                 </container:child>
             </container:HBoxLayoutContainer>
 
@@ -27,7 +27,7 @@
                     <form:FieldLabel text="Аудитория"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="classroom" allowBlank="true"/>
+                    <form:TextField ui:field="classroom"/>
                 </container:child>
             </container:HBoxLayoutContainer>
 
@@ -37,7 +37,7 @@
                     <form:FieldLabel text="Описание"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="description" allowBlank="true"/>
+                    <form:TextField ui:field="description"/>
                 </container:child>
             </container:HBoxLayoutContainer>
 
@@ -47,7 +47,7 @@
                     <form:FieldLabel text="Домашнее задание"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="homework" allowBlank="true"/>
+                    <form:TextField ui:field="homework"/>
                 </container:child>
             </container:HBoxLayoutContainer>
 

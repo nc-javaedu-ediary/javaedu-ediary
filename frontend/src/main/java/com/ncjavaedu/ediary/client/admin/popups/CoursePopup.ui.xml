@@ -25,7 +25,7 @@
                     <form:FieldLabel text="Название"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="title" allowBlank="false"/>
+                    <form:TextField ui:field="title"/>
                 </container:child>
             </container:HBoxLayoutContainer>
 
