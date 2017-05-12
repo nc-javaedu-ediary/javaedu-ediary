@@ -22,8 +22,12 @@ public class ClientLectureServiceImpl extends BaseServiceImpl implements ClientL
         List<LectureDTO> lectures = new ArrayList<>();
         for (Lecture lecture : remoteLectures){
             LectureDTO dto = ServiceUtils.lectureToDto(lecture);
-            if(lecture.getCourse() != null)
+            if(lecture.getCourse() != null) {
                 dto.setCourse(ServiceUtils.courseToDto(lecture.getCourse()));
+                if(lecture.getCourse().getLecturer() != null){
+                    ServiceUtils.linkCourseToLecturerDto(dto.getCourse(),lecture.getCourse());
+                }
+            }
             lectures.add(dto);
         }
         return lectures;

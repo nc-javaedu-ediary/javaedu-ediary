@@ -22,9 +22,9 @@
     <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="timetable">
         <ui:attributes text="Расписание лекций"/>
     </ui:with>
-    <ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="reports">
-        <ui:attributes text="Отчеты"/>
-    </ui:with>
+    <!--<ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="reports">-->
+        <!--<ui:attributes text="Отчеты"/>-->
+    <!--</ui:with>-->
 
     <!--*********************-->
     <ui:with field="userLayoutData"
@@ -127,10 +127,10 @@
                         <!--<schedule:Schedule/>-->
                     </gxt:ContentPanel>
                 </gxt:child>
-                <gxt:child config="{reports}">
-                    <gxt:ContentPanel headingText="Отчеты">
-                    </gxt:ContentPanel>
-                </gxt:child>
+                <!--<gxt:child config="{reports}">-->
+                    <!--<gxt:ContentPanel headingText="Отчеты">-->
+                    <!--</gxt:ContentPanel>-->
+                <!--</gxt:child>-->
             </gxt:PlainTabPanel>
         </container:VBoxLayoutContainer>
     </gxt:ContentPanel>

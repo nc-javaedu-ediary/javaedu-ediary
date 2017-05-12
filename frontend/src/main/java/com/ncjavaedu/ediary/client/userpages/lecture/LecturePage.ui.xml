@@ -11,57 +11,53 @@
 >
     <ui:style src="../../../../resources/style.css"/>
 
-    <ui:with field="lectureLayoutData"
-             type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
-        <ui:attributes width="1" height="1"/>
-    </ui:with>
-    <ui:with type="com.sencha.gxt.widget.core.client.grid.GridView" field="usersView">
-        <ui:attributes stripeRows="true"/>
-    </ui:with>
-    <ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="usersCM"/>
-    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="usersStore"/>
+    <!--<ui:with field="lectureLayoutData"-->
+    <!--type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">-->
+    <!--<ui:attributes width="1" height="1"/>-->
+    <!--</ui:with>-->
+    <!--<ui:with type="com.sencha.gxt.widget.core.client.grid.GridView" field="usersView">-->
+    <!--<ui:attributes stripeRows="true"/>-->
+    <!--</ui:with>-->
+    <!--<ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="usersCM"/>-->
+    <!--<ui:with type="com.sencha.gxt.data.shared.ListStore" field="usersStore"/>-->
 
-    <gxt:ContentPanel headingText="Страница лекции" bodyStyle="padding: 20px" width="0.8" height="0.8"
+    <gxt:ContentPanel headingText="Страница лекции" bodyStyle="padding: 20px" pixelSize="800,400"
                       styleName="{style.lecture}">
         <container:VerticalLayoutContainer>
-            <container:VBoxLayoutContainer>
+            <container:VBoxLayoutContainer VBoxLayoutAlign="CENTER">
                 <container:HBoxLayoutContainer>
                     <form:FieldLabel text="Тема лекции"/>
-                    <form:FieldLabel ui:field="theme"/>
+                    <gwt:Label ui:field="theme"/>
                 </container:HBoxLayoutContainer>
                 <container:HorizontalLayoutContainer>
                     <container:HBoxLayoutContainer>
-                        <container:child>
-                            <form:FieldLabel text="Дата"/>
-                        </container:child>
-                        <container:child>
-                            <form:FieldLabel ui:field="lectDate"/>
-                        </container:child>
+                        <form:FieldLabel text="Дата"/>
+                        <gwt:Label ui:field="lectDate"/>
                     </container:HBoxLayoutContainer>
                     <container:HBoxLayoutContainer>
                         <container:child>
                             <form:FieldLabel text="Лектор"/>
                         </container:child>
                         <container:child>
-                            <form:FieldLabel ui:field="lecturer"/>
+                            <gwt:Label ui:field="lecturer" styleName="{style.label}"/>
                         </container:child>
                     </container:HBoxLayoutContainer>
                 </container:HorizontalLayoutContainer>
             </container:VBoxLayoutContainer>
-            <container:VBoxLayoutContainer>
-                    <form:FieldLabel text="Содержание лекции"/>
-                    <form:FieldLabel ui:field="description"/>
-            </container:VBoxLayoutContainer>
-            <container:VBoxLayoutContainer>
-                    <form:FieldLabel text="Домашняя работа"/>
-                    <form:FieldLabel ui:field="homework"/>
-            </container:VBoxLayoutContainer>
-            <container:VBoxLayoutContainer>
-                <gxt:ContentPanel layoutData="{lectureLayoutData}" title="Посещаемость лекций">
-                    <grid:Grid ui:field="usersGrid" view="{usersView}" cm="{usersCM}"
-                               store="{usersStore}"/>
-                </gxt:ContentPanel>
-            </container:VBoxLayoutContainer>
+            <container:VerticalLayoutContainer width="1">
+                <form:FieldLabel text="Содержание лекции"/>
+                <gwt:Label ui:field="description"/>
+            </container:VerticalLayoutContainer>
+            <container:VerticalLayoutContainer width="1">
+                <form:FieldLabel text="Домашняя работа"/>
+                <gwt:Label ui:field="homework"/>
+            </container:VerticalLayoutContainer>
+            <!--<container:VerticalLayoutContainer>-->
+            <!--<gxt:ContentPanel layoutData="{lectureLayoutData}" title="Посещаемость лекций">-->
+            <!--<grid:Grid ui:field="usersGrid" view="{usersView}" cm="{usersCM}"-->
+            <!--store="{usersStore}"/>-->
+            <!--</gxt:ContentPanel>-->
+            <!--</container:VerticalLayoutContainer>-->
         </container:VerticalLayoutContainer>
     </gxt:ContentPanel>
 </ui:UiBinder>

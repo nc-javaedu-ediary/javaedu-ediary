@@ -83,8 +83,8 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 
     // Schedule tab
     @UiField(provided = true)
+    ContentPanel timeTable;
 //    Schedule timeTable;
-            ContentPanel timeTable;
 
 
     private static final UserProps userProps = GWT.create(UserProps.class);
@@ -236,16 +236,16 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     }
 
     public void userPopupValidated(UserDTO user) {
-        if(tryUpdateUser(user) == false){
+        if (tryUpdateUser(user) == false) {
             users.add(user);
         }
         usersStore.replaceAll(users);
         usersGrid.getView().refresh(true);
     }
 
-    private boolean tryUpdateUser(UserDTO user){
-        for(UserDTO u : users){
-            if(u.getUserId() == user.getUserId()){
+    private boolean tryUpdateUser(UserDTO user) {
+        for (UserDTO u : users) {
+            if (u.getUserId() == user.getUserId()) {
                 u.setUserDTO(user);
                 return true;
             }
@@ -288,9 +288,9 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         lecturesGrid.getView().refresh(true);
     }
 
-    private boolean tryUpdateLecture(LectureDTO lecture){
-        for(LectureDTO l : lectures){
-            if(l.getLectureId() == lecture.getLectureId()){
+    private boolean tryUpdateLecture(LectureDTO lecture) {
+        for (LectureDTO l : lectures) {
+            if (l.getLectureId() == lecture.getLectureId()) {
                 l.setLectureDTO(lecture);
                 return true;
             }
@@ -316,16 +316,16 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     }
 
     public void coursePopupValidated(CourseDTO course) {
-        if (tryUpdateCourse(course) == false){
+        if (tryUpdateCourse(course) == false) {
             courses.add(course);
         }
         coursesStore.replaceAll(courses);
         coursesGrid.getView().refresh(true);
     }
 
-    private boolean tryUpdateCourse(CourseDTO course){
-        for(CourseDTO c: courses){
-            if(c.getCourseId() == course.getCourseId()){
+    private boolean tryUpdateCourse(CourseDTO course) {
+        for (CourseDTO c : courses) {
+            if (c.getCourseId() == course.getCourseId()) {
                 c.setCourseDTO(course);
                 return true;
             }
@@ -336,6 +336,8 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     //----------Timetable Tab-----------//
 
     private void generateSchedule() {
+//        logger.log(Level.WARNING, "In generateSchedule " + lectures.size());
+
         timeTable = new ContentPanel();
     }
 
@@ -371,11 +373,10 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 
             @Override
             public void onSuccess(List<LectureDTO> lectures) {
-//                logger.log(Level.INFO, "success");
 
                 onGetLectures(lectures);
-                // TODO: Fix timetable
-//                timeTable.add(new Schedule(lectures));
+//                logger.log(Level.INFO, "success " + lectures.size());
+                timeTable.add(new Schedule(lectures));
                 lecturesStore.replaceAll(lectures);
                 lecturesGrid.getView().refresh(true);
                 lecturesGrid.reconfigure(lecturesGrid.getStore(), lecturesGrid.getColumnModel());
