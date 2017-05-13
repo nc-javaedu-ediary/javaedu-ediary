@@ -21,5 +21,7 @@ public class LectureServiceImpl implements LectureService {
 
     public void saveLecture(Lecture lecture) { dao.save(lecture); }
 
-    public void deleteLecture(Lecture lecture){}
+    public void deleteLecture(Lecture lecture){
+        dao.delete(lecture);
+    }
 }

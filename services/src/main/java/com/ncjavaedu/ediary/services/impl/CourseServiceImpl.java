@@ -30,6 +30,6 @@ public class CourseServiceImpl implements CourseService {
     }
 
     public void deleteCourse(Course course){
-
+        dao.delete(course);
     }
 }
