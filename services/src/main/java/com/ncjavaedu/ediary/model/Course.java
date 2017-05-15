@@ -84,4 +84,12 @@ public class Course implements Serializable{
     }
 
     public void setLectures(List<Lecture> lectures) { this.lectures = lectures; }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
 }

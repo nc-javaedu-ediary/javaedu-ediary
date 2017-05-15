@@ -19,7 +19,7 @@ public class Lecture implements Serializable{
     private Integer lectureId;
     @Column(name = "TITLE")
     private String title;
-    @Column(name = "DATE")
+    @Column(name = "DATE", nullable = false)
     private Date date;
     @Transient
     private DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");

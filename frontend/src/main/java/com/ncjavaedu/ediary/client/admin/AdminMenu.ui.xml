@@ -20,7 +20,7 @@
         <ui:attributes text="Расписание лекций"/>
     </ui:with>
     <!--<ui:with type="com.sencha.gxt.widget.core.client.TabItemConfig" field="reports">-->
-        <!--<ui:attributes text="Отчеты"/>-->
+    <!--<ui:attributes text="Отчеты"/>-->
     <!--</ui:with>-->
 
     <!--*********************-->
@@ -56,7 +56,11 @@
 
     <!--**********Menu*********-->
     <gxt:ContentPanel bodyStyle="padding: 20px" headerVisible="false">
-        <container:VBoxLayoutContainer VBoxLayoutAlign="CENTER">
+        <container:VBoxLayoutContainer VBoxLayoutAlign="STRETCH">
+            <container:VBoxLayoutContainer VBoxLayoutAlign="RIGHT">
+                <button:TextButton ui:field="logoutButton" text="Выход"/>
+            </container:VBoxLayoutContainer>
+
             <gxt:PlainTabPanel width="800">
 
                 <gxt:child config="{courseManagement}">
@@ -131,14 +135,11 @@
                     </gxt:ContentPanel>
                 </gxt:child>
                 <!--<gxt:child config="{reports}">-->
-                    <!--<gxt:ContentPanel headingText="Отчеты">-->
-                    <!--</gxt:ContentPanel>-->
+                <!--<gxt:ContentPanel headingText="Отчеты">-->
+                <!--</gxt:ContentPanel>-->
                 <!--</gxt:child>-->
             </gxt:PlainTabPanel>
         </container:VBoxLayoutContainer>
-        <gxt:button>
-            <button:TextButton ui:field="logoutButton" text="Выход"/>
-        </gxt:button>
     </gxt:ContentPanel>
 
 </ui:UiBinder>

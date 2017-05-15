@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -25,19 +26,17 @@ public class AuthorizationPanel implements IsWidget {
 
     @UiField
     TextField loginField;
-
     @UiField
     PasswordField passField;
-
     @UiField
     TextButton submitButton;
-
     @UiField
     TextButton clearButton;
 
     private Widget widget;
     private static AuthorizationUiBinder uiBinder = GWT.create(AuthorizationUiBinder.class);
 
+    @UiTemplate("AuthorizationPanel.ui.xml")
     interface AuthorizationUiBinder extends UiBinder<Widget, AuthorizationPanel> {
     }
 
@@ -99,7 +98,6 @@ public class AuthorizationPanel implements IsWidget {
         if (dto == null){
             Info.display("Ошибка", "Неправильное имя пользователя или пароль");
         } else {
-            Info.display("Вы вошли", "Здравствуйте, " + dto.getFirstName());
             if(dto.getRole() != null)
             {
                 if(dto.getRole() == RoleDTO.Admin)
@@ -109,6 +107,7 @@ public class AuthorizationPanel implements IsWidget {
             }
             else
                 displayUserPage(dto);
+            Info.display("Вы вошли", "Здравствуйте, " + dto.getFirstName());
         }
     }
 

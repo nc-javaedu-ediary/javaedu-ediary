@@ -11,7 +11,6 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
-import com.ncjavaedu.ediary.client.model.CourseDTO;
 import com.ncjavaedu.ediary.client.model.LectureDTO;
 import com.ncjavaedu.ediary.client.userpages.lecture.LecturePage;
 import com.sencha.gxt.widget.core.client.Composite;
@@ -26,7 +25,7 @@ import java.util.logging.Logger;
 
 public class Schedule extends Composite {
     @UiField
-    FlexTable schedule;
+    FlexTable schedule_table;
     @UiField
     Label monday;
     @UiField
@@ -38,30 +37,36 @@ public class Schedule extends Composite {
 
     private static final ScheduleUiBinder uiBinder = GWT.create(ScheduleUiBinder.class);
 
-    private static final Logger logger = Logger.getLogger(Schedule.class.getName());
-
     private Date currentDate;
     private List<LectureDTO> allLectures;
-    private List<CourseDTO> allCoursers;
-    private int role;
+    private boolean showUserList = false;
     private Map<Integer, List<LectureDTO>> weeklectureMap;
+
+    private static final Logger logger = Logger.getLogger(Schedule.class.getName());
 
     @UiTemplate("Schedule.ui.xml")
     interface ScheduleUiBinder extends UiBinder<Widget, Schedule> {
     }
 
-    public Schedule(){
-        initWidget(uiBinder.createAndBindUi(this));
+    public Schedule() {
         currentDate = new Date();
-        generateShedule(true);
+        initWidget(uiBinder.createAndBindUi(this));
+        generateTimetableHead();
+        templateSchedule();
     }
 
-    public Schedule(List<LectureDTO> allLectures) {
+    public Schedule(List<LectureDTO> allLectures, boolean showUserList) {
+//        if (allLectures != null)
+        this.showUserList = showUserList;
         this.allLectures = allLectures;
-//        logger.log(Level.INFO, "lectures in Schedule " + allLectures.size());
+
+        logger.log(Level.INFO, "lectures in Schedule " + allLectures.size());
+        logger.log(Level.INFO, "showUserList " + showUserList);
+
         currentDate = new Date();
+
         initWidget(uiBinder.createAndBindUi(this));
-        generateShedule(false);
+        generateShedule();
         // Give the overall composite a style name.
 //        setStyleName("table-style");
     }
@@ -69,56 +74,49 @@ public class Schedule extends Composite {
     @UiHandler({"previous"})
     public void toPreviousWeek(SelectEvent event) {
         currentDate.setTime(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
-        setMondayAndFriday();
         weekSchedule();
     }
 
     @UiHandler({"next"})
     public void toNextWeek(SelectEvent event) {
         currentDate.setTime(currentDate.getTime() + 7 * 24 * 60 * 60 * 1000);
-        setMondayAndFriday();
         weekSchedule();
     }
 
 
-    private void generateShedule(Boolean isTemp) {
+    private void generateShedule() {
         generateTimetableHead();
-        if (isTemp) {
-            templateSchedule();
-        } else {
+        if (allLectures != null || allLectures.size() != 0) {
             createWeeklectureMap();
+            logger.log(Level.INFO, "i createWeeklectureMap");
+
             weekSchedule();
+        } else {
+            templateSchedule();
         }
     }
 
     private void generateTimetableHead() {
-        schedule.setText(0, 1, "Понедельник");
-        schedule.setText(0, 2, "Вторник");
-        schedule.setText(0, 3, "Среда");
-        schedule.setText(0, 4, "Четверг");
-        schedule.setText(0, 5, "Пятница");
+        schedule_table.setText(0, 1, "Понедельник");
+        schedule_table.setText(0, 2, "Вторник");
+        schedule_table.setText(0, 3, "Среда");
+        schedule_table.setText(0, 4, "Четверг");
+        schedule_table.setText(0, 5, "Пятница");
     }
 
     private void templateSchedule() {
-        schedule.setText(1, 0, "15:00");
-        schedule.setText(2, 0, "19:00");
-        for (int j = 1; j < 3; j++)
-            for (int i = 1; i < 6; i++)
-                schedule.setText(j, i, "нет занятий");
-        schedule.setWidget(1, 3, generateTimetableCell("Лекция1", "Иванов", "55"));
-        schedule.setWidget(2, 2, generateTimetableCell("Лекция1", "Иванов", "55"));
-
-        currentDate = new Date();
         setMondayAndFriday();
+        noLecturesTable(new String[]{"--:--"});
     }
 
     private void weekSchedule() {
-        setMondayAndFriday();
+//        setMondayAndFriday();
+        templateSchedule();
+        logger.log(Level.INFO, "i create templateSchedule");
 
         Integer currentWeek = getNumberOfWeek(currentDate) * getYear(currentDate);
 
-        if (weeklectureMap.containsKey(currentWeek)) {
-//            logger.log(Level.INFO, "currentWeek exist in map " + currentWeek);
+        if (weeklectureMap != null && !weeklectureMap.isEmpty() && weeklectureMap.containsKey(currentWeek)) {
 
             List<LectureDTO> currentWeekLectures = weeklectureMap.get(currentWeek);
 
@@ -127,44 +125,55 @@ public class Schedule extends Composite {
                 for (LectureDTO lecture : currentWeekLectures) {
                     timeOfLectures.add(lecture.getLectureTime());
                 }
+
                 String[] timesRow = timeOfLectures.toArray(new String[timeOfLectures.size()]);
                 noLecturesTable(timesRow);
+                logger.log(Level.INFO, "i 1");
+
 
                 int dayOfWeak;
                 for (LectureDTO lecture : currentWeekLectures) {
                     dayOfWeak = getDayOfWeek(lecture.getDate());
-                    if (dayOfWeak >= 0 && dayOfWeak < 5)
+                    if (dayOfWeak >= 0 && dayOfWeak < 5) {
                         for (int i = 1; i <= timesRow.length; i++) {
-                            if (schedule.getText(i, 0).equals(lecture.getLectureTime())) {
-                                schedule.setWidget(i, dayOfWeak + 1, generateTimetableCell(lecture));//не более 1 лекции
-                                break;
+                            if (schedule_table.getText(i, 0).equals(lecture.getLectureTime())) {
+                                logger.log(Level.INFO, "i 2");
+                                if (schedule_table.getText(i, dayOfWeak + 1).equals("нет занятий")) {
+                                    schedule_table.setWidget(i, dayOfWeak + 1, generateTimetableCell(lecture));
+                                    //не более 1 лекции
+                                    logger.log(Level.INFO, "i 3");
+                                    break;
+                                } else {
+
+                                    logger.log(Level.WARNING, "more then 1 lecture in " + i + " " + (dayOfWeak + 1));
+                                    logger.log(Level.WARNING, "schedule_table.getElement " + schedule_table.getElement().toString());
+//                                    Widget w = schedule_table.getWidget(i, dayOfWeak + 1);
+//                                    schedule_table.getElement().toString();
+//                                    if (w!= null)
+//                                        schedule_table.setWidget();
+                                }
                             }
                         }
+                    }
                 }
-            } else {
-                noLecturesTable(new String[]{"--:--"});
             }
-        } else {
-            noLecturesTable(new String[]{"--:--"});
         }
-
-        setMondayAndFriday();
     }
 
     private void noLecturesTable(String[] timesRow) {
-        int rowCount = schedule.getRowCount() - 1;
+        int rowCount = schedule_table.getRowCount() - 1;
         int timesRowLength = timesRow.length;
         if (rowCount > timesRowLength) {
             while (rowCount != timesRowLength) {
-                schedule.removeRow(rowCount);
+                schedule_table.removeRow(rowCount);
                 rowCount--;
             }
         }
 
         for (int i = 0; i < timesRow.length; i++) {
-            schedule.setText(i + 1, 0, timesRow[i]);
+            schedule_table.setText(i + 1, 0, timesRow[i]);
             for (int j = 1; j <= 5; j++)
-                schedule.setText(i + 1, j, "нет занятий");
+                schedule_table.setText(i + 1, j, "нет занятий");
         }
     }
 
@@ -173,7 +182,11 @@ public class Schedule extends Composite {
         weeklectureMap = new HashMap<>();
         Integer key;
         for (LectureDTO l : allLectures) {
-            key = getNumberOfWeek(l.getDate()) * getYear(l.getDate());
+            if (l.getDate() != null)
+                key = getNumberOfWeek(l.getDate()) * getYear(l.getDate());
+            else
+                key = 0;
+
             if (!weeklectureMap.containsKey(key)) {
                 List<LectureDTO> list = new ArrayList<>();
                 list.add(l);
@@ -184,14 +197,33 @@ public class Schedule extends Composite {
         }
     }
 
+    private void updateWeeklectureMap() {
+//        if (weeklectureMap != null) {
+//            Integer key;
+//            for (LectureDTO l : allLectures) {
+//                if (l.getDate() != null)
+//                    key = getNumberOfWeek(l.getDate()) * getYear(l.getDate());
+//                else
+//                    key = 0;
+//
+//                if (!weeklectureMap.containsKey(key)) {
+//                    List<LectureDTO> list = new ArrayList<>();
+//                    list.add(l);
+//                    weeklectureMap.put(key, list);
+//                } else {
+//                    weeklectureMap.get(key).add(l);
+//                }
+//            }
+//        }
+    }
+
     private void setMondayAndFriday() {
         monday.setText(getWeekMonday(currentDate));
         friday.setText(getWeekFriday(currentDate));
     }
 
     private int getDayOfWeek(Date date) {
-        String s = DateTimeFormat.getFormat("EEEE").format(date).toLowerCase();
-        switch (s) {
+        switch (DateTimeFormat.getFormat("EEEE").format(date).toLowerCase()) {
             case "monday":
             case "понедельник":
                 return 0;
@@ -214,7 +246,7 @@ public class Schedule extends Composite {
             case "воскресенье":
                 return 6;
         }
-        return 0;
+        return 10;
     }
 
     private String getWeekMonday(Date date) {
@@ -271,37 +303,45 @@ public class Schedule extends Composite {
     }
 
     private Widget generateTimetableCell(final LectureDTO lectureDTO) {
-
-        Label title = new Label(lectureDTO.getTitle());
-        Label lecturer = new Label(lectureDTO.getCourse().getLecturer().getFullName());
-        Label classRoom = new Label("Кабинет №" + lectureDTO.getClassroom());
-
-
-        title.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                logger.log(Level.INFO, "до " + lectureDTO.getTitle());
-
-                final LecturePage lecturePage = new LecturePage(lectureDTO);
-                logger.log(Level.INFO, "после ");
-
-//                lecturePage.ShowLecturePopup(this);
-                lecturePage.center();
-                lecturePage.show();
-            }
-        });
-//        lecturer.addClickHandler(new ClickHandler() {
-//            @Override
-//            public void onClick(ClickEvent event) {
-//                //TODO toLecturers lectures
-//            }
-//
-//        });
         VerticalLayoutContainer lectureCell = new VerticalLayoutContainer();
-        lectureCell.add(title);
-        lectureCell.add(lecturer);
-        lectureCell.add(classRoom);
-//        lectureCell.add(new Label(lectureDTO.getDay()));
+
+        if (lectureDTO.getTitle() != null) {
+            Label title = new Label(lectureDTO.getTitle());
+            title.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    logger.log(Level.INFO, "до create LecturePage " + lectureDTO.getTitle() + " showUserList " + showUserList);
+
+                    final LecturePage lecturePage = new LecturePage(lectureDTO, showUserList);
+//                lecturePage.ShowLecturePopup(this);
+                    lecturePage.center();
+                    lecturePage.show();
+
+                    logger.log(Level.INFO, "после create LecturePage " + lectureDTO.getTitle());
+                }
+            });
+            lectureCell.add(title);
+
+            if (lectureDTO.getCourse().getLecturer() != null) {
+                //TODO
+                Label lecturer = new Label(lectureDTO.getCourse().getLecturer().getFullName());
+//                lecturer.addClickHandler(new ClickHandler() {
+//                    @Override
+//                    public void onClick(ClickEvent event) {
+//                        //TODO toLecturers lectures
+//                    }
+//
+//                });
+                lectureCell.add(lecturer);
+            }
+            if (lectureDTO.getClassroom() != null) {
+                Label classRoom = new Label("Кабинет №" + lectureDTO.getClassroom());
+                lectureCell.add(classRoom);
+            }
+            if (lectureDTO.getDay() != null) {
+                lectureCell.add(new Label(lectureDTO.getDay()));
+            }
+        }
         return lectureCell;
     }
 }

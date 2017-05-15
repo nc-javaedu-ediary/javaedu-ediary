@@ -14,7 +14,6 @@ import com.ncjavaedu.ediary.client.admin.popups.AdminPopupCallbacks;
 import com.ncjavaedu.ediary.client.admin.popups.CoursePopup;
 import com.ncjavaedu.ediary.client.admin.popups.LecturePopup;
 import com.ncjavaedu.ediary.client.admin.popups.UserPopup;
-import com.ncjavaedu.ediary.client.authorization.AuthorizationPanel;
 import com.ncjavaedu.ediary.client.model.CourseDTO;
 import com.ncjavaedu.ediary.client.model.LectureDTO;
 import com.ncjavaedu.ediary.client.model.UserDTO;
@@ -38,6 +37,7 @@ import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AdminMenu implements IsWidget, AdminPopupCallbacks {
@@ -196,7 +196,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     }
 
     @UiHandler({"removeUserButton"})
-    public void removeUserButtonClick(SelectEvent selectEvent){
+    public void removeUserButtonClick(SelectEvent selectEvent) {
         AsyncCallback<UserDTO> callback = new AsyncCallback<UserDTO>() {
             @Override
             public void onFailure(Throwable throwable) {
@@ -205,8 +205,8 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 
             @Override
             public void onSuccess(UserDTO dto) {
-                for(UserDTO u : users){
-                    if(u.getUserId() == dto.getUserId()){
+                for (UserDTO u : users) {
+                    if (u.getUserId() == dto.getUserId()) {
                         users.remove(u);
                         break;
                     }
@@ -236,7 +236,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     }
 
     @UiHandler({"removeLectureButton"})
-    public void removeLectureButtonClick(SelectEvent selectEvent){
+    public void removeLectureButtonClick(SelectEvent selectEvent) {
         AsyncCallback<LectureDTO> callback = new AsyncCallback<LectureDTO>() {
             @Override
             public void onFailure(Throwable throwable) {
@@ -245,8 +245,8 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 
             @Override
             public void onSuccess(LectureDTO dto) {
-                for(LectureDTO l : lectures){
-                    if(l.getLectureId() == dto.getLectureId()){
+                for (LectureDTO l : lectures) {
+                    if (l.getLectureId() == dto.getLectureId()) {
                         lectures.remove(l);
                         break;
                     }
@@ -277,7 +277,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     }
 
     @UiHandler({"removeCourseButton"})
-    public void removeCourseButtonClick(SelectEvent selectEvent){
+    public void removeCourseButtonClick(SelectEvent selectEvent) {
         AsyncCallback<CourseDTO> callback = new AsyncCallback<CourseDTO>() {
             @Override
             public void onFailure(Throwable throwable) {
@@ -286,8 +286,8 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 
             @Override
             public void onSuccess(CourseDTO dto) {
-                for(CourseDTO c : courses){
-                    if(c.getCourseId() == dto.getCourseId()){
+                for (CourseDTO c : courses) {
+                    if (c.getCourseId() == dto.getCourseId()) {
                         courses.remove(c);
                         break;
                     }
@@ -449,6 +449,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
 
     private void getUsers() {
         AsyncCallback<List<UserDTO>> callback = new AsyncCallback<List<UserDTO>>() {
+            @Override
             public void onFailure(Throwable caught) {
                 Info.display("Ошибка", "Не удалось получить список пользователей");
             }
@@ -479,11 +480,11 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
             public void onSuccess(List<LectureDTO> lectures) {
 
                 onGetLectures(lectures);
-//                logger.log(Level.INFO, "success " + lectures.size());
-                timeTable.add(new Schedule(lectures));
+                logger.log(Level.INFO, "success " + lectures.size());
                 lecturesStore.replaceAll(lectures);
                 lecturesGrid.getView().refresh(true);
                 lecturesGrid.getParent().setHeight(Integer.toString(20 + lectures.size() * 22));
+                timeTable.add(new Schedule(lectures, false));
             }
         };
         ClientLectureService.App.getInstance().getLectures(callback);

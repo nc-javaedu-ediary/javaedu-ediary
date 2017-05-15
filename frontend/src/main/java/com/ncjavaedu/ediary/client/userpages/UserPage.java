@@ -8,6 +8,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.ncjavaedu.ediary.client.model.CourseDTO;
 import com.ncjavaedu.ediary.client.model.LectureDTO;
+import com.ncjavaedu.ediary.client.model.RoleDTO;
 import com.ncjavaedu.ediary.client.model.UserDTO;
 import com.ncjavaedu.ediary.client.schedule.Schedule;
 import com.sencha.gxt.widget.core.client.ContentPanel;
@@ -24,24 +25,36 @@ public class UserPage implements IsWidget {
     private Widget widget;
     private static UserPageUiBinder uiBinder = GWT.create(UserPageUiBinder.class);
 
-    private static final Logger logger = Logger.getLogger(UserPage.class.getName());
-
     private List<LectureDTO> lectures;
-    private int role;
+    private boolean showUserList = false;
 
+    private static final Logger logger = Logger.getLogger(UserPage.class.getName());
 
     @UiTemplate("UserPage.ui.xml")
     interface UserPageUiBinder extends UiBinder<Widget, UserPage> {
     }
 
     public UserPage(UserDTO currentUser) {
-//        if (currentUser.getRole() == RoleDTO.Student)
-//            role = 2;
-//        else role = 1;
-        lectures = new ArrayList<>();
-        for (CourseDTO course : currentUser.getCourses()) {
-            lectures.addAll(course.getLectures());
-            logger.log(Level.INFO, "course " + course.getLecturer().getFirstName());
+        logger.log(Level.INFO, "currentUser.getRole() " + currentUser.getRole());
+
+        if (currentUser != null && currentUser.getRole() == RoleDTO.Lecturer) {
+            showUserList = true;
+            logger.log(Level.INFO, "currentUser.getRole() " + currentUser.getRole());
+        }
+        logger.log(Level.INFO, "showUserList " + showUserList);
+        logger.log(Level.INFO, "currentUser.getCourses() " + currentUser.getCourses().size());
+
+        if (currentUser.getCourses() != null && currentUser.getCourses().size() != 0) {
+            logger.log(Level.INFO, "currentUser.getCourses() " + currentUser.getCourses().size());
+
+            lectures = new ArrayList<>();
+            for (CourseDTO course : currentUser.getCourses()) {
+                if (course.getLectures() != null && course.getLectures().size() != 0) {
+                    lectures.addAll(course.getLectures());
+                    logger.log(Level.INFO, "course.getLectures() " + course.getLectures().size());
+                    logger.log(Level.INFO, "course " + course.getLecturer().getFirstName());
+                }
+            }
         }
     }
 
@@ -49,11 +62,11 @@ public class UserPage implements IsWidget {
     public Widget asWidget() {
         if (widget == null) {
             timeTable = new ContentPanel();
-            if (lectures == null) {
+            if (lectures == null || lectures.size() == 0) {
                 logger.log(Level.INFO, "lectures is null ");
                 timeTable.add(new Schedule());
             } else {
-                timeTable.add(new Schedule(lectures));
+                timeTable.add(new Schedule(lectures, showUserList));
             }
             widget = uiBinder.createAndBindUi(this);
         }

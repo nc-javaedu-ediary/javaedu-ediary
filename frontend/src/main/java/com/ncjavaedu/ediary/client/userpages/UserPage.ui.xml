@@ -4,7 +4,7 @@
     <ui:style src="../../../resources/style.css"/>
 
     <gxt:ContentPanel>
-        <gxt:ContentPanel headerVisible="false" ui:field="timeTable">
+        <gxt:ContentPanel headerVisible="false" ui:field="timeTable" >
             <!--<schedule:Schedule/>-->
         </gxt:ContentPanel>
     </gxt:ContentPanel>

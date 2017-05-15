@@ -14,6 +14,10 @@
     padding: 5px;
     border-bottom-width: 1px;
     border-color: #7ba1d2;
+    min-width: 110px !important;
+}
+.schedule .table-style tr td:first-child {
+    min-width: 50px !important;
 }
 
 .schedule .table-style tbody tr:first-child {

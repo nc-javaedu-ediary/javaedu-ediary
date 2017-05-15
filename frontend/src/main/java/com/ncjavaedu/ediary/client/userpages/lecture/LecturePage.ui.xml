@@ -12,11 +12,11 @@
     <ui:style src="../../../../resources/style.css"/>
 
     <!--<ui:with field="lectureLayoutData"-->
-    <!--type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">-->
-    <!--<ui:attributes width="1" height="1"/>-->
+             <!--type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">-->
+        <!--<ui:attributes width="1" height="1"/>-->
     <!--</ui:with>-->
     <!--<ui:with type="com.sencha.gxt.widget.core.client.grid.GridView" field="usersView">-->
-    <!--<ui:attributes stripeRows="true"/>-->
+        <!--<ui:attributes stripeRows="true"/>-->
     <!--</ui:with>-->
     <!--<ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="usersCM"/>-->
     <!--<ui:with type="com.sencha.gxt.data.shared.ListStore" field="usersStore"/>-->
@@ -53,10 +53,10 @@
                 <gwt:Label ui:field="homework"/>
             </container:VerticalLayoutContainer>
             <!--<container:VerticalLayoutContainer>-->
-            <!--<gxt:ContentPanel layoutData="{lectureLayoutData}" title="Посещаемость лекций">-->
-            <!--<grid:Grid ui:field="usersGrid" view="{usersView}" cm="{usersCM}"-->
-            <!--store="{usersStore}"/>-->
-            <!--</gxt:ContentPanel>-->
+                <!--<gxt:ContentPanel layoutData="{lectureLayoutData}" title="Посещаемость лекций">-->
+                    <!--<grid:Grid ui:field="usersGrid" view="{usersView}" cm="{usersCM}"-->
+                               <!--store="{usersStore}"/>-->
+                <!--</gxt:ContentPanel>-->
             <!--</container:VerticalLayoutContainer>-->
         </container:VerticalLayoutContainer>
     </gxt:ContentPanel>

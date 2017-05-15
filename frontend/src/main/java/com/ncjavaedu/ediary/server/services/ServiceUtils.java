@@ -12,9 +12,6 @@ import com.ncjavaedu.ediary.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by abogdanov on 01.05.17.
- */
 public final class ServiceUtils {
 
     public static final UserDTO userToDto(User user){
@@ -103,6 +100,17 @@ public final class ServiceUtils {
         dto.setCourses(courseDTOS);
     }
 
+    public static final void linkCourseToUsersDto(CourseDTO dto, Course course){
+        List<User> users = course.getUsers();
+        List<UserDTO> usersDTO = new ArrayList<>();
+        for(User u: users){
+            UserDTO udto = ServiceUtils.userToDto(u);
+            ServiceUtils.linkUserToCoursesDto(udto, u);
+            usersDTO.add(udto);
+        }
+        dto.setUsers(usersDTO);
+    }
+
     public static final void linkCourseToLecturesDto(CourseDTO dto, Course course){
         List<Lecture> rcvLectures = course.getLectures();
         List<LectureDTO> lectureDTOS = new ArrayList<>();
@@ -127,6 +135,7 @@ public final class ServiceUtils {
         if(rcvCourse != null) {
             CourseDTO courseDTO = courseToDto(rcvCourse);
             ServiceUtils.linkCourseToLecturerDto(courseDTO, rcvCourse);
+            //        ServiceUtils.linkCourseToUsersDto(courseDTO, rcvCourse);
             dto.setCourse(courseDTO);
         }
     }

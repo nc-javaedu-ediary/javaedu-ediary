@@ -4,6 +4,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.UmbrellaException;
 import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -14,8 +15,12 @@ import com.sencha.gxt.widget.core.client.container.Viewport;
  */
 public class MainApplication implements IsWidget, EntryPoint {
 
-    private static ReportingUiBinder uiBinder = GWT.create(ReportingUiBinder.class);
     private Widget widget;
+    private static ReportingUiBinder uiBinder = GWT.create(ReportingUiBinder.class);
+
+    @UiTemplate("MainApplication.ui.xml")
+    interface ReportingUiBinder extends UiBinder<Widget, MainApplication> {
+    }
 
     @Override
     public Widget asWidget() {
@@ -24,9 +29,6 @@ public class MainApplication implements IsWidget, EntryPoint {
         }
 
         return widget;
-    }
-
-    interface ReportingUiBinder extends UiBinder<Widget, MainApplication> {
     }
 
     /**
@@ -40,7 +42,7 @@ public class MainApplication implements IsWidget, EntryPoint {
                 public void onUncaughtException(Throwable e) {
                     // do exception handling stuf
                     verifyNotUmbrellaException(e);
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             });
 

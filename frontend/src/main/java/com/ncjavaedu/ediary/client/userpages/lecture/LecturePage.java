@@ -11,7 +11,6 @@ import com.ncjavaedu.ediary.client.admin.popups.AdminPopupCallbacks;
 import com.ncjavaedu.ediary.client.model.CourseDTO;
 import com.ncjavaedu.ediary.client.model.LectureDTO;
 import com.ncjavaedu.ediary.client.model.UserDTO;
-import com.ncjavaedu.ediary.client.schedule.Schedule;
 
 import java.util.List;
 import java.util.Objects;
@@ -39,7 +38,7 @@ public class LecturePage extends PopupPanel {
 //    ColumnModel<UserDTO> usersCM;
 //    @UiField(provided = true)
 //    ListStore<UserDTO> usersStore;
-private static final Logger logger = Logger.getLogger(Schedule.class.getName());
+    private static final Logger logger = Logger.getLogger(LecturePage.class.getName());
 
 
     private static final LecturePageProps userProps = GWT.create(LecturePageProps.class);
@@ -58,28 +57,43 @@ private static final Logger logger = Logger.getLogger(Schedule.class.getName());
     }
 
     public LecturePage() {
-        super(false);
+        super(true);
         add(uiBinder.createAndBindUi(this));
     }
 
-    public LecturePage(LectureDTO lecture) {
+    public LecturePage(LectureDTO lecture, boolean showUserList) {
         super(true);
         this.lecture = lecture;
         course = lecture.getCourse();
+        logger.log(Level.INFO, "course " + course);
+
         lector = course.getLecturer();
-        for (UserDTO user : course.getUsers()) {
-            if (user.getUserId() != lector.getUserId())
-                users.add(user);
+        logger.log(Level.INFO, "lector " + lector.getUserId());
+        logger.log(Level.INFO, "showUserList " + showUserList);
+
+
+        if (showUserList)
+            for (UserDTO user : course.getUsers()) {
+                logger.log(Level.INFO, "user " + user + " " + user.getUserId());
+
+                if (!Objects.equals(user.getUserId(), lector.getUserId())) {
+                    users.add(user);
+                    logger.log(Level.INFO, "user " + user + " " + user.getUserId());
+                }
+            }
+//        logger.log(Level.INFO, "!users " + users.size());
+//        logger.log(Level.INFO, "lector " + lector);
+
+        try {
+            generatePage(showUserList);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         add(uiBinder.createAndBindUi(this));
-//        try {
-//            generatePage(role);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+
     }
 
-    private void generatePage(int role) {
+    private void generatePage(boolean showUserList) {
         theme.setText(lecture.getTitle());
         logger.log(Level.INFO, "lecture.getTitle() ");
 
@@ -94,8 +108,8 @@ private static final Logger logger = Logger.getLogger(Schedule.class.getName());
             homework.setText(lecture.getHomework());
         else
             homework.setText("Не задано");
-//        if (role == 1)
-//        generateUserList();
+//        if (showUserList)
+//            generateUserList();
     }
 
 //    private void generateUserList() {
@@ -114,8 +128,8 @@ private static final Logger logger = Logger.getLogger(Schedule.class.getName());
 //        usersCM = new ColumnModel<>(userColumns);
 //
 //        usersStore = new ListStore<>(userProps.key());
-//        if (users != null)
-//            usersStore.addAll(users);
+////        if (users != null)
+////            usersStore.addAll(users);
 //    }
 
     public void ShowLecturePopup(final AdminPopupCallbacks cb) {

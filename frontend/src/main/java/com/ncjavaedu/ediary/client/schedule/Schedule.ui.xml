@@ -44,7 +44,7 @@
         </container:HBoxLayoutContainer>
 
         <container:HBoxLayoutContainer layoutData="{ttable}" styleName="{style.schedule}">
-            <element:FlexTable ui:field="schedule" borderWidth="1" width="0.9"
+            <element:FlexTable ui:field="schedule_table" borderWidth="1" width="0.9"
                                styleName="{style.table-style}"/>
         </container:HBoxLayoutContainer>
     </container:VBoxLayoutContainer>
