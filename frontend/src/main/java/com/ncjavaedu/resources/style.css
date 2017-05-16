@@ -52,6 +52,21 @@
 }
 
 .label{
-    /*font-size: 16px !important;*/
+    font-size: 15px !important;
+    font-family: "Arial Black", sans-serif;
+    display: inline-block;
+    min-width: 100px;
+    max-width: 200px;
+    /*margin: auto;*/
+}
+
+
+.label-mean{
+    font-size: 15px !important;
+    font-family: Arial, sans-serif;
+    display: inline-block;
+    min-width: 100px;
+    max-width: 100%;
+    /*margin: auto;*/
 }
 

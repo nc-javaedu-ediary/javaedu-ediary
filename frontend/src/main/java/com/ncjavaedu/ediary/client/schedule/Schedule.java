@@ -299,7 +299,7 @@ public class Schedule extends Composite {
                 public void onClick(ClickEvent event) {
                     logger.log(Level.INFO, "до create LecturePage " + lectureDTO.getTitle() + " showUserList " + showUserList);
 
-                    final LecturePage lecturePage = new LecturePage(lectureDTO, showUserList);
+                    LecturePage lecturePage = new LecturePage(lectureDTO, showUserList);
 //                lecturePage.ShowLecturePopup(this);
                     lecturePage.center();
                     lecturePage.show();

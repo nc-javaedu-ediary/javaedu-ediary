@@ -13,37 +13,33 @@
         <container:VerticalLayoutContainer>
             <container:VBoxLayoutContainer VBoxLayoutAlign="CENTER">
                 <container:HBoxLayoutContainer>
-                    <form:FieldLabel text="Тема лекции"/>
-                    <gwt:Label ui:field="theme"/>
+                    <form:FieldLabel text="Тема лекции" styleName="{style.label}"/>
+                    <gwt:Label ui:field="theme" styleName="{style.label-mean}"/>
                 </container:HBoxLayoutContainer>
-                <container:HorizontalLayoutContainer>
+                <container:HBoxLayoutContainer hBoxLayoutAlign="STRETCH">
                     <container:HBoxLayoutContainer>
-                        <form:FieldLabel text="Дата"/>
-                        <gwt:Label ui:field="lectDate"/>
+                        <form:FieldLabel text="Дата" styleName="{style.label}"/>
+                        <gwt:Label ui:field="lectDate" styleName="{style.label-mean}"/>
                     </container:HBoxLayoutContainer>
                     <container:HBoxLayoutContainer>
-                        <container:child>
-                            <form:FieldLabel text="Лектор"/>
-                        </container:child>
-                        <container:child>
-                            <gwt:Label ui:field="lecturer" styleName="{style.label}"/>
-                        </container:child>
+                        <form:FieldLabel text="Лектор" styleName="{style.label}"/>
+                        <gwt:Label ui:field="lecturer" styleName="{style.label-mean}"/>
                     </container:HBoxLayoutContainer>
-                </container:HorizontalLayoutContainer>
+                </container:HBoxLayoutContainer>
             </container:VBoxLayoutContainer>
             <container:VerticalLayoutContainer width="1">
-                <form:FieldLabel text="Содержание лекции"/>
-                <gwt:Label ui:field="description"/>
+                <form:FieldLabel text="Содержание лекции" styleName="{style.label}"/>
+                <gwt:Label ui:field="description" styleName="{style.label-mean}"/>
             </container:VerticalLayoutContainer>
             <container:VerticalLayoutContainer width="1">
-                <form:FieldLabel text="Домашняя работа"/>
-                <gwt:Label ui:field="homework"/>
+                <form:FieldLabel text="Домашняя работа" styleName="{style.label}"/>
+                <gwt:Label ui:field="homework" styleName="{style.label-mean}"/>
             </container:VerticalLayoutContainer>
             <!--<container:VerticalLayoutContainer>-->
-                <!--<gxt:ContentPanel layoutData="{lectureLayoutData}" title="Посещаемость лекций">-->
-                    <!--<grid:Grid ui:field="usersGrid" view="{usersView}" cm="{usersCM}"-->
-                               <!--store="{usersStore}"/>-->
-                <!--</gxt:ContentPanel>-->
+            <!--<gxt:ContentPanel layoutData="{lectureLayoutData}" title="Посещаемость лекций">-->
+            <!--<grid:Grid ui:field="usersGrid" view="{usersView}" cm="{usersCM}"-->
+            <!--store="{usersStore}"/>-->
+            <!--</gxt:ContentPanel>-->
             <!--</container:VerticalLayoutContainer>-->
         </container:VerticalLayoutContainer>
     </gxt:ContentPanel>

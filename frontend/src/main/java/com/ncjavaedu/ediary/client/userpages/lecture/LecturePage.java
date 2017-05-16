@@ -30,7 +30,7 @@ public class LecturePage extends PopupPanel {
     @UiField
     Label homework;
 
-//    @UiField
+    //    @UiField
 //    Grid<UserDTO> usersGrid;
 //    @UiField
 //    GridView<UserDTO> usersView;
@@ -43,8 +43,8 @@ public class LecturePage extends PopupPanel {
 
     private static final LecturePageProps userProps = GWT.create(LecturePageProps.class);
 
+    private boolean showUserList;
     private LectureDTO lecture;
-
     private UserDTO lector;
     private CourseDTO course;
     private List<UserDTO> users;
@@ -56,48 +56,52 @@ public class LecturePage extends PopupPanel {
     interface LecturePageUiBinder extends UiBinder<Widget, LecturePage> {
     }
 
-    public LecturePage() {
-        super(true);
-        add(uiBinder.createAndBindUi(this));
-    }
-
     public LecturePage(LectureDTO lecture, boolean showUserList) {
         super(true);
         this.lecture = lecture;
-        course = lecture.getCourse();
+        this.showUserList = showUserList;
+
+        if (lecture.getCourse() != null)
+            course = lecture.getCourse();
+
         logger.log(Level.INFO, "course " + course);
 
-        lector = course.getLecturer();
+        if (course.getLecturer() != null)
+            lector = course.getLecturer();
+
         logger.log(Level.INFO, "lector " + lector.getUserId());
         logger.log(Level.INFO, "showUserList " + showUserList);
 
-
         if (showUserList)
-            for (UserDTO user : course.getUsers()) {
-                logger.log(Level.INFO, "user " + user + " " + user.getUserId());
+            if (course.getUsers() != null)
+                for (UserDTO user : course.getUsers()) {
 
-                if (!Objects.equals(user.getUserId(), lector.getUserId())) {
-                    users.add(user);
                     logger.log(Level.INFO, "user " + user + " " + user.getUserId());
+
+                    if (!Objects.equals(user.getUserId(), lector.getUserId())) {
+                        users.add(user);
+                        logger.log(Level.INFO, "user " + user + " " + user.getUserId());
+                    }
                 }
-            }
 //        logger.log(Level.INFO, "!users " + users.size());
 //        logger.log(Level.INFO, "lector " + lector);
 
+        add(uiBinder.createAndBindUi(this));
         try {
-            generatePage(showUserList);
+            generatePage();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        add(uiBinder.createAndBindUi(this));
 
     }
 
-    private void generatePage(boolean showUserList) {
+    private void generatePage() {
         theme.setText(lecture.getTitle());
+
         logger.log(Level.INFO, "lecture.getTitle() ");
 
         lectDate.setText(lecture.getLectureDay());
+
         try {
             lecturer.setText(lecture.getCourse().getLecturer().getFullName());
         } catch (Exception e) {

@@ -504,8 +504,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
                 onGetCourses(courses);
                 coursesStore.replaceAll(courses);
                 coursesGrid.getView().refresh(true);
-                coursesGrid.getParent().getParent().setHeight(Integer.toString
-                        ((20 + courses.size() * 22) + 30));
+                coursesGrid.getParent().getParent().setHeight(Integer.toString((20 + courses.size() * 22) + 30));
                 coursesGrid.getParent().setHeight(Integer.toString(20 + courses.size() * 22));
             }
         };
