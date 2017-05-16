@@ -1,7 +1,7 @@
 
 .schedule{
     margin: 20px auto;
-    min-height: 200px;
+    min-height: 400px !important;
 }
 
 .schedule .table-style {
@@ -45,6 +45,10 @@
 
 .lecture{
 
+}
+
+.logout{
+    float: right;
 }
 
 .label{

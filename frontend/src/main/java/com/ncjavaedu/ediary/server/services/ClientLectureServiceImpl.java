@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.List;
 
-//import com.ncjavaedu.ediary.client.model.UserDTO;
-
 public class ClientLectureServiceImpl extends BaseServiceImpl implements ClientLectureService {
 
     @Autowired

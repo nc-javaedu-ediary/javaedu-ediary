@@ -48,27 +48,13 @@ public class Schedule extends Composite {
     interface ScheduleUiBinder extends UiBinder<Widget, Schedule> {
     }
 
-    public Schedule() {
-        currentDate = new Date();
-        initWidget(uiBinder.createAndBindUi(this));
-        generateTimetableHead();
-        templateSchedule();
-    }
-
     public Schedule(List<LectureDTO> allLectures, boolean showUserList) {
-//        if (allLectures != null)
-        this.showUserList = showUserList;
         this.allLectures = allLectures;
-
-        logger.log(Level.INFO, "lectures in Schedule " + allLectures.size());
-        logger.log(Level.INFO, "showUserList " + showUserList);
-
+        this.showUserList = showUserList;
         currentDate = new Date();
 
         initWidget(uiBinder.createAndBindUi(this));
         generateShedule();
-        // Give the overall composite a style name.
-//        setStyleName("table-style");
     }
 
     @UiHandler({"previous"})
@@ -86,13 +72,13 @@ public class Schedule extends Composite {
 
     private void generateShedule() {
         generateTimetableHead();
-        if (allLectures != null || allLectures.size() != 0) {
+        if (allLectures != null && allLectures.size() != 0) {
             createWeeklectureMap();
-            logger.log(Level.INFO, "i createWeeklectureMap");
-
             weekSchedule();
+            logger.log(Level.INFO, "i create weekSchedule");
         } else {
             templateSchedule();
+            logger.log(Level.INFO, "i create templateSchedule");
         }
     }
 
@@ -110,9 +96,7 @@ public class Schedule extends Composite {
     }
 
     private void weekSchedule() {
-//        setMondayAndFriday();
         templateSchedule();
-        logger.log(Level.INFO, "i create templateSchedule");
 
         Integer currentWeek = getNumberOfWeek(currentDate) * getYear(currentDate);
 
@@ -175,6 +159,9 @@ public class Schedule extends Composite {
             for (int j = 1; j <= 5; j++)
                 schedule_table.setText(i + 1, j, "нет занятий");
         }
+
+        schedule_table.getParent().setHeight(Integer.toString(50 + timesRow.length * 22));
+
     }
 
 

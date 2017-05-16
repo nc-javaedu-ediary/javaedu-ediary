@@ -88,6 +88,8 @@ public final class ServiceUtils {
         return course;
     }
 
+    /*links*/
+
     public static final void linkUserToCoursesDto(UserDTO dto, User user){
         List<Course> courses = user.getCourses();
         List<CourseDTO> courseDTOS = new ArrayList<>();
@@ -135,7 +137,6 @@ public final class ServiceUtils {
         if(rcvCourse != null) {
             CourseDTO courseDTO = courseToDto(rcvCourse);
             ServiceUtils.linkCourseToLecturerDto(courseDTO, rcvCourse);
-            //        ServiceUtils.linkCourseToUsersDto(courseDTO, rcvCourse);
             dto.setCourse(courseDTO);
         }
     }

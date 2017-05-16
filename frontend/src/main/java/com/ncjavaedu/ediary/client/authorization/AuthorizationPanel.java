@@ -22,6 +22,9 @@ import com.sencha.gxt.widget.core.client.form.PasswordField;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.info.Info;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class AuthorizationPanel implements IsWidget {
 
     @UiField
@@ -35,6 +38,8 @@ public class AuthorizationPanel implements IsWidget {
 
     private Widget widget;
     private static AuthorizationUiBinder uiBinder = GWT.create(AuthorizationUiBinder.class);
+
+    private static final Logger logger = Logger.getLogger(AuthorizationPanel.class.getName());
 
     @UiTemplate("AuthorizationPanel.ui.xml")
     interface AuthorizationUiBinder extends UiBinder<Widget, AuthorizationPanel> {
@@ -52,7 +57,7 @@ public class AuthorizationPanel implements IsWidget {
 
             @Override
             public void onSuccess(UserDTO userDTO) {
-                if(userDTO != null)
+                if (userDTO != null)
                     onLogin(userDTO);
             }
         };
@@ -76,7 +81,7 @@ public class AuthorizationPanel implements IsWidget {
 
             @Override
             public void onSuccess(UserDTO user) {
-                AsyncCallback<UserDTO> callback1 = new AsyncCallback<UserDTO>() {
+                AsyncCallback<UserDTO> sessionCallback = new AsyncCallback<UserDTO>() {
                     @Override
                     public void onFailure(Throwable throwable) {
                         Info.display("!", "Failed to store user in session");
@@ -84,34 +89,52 @@ public class AuthorizationPanel implements IsWidget {
 
                     @Override
                     public void onSuccess(UserDTO userDTO) {
-                        onLogin(userDTO);
+                        logger.log(Level.INFO, userDTO.getLogin() + " saved in session");
+                        logger.log(Level.INFO, "getCourses " + userDTO.getCourses().size());
                     }
                 };
-
-                ClientSessionManagementService.App.getInstance().saveUser(user, callback1);
+                ClientSessionManagementService.App.getInstance().saveUser(user, sessionCallback);
+                onLogin(user);
+//                saveInSession(user);
             }
         };
-        ClientUserService.App.getInstance().getUser(loginField.getText(),passField.getText(),callback);
+        ClientUserService.App.getInstance().getUser(loginField.getText(), passField.getText(), callback);
     }
 
-    private void onLogin(UserDTO dto){
-        if (dto == null){
+    private void saveInSession(UserDTO user) {
+        AsyncCallback<UserDTO> sessionCallback = new AsyncCallback<UserDTO>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                Info.display("!", "Failed to store user in session");
+            }
+
+            @Override
+            public void onSuccess(UserDTO userDTO) {
+                logger.log(Level.INFO, "currentUser saved in session");
+            }
+        };
+        ClientSessionManagementService.App.getInstance().saveUser(user, sessionCallback);
+    }
+
+    private void onLogin(UserDTO dto) {
+        if (dto == null) {
             Info.display("Ошибка", "Неправильное имя пользователя или пароль");
         } else {
-            if(dto.getRole() != null)
-            {
-                if(dto.getRole() == RoleDTO.Admin)
+            if (dto.getRole() != null) {
+                if (dto.getRole() == RoleDTO.Admin)
                     displayAdminMenu();
-                else
+                else {
+                    logger.log(Level.INFO, "currentUser.getCourses() !! " + dto.getCourses().size());
+                    logger.log(Level.INFO, "currentUser.getCourses() !! " + dto.getFirstName());
                     displayUserPage(dto);
-            }
-            else
+                }
+            } else
                 displayUserPage(dto);
             Info.display("Вы вошли", "Здравствуйте, " + dto.getFirstName());
         }
     }
 
-    private void displayAdminMenu(){
+    private void displayAdminMenu() {
         Viewport vp = new Viewport();
         vp.add(new AdminMenu().asWidget());
         //TODO RootPanel.get("content")
@@ -119,7 +142,7 @@ public class AuthorizationPanel implements IsWidget {
         RootLayoutPanel.get().add(vp);
     }
 
-    private void displayUserPage(UserDTO dto){
+    private void displayUserPage(UserDTO dto) {
         Viewport vp = new Viewport();
         vp.add(new UserPage(dto).asWidget());
         //TODO RootPanel.get("content")

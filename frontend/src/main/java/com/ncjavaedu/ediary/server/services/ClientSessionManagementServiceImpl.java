@@ -7,9 +7,6 @@ import com.ncjavaedu.ediary.model.User;
 import com.ncjavaedu.ediary.services.SessionManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-/**
- * Created by abogdanov on 11.05.17.
- */
 public class ClientSessionManagementServiceImpl extends BaseServiceImpl implements ClientSessionManagementService {
 
     @Autowired
@@ -23,6 +20,7 @@ public class ClientSessionManagementServiceImpl extends BaseServiceImpl implemen
             UserDTO retUser;
             if (rcvUser != null) {
                 retUser = ServiceUtils.userToDto(rcvUser);
+                ServiceUtils.linkUserToCoursesDto(retUser, rcvUser);
             } else
                 retUser = null;
             return retUser;

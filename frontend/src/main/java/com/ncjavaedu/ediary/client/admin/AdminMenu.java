@@ -440,8 +440,6 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     //----------Timetable Tab-----------//
 
     private void generateSchedule() {
-//        logger.log(Level.WARNING, "In generateSchedule " + lectures.size());
-
         timeTable = new ContentPanel();
     }
 

@@ -58,7 +58,9 @@ public class ClientUserServiceImpl extends BaseServiceImpl implements ClientUser
 
     private UserDTO getUserDTO(User user) {
         UserDTO dto = ServiceUtils.userToDto(user);
-        ServiceUtils.linkUserToCoursesDto(dto, user);
+        if (user.getCourses() != null){
+            ServiceUtils.linkUserToCoursesDto(dto, user);
+        }
         return dto;
     }
 

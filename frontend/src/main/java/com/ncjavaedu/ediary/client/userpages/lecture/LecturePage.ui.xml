@@ -3,23 +3,10 @@
         xmlns:ui='urn:ui:com.google.gwt.uibinder'
         xmlns:container='urn:import:com.sencha.gxt.widget.core.client.container'
         xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'
-        xmlns:grid='urn:import:com.sencha.gxt.widget.core.client.grid'
-        xmlns:button='urn:import:com.sencha.gxt.widget.core.client.button'
-        xmlns:element='urn:import:com.google.gwt.user.client.ui'
         xmlns:gwt="urn:import:com.google.gwt.user.client.ui"
         xmlns:form="urn:import:com.sencha.gxt.widget.core.client.form"
 >
     <ui:style src="../../../../resources/style.css"/>
-
-    <!--<ui:with field="lectureLayoutData"-->
-             <!--type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">-->
-        <!--<ui:attributes width="1" height="1"/>-->
-    <!--</ui:with>-->
-    <!--<ui:with type="com.sencha.gxt.widget.core.client.grid.GridView" field="usersView">-->
-        <!--<ui:attributes stripeRows="true"/>-->
-    <!--</ui:with>-->
-    <!--<ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="usersCM"/>-->
-    <!--<ui:with type="com.sencha.gxt.data.shared.ListStore" field="usersStore"/>-->
 
     <gxt:ContentPanel headingText="Страница лекции" bodyStyle="padding: 20px" pixelSize="800,400"
                       styleName="{style.lecture}">
