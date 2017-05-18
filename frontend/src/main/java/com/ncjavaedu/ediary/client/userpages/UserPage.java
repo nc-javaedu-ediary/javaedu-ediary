@@ -45,6 +45,8 @@ public class UserPage implements IsWidget {
     }
 
     public UserPage(UserDTO currentUser) {
+//        logger.log(Level.INFO, "currentUser.getRole() " + currentUser.getRole());
+
         if (currentUser != null && currentUser.getRole() == RoleDTO.Lecturer) {
             showUserList = true;
         }

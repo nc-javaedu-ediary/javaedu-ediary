@@ -4,16 +4,20 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.ncjavaedu.ediary.client.model.CourseDTO;
 import com.ncjavaedu.ediary.client.model.LectureDTO;
 import com.ncjavaedu.ediary.client.model.UserDTO;
+import com.ncjavaedu.ediary.client.services.ClientLectureService;
 import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.grid.*;
+import com.sencha.gxt.widget.core.client.info.Info;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,12 +56,13 @@ public class LecturePage extends PopupPanel {
 
     private LectureDTO lecture;
     private UserDTO lector;
-    private CourseDTO course;
     private List<UserDTO> users;
     private List<UserDTO> studentsAttendance;
 
     private CheckBoxSelectionModel<UserDTO> selectionModel;
 
+    private Timer elapsedTimer;
+    private int studentsNumber = -1;
 
     private static final Logger logger = Logger.getLogger(LecturePage.class.getName());
 
@@ -72,7 +77,7 @@ public class LecturePage extends PopupPanel {
         this.studentsAttendance = new ArrayList<>();
 
         if (lecture.getCourse() != null) {
-            course = lecture.getCourse();
+            CourseDTO course = lecture.getCourse();
             if (course.getLecturer() != null)
                 lector = course.getLecturer();
             if (course.getUsers() != null)
@@ -85,32 +90,36 @@ public class LecturePage extends PopupPanel {
 
         if (lecture.getStudentsAttendance() != null) {
             studentsAttendance.addAll(lecture.getStudentsAttendance());
-            logger.log(Level.FINE, "studentsAttendance is " + studentsAttendance.size());
-
+            studentsNumber = studentsAttendance.size();
+//            logger.log(Level.FINE, "studentsAttendance is " + studentsAttendance.size());
         }
 
-        generateUserList();
+        elapsedTimer = new Timer () {
+            public void run() {
+                checkChanges();
+            }
+        };
+
+        generateStudentsList();
         add(uiBinder.createAndBindUi(this));
         showLectInformation();
+
+
         if (showUserList) {
             gridContainer.setVisible(true);
 
             if (usersStore.size() != 0) {
+
                 usersGrid.setSelectionModel(selectionModel);
-                usersGrid.getView().setForceFit(true);
                 usersGrid.getView().setAutoExpandColumn(usersGrid.getColumnModel().getColumn(1));//!
                 usersGrid.getView().setAutoFill(true);
+                usersGrid.getView().setForceFit(true);
                 usersGrid.getView().setStripeRows(true);
                 usersGrid.getView().setColumnLines(true);
 
-
                 if (studentsAttendance != null && studentsAttendance.size() !=0)
                     for (UserDTO studentDTO : studentsAttendance) {
-                        logger.log(Level.WARNING, "users3 " + studentsAttendance.size());
-
                         selectionModel.select(studentDTO, true);
-                        logger.log(Level.WARNING, "studentsAttendance " + studentsAttendance.size());
-
                     }
 
                 usersGrid.getParent().setHeight(Integer.toString(20 + users.size() * 22));
@@ -122,8 +131,6 @@ public class LecturePage extends PopupPanel {
 
     private void showLectInformation() {
         theme.setText(lecture.getTitle());
-
-        logger.log(Level.INFO, "lecture.getTitle() ");
 
         lectDate.setText(lecture.getLectureDay());
 
@@ -137,7 +144,8 @@ public class LecturePage extends PopupPanel {
             homework.setText("Не задано");
     }
 
-    private void generateUserList() {
+    private void generateStudentsList() {
+
         IdentityValueProvider<UserDTO> provider = new IdentityValueProvider<>();
         selectionModel = new CheckBoxSelectionModel<UserDTO>(provider){
             @Override
@@ -145,7 +153,7 @@ public class LecturePage extends PopupPanel {
                 super.setChecked(checked);
                 studentsAttendance.clear();
                 studentsAttendance.addAll(this.getSelectedItems());
-                logger.log(Level.WARNING, "checked " + checked);
+                elapsedTimer.scheduleRepeating(500);
             }
 
         };
@@ -165,12 +173,35 @@ public class LecturePage extends PopupPanel {
         usersStore = new ListStore<>(userProps.key());
         if (users != null && users.size() != 0) {
             usersStore.addAll(users);
-
-            //only for test
-//            studentsAttendance.addAll(users);
-//            logger.log(Level.WARNING, "users2 " + studentsAttendance.size());
-
-
         }
+    }
+
+
+    private void checkChanges() {
+        if (studentsNumber != studentsAttendance.size()) {
+            sendLecture();
+            studentsNumber = studentsAttendance.size();
+        }
+    }
+
+    private void sendLecture() {
+        AsyncCallback<LectureDTO> callback = new AsyncCallback<LectureDTO>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                Info.display("!", "Fail");
+            }
+
+            @Override
+            public void onSuccess(LectureDTO result) {
+                Info.display("!", "Данные сохранены");
+            }
+        };
+
+        ClientLectureService.App.getInstance().saveLecture(lecture, studentsAttendance, callback);
+    }
+
+    public void cancelTimer(){
+        elapsedTimer.cancel();
+        logger.log(Level.INFO, "timer off");
     }
 }
