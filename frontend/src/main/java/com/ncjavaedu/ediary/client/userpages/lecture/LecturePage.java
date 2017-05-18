@@ -163,8 +163,9 @@ public class LecturePage extends PopupPanel {
         if (users != null && users.size() != 0) {
             usersStore.addAll(users);
 
-            studentsAttendance.addAll(users);
-            logger.log(Level.WARNING, "users2 " + studentsAttendance.size());
+            //only for test
+//            studentsAttendance.addAll(users);
+//            logger.log(Level.WARNING, "users2 " + studentsAttendance.size());
 
 
         }
