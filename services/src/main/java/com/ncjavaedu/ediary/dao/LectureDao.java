@@ -1,6 +1,7 @@
 package com.ncjavaedu.ediary.dao;
 
 import com.ncjavaedu.ediary.model.Lecture;
+import com.ncjavaedu.ediary.model.User;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
  */
 public interface LectureDao {
     List<Lecture> list();
+    void save(Lecture lecture, List<User> students);
     void save(Lecture lecture);
     void delete(Lecture lecture);
 }

@@ -3,7 +3,9 @@ package com.ncjavaedu.ediary.client.model;
 import com.google.gwt.i18n.client.DateTimeFormat;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class LectureDTO implements Serializable {
@@ -14,6 +16,7 @@ public class LectureDTO implements Serializable {
     private String description;
     private String homework;
     private CourseDTO course;
+    private List<UserDTO> studentsAttendance  = new ArrayList<>();;
 
     public LectureDTO() {
 
@@ -99,11 +102,11 @@ public class LectureDTO implements Serializable {
         return DateTimeFormat.getFormat("HH:mm").format(date);
     }
 
-//    private void parseDate(String date) {
-//        try {
-//            this.date.setTime(dateFormat.parse(date));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public List<UserDTO> getStudentsAttendance() {
+        return studentsAttendance;
+    }
+
+    public void setStudentsAttendance(List<UserDTO> studentsAttendance) {
+        this.studentsAttendance = studentsAttendance;
+    }
 }

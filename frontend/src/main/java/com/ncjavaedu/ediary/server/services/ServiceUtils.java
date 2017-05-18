@@ -14,14 +14,14 @@ import java.util.List;
 
 public final class ServiceUtils {
 
-    public static final UserDTO userToDto(User user){
+    public static final UserDTO userToDto(User user) {
         UserDTO dto = new UserDTO();
         dto.setUserId(user.getUserId());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
         dto.setUniversity(user.getUniversity());
-        if(user.getRole() != null) {
+        if (user.getRole() != null) {
             dto.setRole(RoleDTO.values()[user.getRole().ordinal()]);
         }
         dto.setLogin(user.getLogin());
@@ -46,7 +46,7 @@ public final class ServiceUtils {
         return user;
     }
 
-    public static final LectureDTO lectureToDto(Lecture lecture){
+    public static final LectureDTO lectureToDto(Lecture lecture) {
         LectureDTO dto = new LectureDTO();
         dto.setLectureId(lecture.getLectureId());
         dto.setTitle(lecture.getTitle());
@@ -59,7 +59,7 @@ public final class ServiceUtils {
         return dto;
     }
 
-    public static final Lecture lectureDtoToLecture(LectureDTO dto){
+    public static final Lecture lectureDtoToLecture(LectureDTO dto) {
         Lecture lecture = new Lecture();
         lecture.setLectureId(dto.getLectureId());
         lecture.setTitle(dto.getTitle());
@@ -72,7 +72,7 @@ public final class ServiceUtils {
         return lecture;
     }
 
-    public static final CourseDTO courseToDto( Course course){
+    public static final CourseDTO courseToDto(Course course) {
         CourseDTO dto = new CourseDTO();
         dto.setCourseId(course.getCourseId());
         dto.setTitle(course.getTitle());
@@ -80,7 +80,7 @@ public final class ServiceUtils {
         return dto;
     }
 
-    public static final Course courseDtoToCourse(CourseDTO dto){
+    public static final Course courseDtoToCourse(CourseDTO dto) {
         Course course = new Course();
         course.setCourseId(dto.getCourseId());
         course.setTitle(dto.getTitle());
@@ -90,10 +90,10 @@ public final class ServiceUtils {
 
     /*links*/
 
-    public static final void linkUserToCoursesDto(UserDTO dto, User user){
+    public static final void linkUserToCoursesDto(UserDTO dto, User user) {
         List<Course> courses = user.getCourses();
         List<CourseDTO> courseDTOS = new ArrayList<>();
-        for(Course c: courses){
+        for (Course c : courses) {
             CourseDTO cdto = ServiceUtils.courseToDto(c);
             ServiceUtils.linkCourseToLecturerDto(cdto, c);
             ServiceUtils.linkCourseToLecturesDto(cdto, c);
@@ -102,52 +102,58 @@ public final class ServiceUtils {
         dto.setCourses(courseDTOS);
     }
 
-    public static final void linkCourseToUsersDto(CourseDTO dto, Course course){
+    public static final void linkCourseToUsersDto(CourseDTO dto, Course course, boolean addLink) {
         List<User> users = course.getUsers();
         List<UserDTO> usersDTO = new ArrayList<>();
-        for(User u: users){
+        for (User u : users) {
             UserDTO udto = ServiceUtils.userToDto(u);
-            ServiceUtils.linkUserToCoursesDto(udto, u);
+            if (addLink)
+                ServiceUtils.linkUserToCoursesDto(udto, u);
             usersDTO.add(udto);
         }
+
         dto.setUsers(usersDTO);
     }
 
-    public static final void linkCourseToLecturesDto(CourseDTO dto, Course course){
+    public static final void linkCourseToLecturesDto(CourseDTO dto, Course course) {
         List<Lecture> rcvLectures = course.getLectures();
         List<LectureDTO> lectureDTOS = new ArrayList<>();
 //        ServiceUtils.linkCourseToUsersDto(dto, course);
         for (Lecture l : rcvLectures) {
             LectureDTO ldto = ServiceUtils.lectureToDto(l);
             ServiceUtils.linkLectureToCourseDto(ldto, l);
+            ServiceUtils.linkLectureToStudentsAttendanceDto(ldto, l);
             lectureDTOS.add(ldto);
         }
         dto.setLectures(lectureDTOS);
     }
 
-    public static final void linkCourseToLecturerDto(CourseDTO dto, Course course){
+    public static final void linkCourseToLecturerDto(CourseDTO dto, Course course) {
         User rcvUser = course.getLecturer();
-        if(rcvUser != null) {
+        if (rcvUser != null) {
             UserDTO userDTO = userToDto(rcvUser);
             dto.setLecturer(userDTO);
         }
     }
 
-    public static final void linkLectureToCourseDto(LectureDTO dto, Lecture lecture){
+    public static final void linkLectureToCourseDto(LectureDTO dto, Lecture lecture) {
         Course rcvCourse = lecture.getCourse();
-        if(rcvCourse != null) {
+        if (rcvCourse != null) {
             CourseDTO courseDTO = courseToDto(rcvCourse);
             ServiceUtils.linkCourseToLecturerDto(courseDTO, rcvCourse);
+            ServiceUtils.linkCourseToUsersDto(courseDTO, rcvCourse, false);
 
-            List<User> users = rcvCourse.getUsers();
-            List<UserDTO> usersDTO = new ArrayList<>();
-            for(User u: users){
-                usersDTO.add(ServiceUtils.userToDto(u));
-            }
-            courseDTO.setUsers(usersDTO);
-
-//            ServiceUtils.linkCourseToUsersDto(courseDTO, rcvCourse);
             dto.setCourse(courseDTO);
         }
+    }
+
+    public static final void linkLectureToStudentsAttendanceDto(LectureDTO dto, Lecture lecture) {
+        List<User> rcvstudents = lecture.getStudentsAttendance();
+        List<UserDTO> studentsAttendanceDTO = new ArrayList<>();
+        for (User u : rcvstudents) {
+            UserDTO stdto = ServiceUtils.userToDto(u);
+            studentsAttendanceDTO.add(stdto);
+        }
+        dto.setStudentsAttendance(studentsAttendanceDTO);
     }
 }

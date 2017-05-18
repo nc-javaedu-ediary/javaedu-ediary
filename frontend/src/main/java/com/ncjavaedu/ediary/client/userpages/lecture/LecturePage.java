@@ -60,7 +60,6 @@ public class LecturePage extends PopupPanel {
 
 
     private static final Logger logger = Logger.getLogger(LecturePage.class.getName());
-    private boolean selected;
 
     @UiTemplate("LecturePage.ui.xml")
     interface LecturePageUiBinder extends UiBinder<Widget, LecturePage> {
@@ -84,6 +83,12 @@ public class LecturePage extends PopupPanel {
                 }
         }
 
+        if (lecture.getStudentsAttendance() != null) {
+            studentsAttendance.addAll(lecture.getStudentsAttendance());
+            logger.log(Level.FINE, "studentsAttendance is " + studentsAttendance.size());
+
+        }
+
         generateUserList();
         add(uiBinder.createAndBindUi(this));
         showLectInformation();
@@ -92,18 +97,18 @@ public class LecturePage extends PopupPanel {
 
             if (usersStore.size() != 0) {
                 usersGrid.setSelectionModel(selectionModel);
-//                usersGrid.getView().setAutoExpandColumn(usersGrid.getColumnModel().getColumn(1));//!
-                usersGrid.getView().setAutoFill(true);
                 usersGrid.getView().setForceFit(true);
+                usersGrid.getView().setAutoExpandColumn(usersGrid.getColumnModel().getColumn(1));//!
+                usersGrid.getView().setAutoFill(true);
                 usersGrid.getView().setStripeRows(true);
                 usersGrid.getView().setColumnLines(true);
 
 
                 if (studentsAttendance != null && studentsAttendance.size() !=0)
-                    for (UserDTO userDTO : studentsAttendance) {
+                    for (UserDTO studentDTO : studentsAttendance) {
                         logger.log(Level.WARNING, "users3 " + studentsAttendance.size());
 
-                        selectionModel.select(userDTO, true);
+                        selectionModel.select(studentDTO, true);
                         logger.log(Level.WARNING, "studentsAttendance " + studentsAttendance.size());
 
                     }
@@ -148,8 +153,6 @@ public class LecturePage extends PopupPanel {
         ColumnConfig<UserDTO, Integer> idCol = new ColumnConfig<>(userProps.userId(), 100, "ID");
         ColumnConfig<UserDTO, String> fnCol = new ColumnConfig<>(userProps.firstName(), 200, "Имя");
         ColumnConfig<UserDTO, String> lnCol = new ColumnConfig<>(userProps.lastName(), 300, "Фамилия");
-
-        logger.log(Level.WARNING, "lnCol " + lnCol);
 
         List<ColumnConfig<UserDTO, ?>> userColumns = new ArrayList<>();
         userColumns.add(selectionModel.getColumn());

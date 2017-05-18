@@ -25,8 +25,7 @@ public class ClientCourseServiceImpl extends BaseServiceImpl implements ClientCo
         for (Course course : remoteCourses){
             CourseDTO dto = ServiceUtils.courseToDto(course);
             ServiceUtils.linkCourseToLecturerDto(dto, course);
-            ServiceUtils.linkCourseToUsersDto(dto, course);
-//            ServiceUtils.linkCourseToLecturesDto(dto, course);
+            ServiceUtils.linkCourseToUsersDto(dto, course, true);
             courses.add(dto);
         }
         return courses;

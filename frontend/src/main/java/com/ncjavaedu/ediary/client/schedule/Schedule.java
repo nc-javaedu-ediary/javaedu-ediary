@@ -113,8 +113,6 @@ public class Schedule extends Composite {
 
                 String[] timesRow = timeOfLectures.toArray(new String[timeOfLectures.size()]);
                 noLecturesTable(timesRow);
-                logger.log(Level.INFO, "i 1");
-
 
                 int dayOfWeak;
                 for (LectureDTO lecture : currentWeekLectures) {
@@ -126,7 +124,7 @@ public class Schedule extends Composite {
                                     if (schedule_table.getText(i, dayOfWeak + 1).equals("нет занятий")) {
                                         schedule_table.setWidget(i, dayOfWeak + 1, generateTimetableCell(lecture));
                                         //не более 1 лекции
-                                        logger.log(Level.INFO, "i 3");
+//                                        logger.log(Level.INFO, "i 3");
                                         break;
                                     } else {
 
@@ -274,15 +272,11 @@ public class Schedule extends Composite {
 
         if (lectureDTO.getTitle() != null) {
             Label title = new Label(lectureDTO.getTitle());
-            logger.log(Level.INFO, "lectureDTO.getTitle() " + 1);
 
             title.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    logger.log(Level.INFO, "lectureDTO.getTitle() " + 2);
-
                     LecturePage lecturePage = new LecturePage(lectureDTO, showUserList);
-//                lecturePage.ShowLecturePopup(this);
                     lecturePage.center();
                     lecturePage.show();
 
@@ -291,13 +285,13 @@ public class Schedule extends Composite {
             });
             lectureCell.add(title);
 
-            logger.log(Level.INFO, "lectureDTO.getTitle() " + 2);
-            logger.log(Level.INFO, "lectureDTO.getCourse() " + lectureDTO.getCourse());
+//            logger.log(Level.INFO, "lectureDTO.getTitle() " + 2);
+//            logger.log(Level.INFO, "lectureDTO.getCourse() " + lectureDTO.getCourse());
 
 
             if (lectureDTO.getCourse().getLecturer() != null) {
                 //TODO
-                logger.log(Level.INFO, "getLecturer " + 2);
+//                logger.log(Level.INFO, "getLecturer " + 2);
 
                 Label lecturer = new Label(lectureDTO.getCourse().getLecturer().getFullName());
 //                lecturer.addClickHandler(new ClickHandler() {
@@ -309,14 +303,14 @@ public class Schedule extends Composite {
 //                });
                 lectureCell.add(lecturer);
             }
-            logger.log(Level.INFO, "lectureDTO.getTitle() " + 3);
+//            logger.log(Level.INFO, "lectureDTO.getTitle() " + 3);
 
             if (lectureDTO.getClassroom() != null) {
                 Label classRoom = new Label("Кабинет №" + lectureDTO.getClassroom());
                 lectureCell.add(classRoom);
             }
 
-            logger.log(Level.INFO, "lectureDTO.getTitle() " + 4);
+//            logger.log(Level.INFO, "lectureDTO.getTitle() " + 4);
 
             if (lectureDTO.getDay() != null) {
                 lectureCell.add(new Label(lectureDTO.getDay()));

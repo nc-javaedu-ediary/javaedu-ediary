@@ -8,7 +8,9 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "LECTURES")
@@ -37,6 +39,13 @@ public class Lecture implements Serializable{
     })
     @Fetch(value = FetchMode.SELECT)
     private Course course;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "LECTURE_STUDENTS", joinColumns = {
+            @JoinColumn(name = "LECTURE_ID")}, inverseJoinColumns = {
+            @JoinColumn(name = "USER_ID")})
+    @Fetch(value = FetchMode.SELECT)
+    private List<User> studentsAttendance = new ArrayList<>();
 
     public Lecture() {}
 
@@ -121,5 +130,13 @@ public class Lecture implements Serializable{
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<User> getStudentsAttendance() {
+        return studentsAttendance;
+    }
+
+    public void setStudentsAttendance(List<User> studentsAttendance) {
+        this.studentsAttendance = studentsAttendance;
     }
 }
