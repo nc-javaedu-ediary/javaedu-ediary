@@ -4,16 +4,20 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.ncjavaedu.ediary.client.model.CourseDTO;
 import com.ncjavaedu.ediary.client.model.LectureDTO;
 import com.ncjavaedu.ediary.client.model.UserDTO;
+import com.ncjavaedu.ediary.client.services.ClientLectureService;
 import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.grid.*;
+import com.sencha.gxt.widget.core.client.info.Info;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +62,7 @@ public class LecturePage extends PopupPanel {
 
     private CheckBoxSelectionModel<UserDTO> selectionModel;
 
+    private Timer elapsedTimer;
 
     private static final Logger logger = Logger.getLogger(LecturePage.class.getName());
 
@@ -88,6 +93,14 @@ public class LecturePage extends PopupPanel {
             logger.log(Level.FINE, "studentsAttendance is " + studentsAttendance.size());
 
         }
+
+        elapsedTimer = new Timer () {
+            public void run() {
+                sendLecture();
+                logger.log(Level.FINE, "elapsedTimer send data right now!");
+
+            }
+        };
 
         generateUserList();
         add(uiBinder.createAndBindUi(this));
@@ -146,6 +159,9 @@ public class LecturePage extends PopupPanel {
                 studentsAttendance.clear();
                 studentsAttendance.addAll(this.getSelectedItems());
                 logger.log(Level.WARNING, "checked " + checked);
+                elapsedTimer.scheduleRepeating(5000);
+
+//                sendLecture();
             }
 
         };
@@ -165,12 +181,22 @@ public class LecturePage extends PopupPanel {
         usersStore = new ListStore<>(userProps.key());
         if (users != null && users.size() != 0) {
             usersStore.addAll(users);
-
-            //only for test
-//            studentsAttendance.addAll(users);
-//            logger.log(Level.WARNING, "users2 " + studentsAttendance.size());
-
-
         }
+    }
+
+    private void sendLecture() {
+        AsyncCallback<LectureDTO> callback = new AsyncCallback<LectureDTO>() {
+            @Override
+            public void onFailure(Throwable throwable) {
+                Info.display("!", "Fail");
+            }
+
+            @Override
+            public void onSuccess(LectureDTO result) {
+                Info.display("!", "Данные сохранены");
+            }
+        };
+
+        ClientLectureService.App.getInstance().saveLecture(lecture, studentsAttendance, callback);
     }
 }

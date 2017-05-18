@@ -118,7 +118,6 @@ public final class ServiceUtils {
     public static final void linkCourseToLecturesDto(CourseDTO dto, Course course) {
         List<Lecture> rcvLectures = course.getLectures();
         List<LectureDTO> lectureDTOS = new ArrayList<>();
-//        ServiceUtils.linkCourseToUsersDto(dto, course);
         for (Lecture l : rcvLectures) {
             LectureDTO ldto = ServiceUtils.lectureToDto(l);
             ServiceUtils.linkLectureToCourseDto(ldto, l);
