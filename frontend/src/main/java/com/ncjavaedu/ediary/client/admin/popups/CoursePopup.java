@@ -29,11 +29,9 @@ import com.sencha.gxt.widget.core.client.info.Info;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.logging.Logger;
 
-
-/**
- * Created by abogdanov on 23.04.17.
- */
 public class CoursePopup extends PopupPanel {
     @UiField
     TextField title;
@@ -60,8 +58,13 @@ public class CoursePopup extends PopupPanel {
     DualListField<LectureDTO, String> lecturesList;
 
     private List<LectureDTO> lectures;
+    private List<LectureDTO> newLectures;
+    private boolean isSaved = false;
 
     private AdminPopupCallbacks cb = null;
+
+    private static final Logger logger = Logger.getLogger(CoursePopup.class.getName());
+
 
     private static CoursePopupUiBinder uiBinder = GWT.create(CoursePopupUiBinder.class);
 
@@ -82,7 +85,7 @@ public class CoursePopup extends PopupPanel {
         add(uiBinder.createAndBindUi(this));
     }
 
-    public CoursePopup(List<LectureDTO> lectures){
+    public CoursePopup(List<LectureDTO> lectures) {
         super(false);
         this.lectures = lectures;
 
@@ -104,7 +107,7 @@ public class CoursePopup extends PopupPanel {
         fillFields();
     }
 
-    public CoursePopup(CourseDTO courseToEdit, List<LectureDTO> lectures){
+    public CoursePopup(CourseDTO courseToEdit, List<LectureDTO> lectures) {
         super(false);
         this.courseToEdit = courseToEdit;
         this.lectures = lectures;
@@ -118,58 +121,71 @@ public class CoursePopup extends PopupPanel {
     }
 
     @UiHandler({"cancelButton"})
-    public void cancelButtonClick(SelectEvent selectEvent){
+    public void cancelButtonClick(SelectEvent selectEvent) {
         super.hide();
     }
 
     @UiHandler({"saveButton"})
-    public void saveButtonClick(SelectEvent selectEvent){
-        if(cb != null){
-            if(title.getText() != ""){
-                CourseDTO dto = new CourseDTO();
-                if(courseToEdit != null){
-                    dto.setCourseId(courseToEdit.getCourseId());
-                }
-                dto.setTitle(title.getText());
-                UserDTO lec = (UserDTO)lecturer.getValue();
-                List<LectureDTO> lectureDTOS = new ArrayList<>();
-                for(LectureDTO l: lecturesList.getValue()){
-                    lectureDTOS.add(l);
-                }
-                AsyncCallback<CourseDTO> callback = new AsyncCallback<CourseDTO>() {
-                    @Override
-                    public void onFailure(Throwable throwable) {
-                        Info.display("!", "Fail");
+    public void saveButtonClick(SelectEvent selectEvent) {
+        if (cb != null) {
+            if (!Objects.equals(title.getText(), "")) {
+                UserDTO lec = (UserDTO) lecturer.getValue();
+                if (lec != null) {
+
+                    CourseDTO dto = new CourseDTO();
+
+                    if (courseToEdit != null) {
+                        dto.setCourseId(courseToEdit.getCourseId());
+                    }
+                    dto.setTitle(title.getText());
+
+
+                    List<LectureDTO> lectureDTOS = new ArrayList<>();
+                    newLectures = new ArrayList<>();
+                    for (LectureDTO l : lecturesList.getValue()) { // TODO Это новые лекции или же список всех лекций курса?
+                        lectureDTOS.add(l);
+                        newLectures.add(l);
                     }
 
-                    @Override
-                    public void onSuccess(CourseDTO dto) {
-                        cb.coursePopupValidated(dto);
-                    }
-                };
-                ClientCourseService.App.getInstance().saveCourse(dto, lec, lectureDTOS, callback);
-                super.hide();
-            }
-            else
+                    AsyncCallback<CourseDTO> callback = new AsyncCallback<CourseDTO>() {
+                        @Override
+                        public void onFailure(Throwable throwable) {
+                            Info.display("!", "Fail");
+                        }
+
+                        @Override
+                        public void onSuccess(CourseDTO dto) {
+//                            onSave();
+                            cb.coursePopupValidated(dto);
+                        }
+                    };
+                    ClientCourseService.App.getInstance().saveCourse(dto, lec, lectureDTOS, callback);
+                    super.hide();
+                } else
+                    Info.display("Ошибка", "Лектор не выбран");
+            } else
                 Info.display("Ошибка", "Название введено неверно");
-        }
-        else {
+        } else {
             super.hide();
         }
     }
 
-    public void ShowCoursePopup(final AdminPopupCallbacks cb){
+    private void onSave() {
+        isSaved(true);
+    }
+
+    public void ShowCoursePopup(final AdminPopupCallbacks cb) {
         this.cb = cb;
 
         center();
         show();
     }
 
-    public void fillFields(){
+    public void fillFields() {
         title.setText(courseToEdit.getTitle());
     }
 
-    public void fillComboBox(){
+    public void fillComboBox() {
         cbLecturersStore = new ListStore<>(userProps.key());
         lecturer = new ComboBox(cbLecturersStore, cbValueProvider);
 
@@ -187,22 +203,22 @@ public class CoursePopup extends PopupPanel {
         ClientUserService.App.getInstance().getLecturers(callback);
     }
 
-    public void fillDualList(){
+    public void fillDualList() {
         courseLecturesStore = new ListStore<>(lectureProps.key());
         List<LectureDTO> nonCourseLectures = new ArrayList<>();
         nonCourseLectures.addAll(lectures);
-        if(courseToEdit != null){
+        if (courseToEdit != null) {
             List<LectureDTO> courseLectures = courseToEdit.getLectures();
             courseLecturesStore.addAll(courseLectures);
-            for(LectureDTO l: lectures){
-                if(l.getCourse() != null){
+            for (LectureDTO l : lectures) {
+                if (l.getCourse() != null) {
                     nonCourseLectures.remove(l);
                 }
             }
         }
 
         allLecturesStore = new ListStore<>(lectureProps.key());
-        if(lectures != null){
+        if (lectures != null) {
             allLecturesStore.addAll(nonCourseLectures);
         }
 
@@ -210,5 +226,24 @@ public class CoursePopup extends PopupPanel {
         lecturesList.addValidator(new EmptyValidator<List<LectureDTO>>());
         lecturesList.setEnableDnd(true);
         lecturesList.setMode(DualListField.Mode.INSERT);
+
     }
+
+    public List<LectureDTO> getNewLectures() {
+        return newLectures;
+    }
+
+    public List<LectureDTO> getLectures() {
+        return lectures;
+    }
+
+    private void isSaved(boolean isSaved) {
+        this.isSaved = isSaved;
+    }
+
+    public boolean isSaved() {
+        return isSaved;
+    }
+
+
 }

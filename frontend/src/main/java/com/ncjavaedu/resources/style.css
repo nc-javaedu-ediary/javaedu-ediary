@@ -53,20 +53,31 @@
 
 .label{
     font-size: 15px !important;
-    font-family: "Arial Black", sans-serif;
-    display: inline-block;
+    font-family: tahoma, arial, verdana, sans-serif;
+    font-weight: bold;
+    color: #001c4a;
+    margin: 5px;
+    /*display: inline-block;*/
     min-width: 100px;
-    max-width: 200px;
     /*margin: auto;*/
 }
 
 
 .label-mean{
     font-size: 15px !important;
-    font-family: Arial, sans-serif;
-    display: inline-block;
+    font-family: tahoma, arial, verdana, sans-serif;
+    color: #001a46;
+    margin: 5px;
+    /*display: inline-block;*/
     min-width: 100px;
-    max-width: 100%;
     /*margin: auto;*/
+}
+
+.label-nousers{
+    font-size: 15px !important;
+    font-family: tahoma, arial, verdana, sans-serif;
+    color: rgba(0, 42, 111, 0.43);
+    margin: 5px;
+    text-align: center;
 }
 

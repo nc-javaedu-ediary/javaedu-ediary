@@ -5,13 +5,24 @@
         xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'
         xmlns:gwt="urn:import:com.google.gwt.user.client.ui"
         xmlns:form="urn:import:com.sencha.gxt.widget.core.client.form"
+        xmlns:grid='urn:import:com.sencha.gxt.widget.core.client.grid'
 >
     <ui:style src="../../../../resources/style.css"/>
+
+    <ui:with field="userLayoutData"
+             type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData">
+        <ui:attributes width="1" height="1"/>
+    </ui:with>
+    <ui:with type="com.sencha.gxt.widget.core.client.grid.GridView" field="usersView">
+        <ui:attributes stripeRows="true"/>
+    </ui:with>
+    <ui:with type="com.sencha.gxt.widget.core.client.grid.ColumnModel" field="usersCM"/>
+    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="usersStore"/>
 
     <gxt:ContentPanel headingText="Страница лекции" bodyStyle="padding: 20px" pixelSize="800,400"
                       styleName="{style.lecture}">
         <container:VerticalLayoutContainer>
-            <container:VBoxLayoutContainer VBoxLayoutAlign="CENTER">
+            <container:VBoxLayoutContainer VBoxLayoutAlign="STRETCH">
                 <container:HBoxLayoutContainer>
                     <form:FieldLabel text="Тема лекции" styleName="{style.label}"/>
                     <gwt:Label ui:field="theme" styleName="{style.label-mean}"/>
@@ -28,19 +39,21 @@
                 </container:HBoxLayoutContainer>
             </container:VBoxLayoutContainer>
             <container:VerticalLayoutContainer width="1">
-                <form:FieldLabel text="Содержание лекции" styleName="{style.label}"/>
-                <gwt:Label ui:field="description" styleName="{style.label-mean}"/>
+                <form:FieldLabel text="Содержание лекции" styleName="{style.label}" width="200"/>
+                <gwt:Label ui:field="description" styleName="{style.label-mean}" width="100%"/>
             </container:VerticalLayoutContainer>
             <container:VerticalLayoutContainer width="1">
-                <form:FieldLabel text="Домашняя работа" styleName="{style.label}"/>
-                <gwt:Label ui:field="homework" styleName="{style.label-mean}"/>
+                <form:FieldLabel text="Домашнее задание" styleName="{style.label}" width="200"/>
+                <gwt:Label ui:field="homework" styleName="{style.label-mean}" width="100%"/>
             </container:VerticalLayoutContainer>
-            <!--<container:VerticalLayoutContainer>-->
-            <!--<gxt:ContentPanel layoutData="{lectureLayoutData}" title="Посещаемость лекций">-->
-            <!--<grid:Grid ui:field="usersGrid" view="{usersView}" cm="{usersCM}"-->
-            <!--store="{usersStore}"/>-->
-            <!--</gxt:ContentPanel>-->
-            <!--</container:VerticalLayoutContainer>-->
+            <container:VerticalLayoutContainer visible="false" ui:field="gridContainer">
+                <container:child layoutData="{userLayoutData}">
+                    <grid:Grid ui:field="usersGrid" view="{usersView}" cm="{usersCM}" store="{usersStore}"/>
+                </container:child>
+            </container:VerticalLayoutContainer>
+            <container:VerticalLayoutContainer layoutData="{userLayoutData}" visible="false" ui:field="nousers">
+                <gwt:Label styleName="{style.label-nousers}" width="100%" text="Ни один пользователь не записан на данный курс" horizontalAlignment="ALIGN_CENTER"/>
+            </container:VerticalLayoutContainer>
         </container:VerticalLayoutContainer>
     </gxt:ContentPanel>
 </ui:UiBinder>

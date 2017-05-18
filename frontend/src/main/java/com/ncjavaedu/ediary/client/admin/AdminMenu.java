@@ -1,12 +1,15 @@
 package com.ncjavaedu.ediary.client.admin;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.ncjavaedu.ediary.client.MainApplication;
@@ -95,7 +98,7 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     // Schedule tab
     @UiField(provided = true)
     ContentPanel timeTable;
-//    Schedule timeTable;
+    private Schedule schedule;
 
     @UiField
     TextButton logoutButton;
@@ -224,14 +227,12 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
     @UiHandler({"addLectureButton"})
     public void addLectureButtonClick(SelectEvent selectEvent) {
         final LecturePopup popup = new LecturePopup();
-
         popup.ShowLecturePopup(this);
     }
 
     @UiHandler({"editLectureButton"})
     public void editLectureButtonClick(SelectEvent selectEvent) {
         final LecturePopup popup = new LecturePopup(lecturesGrid.getSelectionModel().getSelectedItem());
-
         popup.ShowLecturePopup(this);
     }
 
@@ -274,6 +275,21 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         final CoursePopup popup = new CoursePopup(coursesGrid.getSelectionModel().getSelectedItem(), lectures);
 
         popup.ShowCoursePopup(this);
+        popup.addCloseHandler(new CloseHandler<PopupPanel>() {
+            @Override
+            public void onClose(CloseEvent<PopupPanel> event) {
+//                popup.getLectures();
+//                logger.log(Level.INFO, "popup.getok " + popup.isSaved());
+//                if (popup.isSaved()){
+//                    logger.log(Level.INFO, "popup.getLecturesDto() " + popup.getLectures());
+//                    logger.log(Level.INFO, "popup.getLecturesDto() " + popup.getNewLectures());
+//                    schedule.updateSchedule(popup.getNewLectures());
+//                }
+
+
+
+            }
+        });
     }
 
     @UiHandler({"removeCourseButton"})
@@ -482,7 +498,8 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
                 lecturesStore.replaceAll(lectures);
                 lecturesGrid.getView().refresh(true);
                 lecturesGrid.getParent().setHeight(Integer.toString(20 + lectures.size() * 22));
-                timeTable.add(new Schedule(lectures, false));
+                schedule = new Schedule(lectures, false);
+                timeTable.add(schedule);
             }
         };
         ClientLectureService.App.getInstance().getLectures(callback);

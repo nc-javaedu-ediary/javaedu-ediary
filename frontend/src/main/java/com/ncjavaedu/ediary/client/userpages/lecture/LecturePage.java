@@ -7,11 +7,15 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.ncjavaedu.ediary.client.admin.popups.AdminPopupCallbacks;
 import com.ncjavaedu.ediary.client.model.CourseDTO;
 import com.ncjavaedu.ediary.client.model.LectureDTO;
 import com.ncjavaedu.ediary.client.model.UserDTO;
+import com.sencha.gxt.core.client.IdentityValueProvider;
+import com.sencha.gxt.data.shared.ListStore;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.grid.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -30,27 +34,33 @@ public class LecturePage extends PopupPanel {
     @UiField
     Label homework;
 
-    //    @UiField
-//    Grid<UserDTO> usersGrid;
-//    @UiField
-//    GridView<UserDTO> usersView;
-//    @UiField(provided = true)
-//    ColumnModel<UserDTO> usersCM;
-//    @UiField(provided = true)
-//    ListStore<UserDTO> usersStore;
-    private static final Logger logger = Logger.getLogger(LecturePage.class.getName());
+    @UiField
+    VerticalLayoutContainer gridContainer;
+    @UiField
+    Grid<UserDTO> usersGrid;
+    @UiField
+    GridView<UserDTO> usersView;
+    @UiField(provided = true)
+    ColumnModel<UserDTO> usersCM;
+    @UiField(provided = true)
+    ListStore<UserDTO> usersStore;
+    @UiField
+    VerticalLayoutContainer nousers;
 
-
+    private static LecturePageUiBinder uiBinder = GWT.create(LecturePageUiBinder.class);
     private static final LecturePageProps userProps = GWT.create(LecturePageProps.class);
 
-    private boolean showUserList;
     private LectureDTO lecture;
     private UserDTO lector;
     private CourseDTO course;
     private List<UserDTO> users;
+    private List<UserDTO> studentsAttendance;
 
-    private static LecturePageUiBinder uiBinder = GWT.create(LecturePageUiBinder.class);
-    private AdminPopupCallbacks cb;
+    private CheckBoxSelectionModel<UserDTO> selectionModel;
+
+
+    private static final Logger logger = Logger.getLogger(LecturePage.class.getName());
+    private boolean selected;
 
     @UiTemplate("LecturePage.ui.xml")
     interface LecturePageUiBinder extends UiBinder<Widget, LecturePage> {
@@ -59,87 +69,104 @@ public class LecturePage extends PopupPanel {
     public LecturePage(LectureDTO lecture, boolean showUserList) {
         super(true);
         this.lecture = lecture;
-        this.showUserList = showUserList;
+        this.users = new ArrayList<>();
+        this.studentsAttendance = new ArrayList<>();
 
-        if (lecture.getCourse() != null)
+        if (lecture.getCourse() != null) {
             course = lecture.getCourse();
-
-        logger.log(Level.INFO, "course " + course);
-
-        if (course.getLecturer() != null)
-            lector = course.getLecturer();
-
-        logger.log(Level.INFO, "lector " + lector.getUserId());
-        logger.log(Level.INFO, "showUserList " + showUserList);
-
-        if (showUserList)
+            if (course.getLecturer() != null)
+                lector = course.getLecturer();
             if (course.getUsers() != null)
                 for (UserDTO user : course.getUsers()) {
-
-                    logger.log(Level.INFO, "user " + user + " " + user.getUserId());
-
                     if (!Objects.equals(user.getUserId(), lector.getUserId())) {
                         users.add(user);
-                        logger.log(Level.INFO, "user " + user + " " + user.getUserId());
                     }
                 }
-//        logger.log(Level.INFO, "!users " + users.size());
-//        logger.log(Level.INFO, "lector " + lector);
+        }
 
+        generateUserList();
         add(uiBinder.createAndBindUi(this));
-        try {
-            generatePage();
-        } catch (Exception e) {
-            e.printStackTrace();
+        showLectInformation();
+        if (showUserList) {
+            gridContainer.setVisible(true);
+
+            if (usersStore.size() != 0) {
+                usersGrid.setSelectionModel(selectionModel);
+//                usersGrid.getView().setAutoExpandColumn(usersGrid.getColumnModel().getColumn(1));//!
+                usersGrid.getView().setAutoFill(true);
+                usersGrid.getView().setForceFit(true);
+                usersGrid.getView().setStripeRows(true);
+                usersGrid.getView().setColumnLines(true);
+
+
+                if (studentsAttendance != null && studentsAttendance.size() !=0)
+                    for (UserDTO userDTO : studentsAttendance) {
+                        logger.log(Level.WARNING, "users3 " + studentsAttendance.size());
+
+                        selectionModel.select(userDTO, true);
+                        logger.log(Level.WARNING, "studentsAttendance " + studentsAttendance.size());
+
+                    }
+
+                usersGrid.getParent().setHeight(Integer.toString(20 + users.size() * 22));
+            } else
+                nousers.setVisible(true);
         }
 
     }
 
-    private void generatePage() {
+    private void showLectInformation() {
         theme.setText(lecture.getTitle());
 
         logger.log(Level.INFO, "lecture.getTitle() ");
 
         lectDate.setText(lecture.getLectureDay());
 
-        try {
+        if (lecture.getCourse().getLecturer() != null)
             lecturer.setText(lecture.getCourse().getLecturer().getFullName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         description.setText(lecture.getDescription());
         if (!Objects.equals(lecture.getHomework(), ""))
             homework.setText(lecture.getHomework());
         else
             homework.setText("Не задано");
-//        if (showUserList)
-//            generateUserList();
     }
 
-//    private void generateUserList() {
-////        IdentityValueProvider<UserDTO> provider = new IdentityValueProvider<>();
-////        final CheckBoxSelectionModel<UserDTO> selectionModel = new CheckBoxSelectionModel<>(provider);
-//        ColumnConfig<UserDTO, Integer> idCol = new ColumnConfig<>(userProps.userId(), 20, "ID");
-//        ColumnConfig<UserDTO, String> fnCol = new ColumnConfig<>(userProps.firstName(), 80, "Имя");
-//        ColumnConfig<UserDTO, String> lnCol = new ColumnConfig<>(userProps.lastName(), 100, "Фамилия");
-//
-//        List<ColumnConfig<UserDTO, ?>> userColumns = new ArrayList<>();
-////        userColumns.add(selectionModel.getColumn());
-//        userColumns.add(idCol);
-//        userColumns.add(fnCol);
-//        userColumns.add(lnCol);
-//
-//        usersCM = new ColumnModel<>(userColumns);
-//
-//        usersStore = new ListStore<>(userProps.key());
-////        if (users != null)
-////            usersStore.addAll(users);
-//    }
+    private void generateUserList() {
+        IdentityValueProvider<UserDTO> provider = new IdentityValueProvider<>();
+        selectionModel = new CheckBoxSelectionModel<UserDTO>(provider){
+            @Override
+            protected void setChecked(boolean checked) {
+                super.setChecked(checked);
+                studentsAttendance.clear();
+                studentsAttendance.addAll(this.getSelectedItems());
+                logger.log(Level.WARNING, "checked " + checked);
+            }
 
-    public void ShowLecturePopup(final AdminPopupCallbacks cb) {
-        this.cb = cb;
+        };
 
-        center();
-        show();
+        ColumnConfig<UserDTO, Integer> idCol = new ColumnConfig<>(userProps.userId(), 100, "ID");
+        ColumnConfig<UserDTO, String> fnCol = new ColumnConfig<>(userProps.firstName(), 200, "Имя");
+        ColumnConfig<UserDTO, String> lnCol = new ColumnConfig<>(userProps.lastName(), 300, "Фамилия");
+
+        logger.log(Level.WARNING, "lnCol " + lnCol);
+
+        List<ColumnConfig<UserDTO, ?>> userColumns = new ArrayList<>();
+        userColumns.add(selectionModel.getColumn());
+        userColumns.add(idCol);
+        userColumns.add(fnCol);
+        userColumns.add(lnCol);
+
+        usersCM = new ColumnModel<>(userColumns);
+
+        usersStore = new ListStore<>(userProps.key());
+        if (users != null && users.size() != 0) {
+            usersStore.addAll(users);
+
+            studentsAttendance.addAll(users);
+            logger.log(Level.WARNING, "users2 " + studentsAttendance.size());
+
+
+        }
     }
 }

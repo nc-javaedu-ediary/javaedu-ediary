@@ -95,8 +95,8 @@ public final class ServiceUtils {
         List<CourseDTO> courseDTOS = new ArrayList<>();
         for(Course c: courses){
             CourseDTO cdto = ServiceUtils.courseToDto(c);
-            ServiceUtils.linkCourseToLecturesDto(cdto, c);
             ServiceUtils.linkCourseToLecturerDto(cdto, c);
+            ServiceUtils.linkCourseToLecturesDto(cdto, c);
             courseDTOS.add(cdto);
         }
         dto.setCourses(courseDTOS);
@@ -116,6 +116,7 @@ public final class ServiceUtils {
     public static final void linkCourseToLecturesDto(CourseDTO dto, Course course){
         List<Lecture> rcvLectures = course.getLectures();
         List<LectureDTO> lectureDTOS = new ArrayList<>();
+//        ServiceUtils.linkCourseToUsersDto(dto, course);
         for (Lecture l : rcvLectures) {
             LectureDTO ldto = ServiceUtils.lectureToDto(l);
             ServiceUtils.linkLectureToCourseDto(ldto, l);
@@ -137,6 +138,15 @@ public final class ServiceUtils {
         if(rcvCourse != null) {
             CourseDTO courseDTO = courseToDto(rcvCourse);
             ServiceUtils.linkCourseToLecturerDto(courseDTO, rcvCourse);
+
+            List<User> users = rcvCourse.getUsers();
+            List<UserDTO> usersDTO = new ArrayList<>();
+            for(User u: users){
+                usersDTO.add(ServiceUtils.userToDto(u));
+            }
+            courseDTO.setUsers(usersDTO);
+
+//            ServiceUtils.linkCourseToUsersDto(courseDTO, rcvCourse);
             dto.setCourse(courseDTO);
         }
     }

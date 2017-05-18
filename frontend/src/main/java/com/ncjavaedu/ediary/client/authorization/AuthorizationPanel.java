@@ -75,27 +75,14 @@ public class AuthorizationPanel implements IsWidget {
         AsyncCallback<UserDTO> callback = new AsyncCallback<UserDTO>() {
             @Override
             public void onFailure(Throwable throwable) {
-                Info.display("Ошибка", "Произошла ошибка при отправке запроса на сервер"
-                        + throwable.getMessage());
+                Info.display("Ошибка", "Произошла ошибка при отправке запроса на сервер");
+                logger.log(Level.INFO, "Произошла ошибка при отправке запроса на сервер " + throwable.getMessage());
             }
 
             @Override
             public void onSuccess(UserDTO user) {
-                AsyncCallback<UserDTO> sessionCallback = new AsyncCallback<UserDTO>() {
-                    @Override
-                    public void onFailure(Throwable throwable) {
-                        Info.display("!", "Failed to store user in session");
-                    }
-
-                    @Override
-                    public void onSuccess(UserDTO userDTO) {
-                        logger.log(Level.INFO, userDTO.getLogin() + " saved in session");
-                        logger.log(Level.INFO, "getCourses " + userDTO.getCourses().size());
-                    }
-                };
-                ClientSessionManagementService.App.getInstance().saveUser(user, sessionCallback);
+                saveInSession(user);
                 onLogin(user);
-//                saveInSession(user);
             }
         };
         ClientUserService.App.getInstance().getUser(loginField.getText(), passField.getText(), callback);
@@ -110,7 +97,7 @@ public class AuthorizationPanel implements IsWidget {
 
             @Override
             public void onSuccess(UserDTO userDTO) {
-                logger.log(Level.INFO, "currentUser saved in session");
+                logger.log(Level.INFO, userDTO.getLogin() + " saved in session");
             }
         };
         ClientSessionManagementService.App.getInstance().saveUser(user, sessionCallback);
