@@ -65,7 +65,6 @@ public class CoursePopup extends PopupPanel {
 
     private static final Logger logger = Logger.getLogger(CoursePopup.class.getName());
 
-
     private static CoursePopupUiBinder uiBinder = GWT.create(CoursePopupUiBinder.class);
 
     private CourseDTO courseToEdit;
