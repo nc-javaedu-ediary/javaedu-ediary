@@ -215,7 +215,6 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
                     }
                 }
                 usersStore.replaceAll(users);
-                usersGrid.getParent().setHeight(Integer.toString(20 + users.size() * 22));
                 usersGrid.getView().refresh(true);
                 removeUserButton.setEnabled(false);
                 editUserButton.setEnabled(false);
@@ -318,9 +317,6 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
                 }
                 coursesStore.replaceAll(courses);
                 coursesGrid.getView().refresh(true);
-                coursesGrid.getParent().getParent().setHeight(Integer.toString
-                        ((20 + courses.size() * 22) + 30));
-                coursesGrid.getParent().setHeight(Integer.toString(20 + courses.size() * 22));
                 removeCourseButton.setEnabled(false);
                 editCourseButton.setEnabled(false);
             }
@@ -363,7 +359,6 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
             users.add(user);
         }
         usersStore.replaceAll(users);
-        usersGrid.getParent().setHeight(Integer.toString(20 + users.size() * 22));
         usersGrid.getView().refresh(true);
     }
 
@@ -409,7 +404,6 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
             lectures.add(lecture);
         }
         lecturesStore.replaceAll(lectures);
-        lecturesGrid.getParent().setHeight(Integer.toString(20 + lectures.size() * 22));
         lecturesGrid.getView().refresh(true);
     }
 
@@ -445,9 +439,6 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
             courses.add(course);
         }
         coursesStore.replaceAll(courses);
-        coursesGrid.getParent().getParent().setHeight(Integer.toString
-                (20 + courses.size() * 22 + 30));
-        coursesGrid.getParent().setHeight(Integer.toString(20 + courses.size() * 22));
         coursesGrid.getView().refresh(true);
     }
 
