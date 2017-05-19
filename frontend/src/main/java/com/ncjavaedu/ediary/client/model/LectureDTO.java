@@ -1,23 +1,33 @@
 package com.ncjavaedu.ediary.client.model;
 
+import com.google.gwt.i18n.client.DateTimeFormat;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-//import java.text.DateFormat;
-//import java.text.SimpleDateFormat;
-//import java.util.GregorianCalendar;
 
-
-public class LectureDTO implements Serializable{
+public class LectureDTO implements Serializable {
     private Integer lectureId;
     private String title;
-//    @Column(name = "DATE")
-//    private GregorianCalendar date = new GregorianCalendar();
-//    @Transient
-//    private DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+    private Date date;
     private String classroom;
     private String description;
     private String homework;
     private CourseDTO course;
+    private List<UserDTO> studentsAttendance  = new ArrayList<>();;
+
+    public LectureDTO() {
+
+    }
+
+    public LectureDTO(String title, String classroom, String description, String homework) {
+        this.title = title;
+        this.classroom = classroom;
+        this.description = description;
+        this.homework = homework;
+    }
 
     public Integer getLectureId() {
         return lectureId;
@@ -34,18 +44,6 @@ public class LectureDTO implements Serializable{
     public void setTitle(String title) {
         this.title = title;
     }
-
-//    public GregorianCalendar getDate() {
-//        return date;
-//    }
-
-//    public void setDate(GregorianCalendar date) {
-//        this.date = date;
-//    }
-
-//    public void setDate(String date) {
-//        parseDate(date);
-//    }
 
     public String getClassroom() {
         return classroom;
@@ -71,11 +69,44 @@ public class LectureDTO implements Serializable{
         this.homework = homework;
     }
 
-//    private void parseDate(String date) {
-//        try {
-//            this.date.setTime(dateFormat.parse(date));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public CourseDTO getCourse() { return course;}
+
+    public void setCourse(CourseDTO course) { this.course = course; }
+
+    public void setLectureDTO(LectureDTO lectureDTO){
+        this.lectureId = lectureDTO.getLectureId();
+        this.title = lectureDTO.getTitle();
+        this.classroom = lectureDTO.getClassroom();
+        this.description = lectureDTO.getDescription();
+        this.homework = lectureDTO.getHomework();
+        this.course = lectureDTO.getCourse();
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getDay(){
+        return DateTimeFormat.getFormat("dd").format(date);
+    }
+
+    public String getLectureDay(){
+        return DateTimeFormat.getFormat("dd-MM-yyyy").format(date);
+    }
+
+    public String getLectureTime() {
+        return DateTimeFormat.getFormat("HH:mm").format(date);
+    }
+
+    public List<UserDTO> getStudentsAttendance() {
+        return studentsAttendance;
+    }
+
+    public void setStudentsAttendance(List<UserDTO> studentsAttendance) {
+        this.studentsAttendance = studentsAttendance;
+    }
 }

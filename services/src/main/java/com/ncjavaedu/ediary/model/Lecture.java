@@ -1,11 +1,16 @@
 package com.ncjavaedu.ediary.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "LECTURES")
@@ -16,8 +21,8 @@ public class Lecture implements Serializable{
     private Integer lectureId;
     @Column(name = "TITLE")
     private String title;
-    @Column(name = "DATE")
-    private GregorianCalendar date = new GregorianCalendar();
+    @Column(name = "DATE", nullable = false)
+    private Date date;
     @Transient
     private DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
     @Column(name = "CLASSROOM")
@@ -27,15 +32,20 @@ public class Lecture implements Serializable{
     @Column(name = "HOMEWORK")
     private String homework;
 
-//    @ManyToMany(cascade = CascadeType.ALL)
-//    @JoinTable(name = "COURSE_LECTURES", joinColumns = {
-//            @JoinColumn(name = "LECTURE_ID")}, inverseJoinColumns = {
-//            @JoinColumn(name = "COURSE_ID")})
-//   private  List<Course> courses = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "COURSE_ID", nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name="COURSE_LECTURES", joinColumns = {
+            @JoinColumn(name="LECTURE_ID")}, inverseJoinColumns = {
+            @JoinColumn(name="COURSE_ID")
+    })
+    @Fetch(value = FetchMode.SELECT)
     private Course course;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "LECTURE_STUDENTS", joinColumns = {
+            @JoinColumn(name = "LECTURE_ID")}, inverseJoinColumns = {
+            @JoinColumn(name = "USER_ID")})
+    @Fetch(value = FetchMode.SELECT)
+    private List<User> studentsAttendance = new ArrayList<>();
 
     public Lecture() {}
 
@@ -70,15 +80,15 @@ public class Lecture implements Serializable{
         this.title = title;
     }
 
-    public GregorianCalendar getDate() {
-        return date;
-    }
-
     public String getStringDate() {
         return dateFormat.format(date);
     }
 
-    public void setDate(GregorianCalendar date) {
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -110,11 +120,23 @@ public class Lecture implements Serializable{
         this.homework = homework;
     }
 
+    public Course getCourse() { return  course; }
+
+    public void setCourse(Course course) { this.course = course; }
+
     private void parseDate(String date) {
         try {
-            this.date.setTime(dateFormat.parse(date));
+            this.date = dateFormat.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<User> getStudentsAttendance() {
+        return studentsAttendance;
+    }
+
+    public void setStudentsAttendance(List<User> studentsAttendance) {
+        this.studentsAttendance = studentsAttendance;
     }
 }

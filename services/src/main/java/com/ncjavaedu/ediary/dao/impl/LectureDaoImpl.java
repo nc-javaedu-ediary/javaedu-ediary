@@ -2,6 +2,7 @@ package com.ncjavaedu.ediary.dao.impl;
 
 import com.ncjavaedu.ediary.dao.LectureDao;
 import com.ncjavaedu.ediary.model.Lecture;
+import com.ncjavaedu.ediary.model.User;
 import org.hibernate.Criteria;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,17 @@ public class LectureDaoImpl extends BaseDao<Integer, Lecture> implements Lecture
     @Transactional
     public void save(Lecture lecture)
     {
-        getSession().persist(lecture);
+        getSession().saveOrUpdate(lecture);
+    }
+
+    @Transactional
+    public void save(Lecture lecture, List<User> students) {
+        lecture.setStudentsAttendance(students);
+        getSession().saveOrUpdate(lecture);
+    }
+
+    @Transactional
+    public void delete(Lecture lecture){
+        super.delete(lecture);
     }
 }

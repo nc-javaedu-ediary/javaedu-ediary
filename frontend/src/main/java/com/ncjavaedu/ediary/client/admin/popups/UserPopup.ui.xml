@@ -14,7 +14,16 @@
         <ui:attributes width="1" height="1" />
     </ui:with>
 
-    <gxt:ContentPanel headingText="Информация о пользователе" pixelSize="300,300" bodyStyle="padding: 20px">
+    <ui:with type="com.sencha.gxt.widget.core.client.container.BoxLayoutContainer.BoxLayoutData" field="nostretch">
+        <ui:attributes maxSize="-1" />
+    </ui:with>
+
+    <ui:with type="com.google.gwt.cell.client.Cell" field="textCell"/>
+    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="allCoursesStore"/>
+    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="userCoursesStore"/>
+    <ui:with type="com.sencha.gxt.core.client.ValueProvider" field="courseValueProvider"/>
+
+    <gxt:ContentPanel headingText="Информация о пользователе" pixelSize="300,500" bodyStyle="padding: 20px">
         <container:VBoxLayoutContainer VBoxLayoutAlign="STRETCH">
             <!--First Name-->
             <container:HBoxLayoutContainer>
@@ -22,7 +31,7 @@
                     <form:FieldLabel text="Имя"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="firstName" allowBlank="false"/>
+                    <form:TextField ui:field="firstName"/>
                 </container:child>
             </container:HBoxLayoutContainer>
 
@@ -32,7 +41,7 @@
                     <form:FieldLabel text="Фамилия"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="lastName" allowBlank="true"/>
+                    <form:TextField ui:field="lastName"/>
                 </container:child>
             </container:HBoxLayoutContainer>
 
@@ -42,7 +51,7 @@
                     <form:FieldLabel text="Университет"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="university" allowBlank="true"/>
+                    <form:TextField ui:field="university"/>
                 </container:child>
             </container:HBoxLayoutContainer>
 
@@ -52,7 +61,7 @@
                     <form:FieldLabel text="E-mail"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="email" allowBlank="true"/>
+                    <form:TextField ui:field="email"/>
                 </container:child>
             </container:HBoxLayoutContainer>
 
@@ -62,7 +71,7 @@
                     <form:FieldLabel text="Логин"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="login" allowBlank="false"/>
+                    <form:TextField ui:field="login"/>
                 </container:child>
             </container:HBoxLayoutContainer>
 
@@ -72,9 +81,28 @@
                     <form:FieldLabel text="Пароль"/>
                 </container:child>
                 <container:child>
-                    <form:TextField ui:field="password" allowBlank="false"/>
+                    <form:TextField ui:field="password"/>
                 </container:child>
             </container:HBoxLayoutContainer>
+
+            <!--Role-->
+            <container:HBoxLayoutContainer>
+                <container:child>
+                    <form:FieldLabel text="Роль"/>
+                </container:child>
+                <g:VerticalPanel>
+                    <form:Radio ui:field="roleAdmin" boxLabel="Админ"/>
+                    <form:Radio ui:field="roleStudent" boxLabel="Студент" value="true"/>
+                    <form:Radio ui:field="roleLecturer" boxLabel="Лектор"/>
+                </g:VerticalPanel>
+            </container:HBoxLayoutContainer>
+
+
+            <!--Courses-->
+            <g:VerticalPanel>
+                <form:DualListField ui:field="coursesList" cell="{textCell}" fromStore="{allCoursesStore}"
+                                    toStore="{userCoursesStore}" valueProvider="{courseValueProvider}"/>
+            </g:VerticalPanel>
 
             <!--Buttons-->
             <container:HBoxLayoutContainer pack="CENTER">

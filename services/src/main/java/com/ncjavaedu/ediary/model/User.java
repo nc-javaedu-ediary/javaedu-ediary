@@ -1,5 +1,8 @@
 package com.ncjavaedu.ediary.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,13 +28,14 @@ public class User implements Serializable{
     @Column(name = "EMAIL")
     private String email;
 
-    @Transient
+    @Enumerated(EnumType.ORDINAL)
     private Role role;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "USER_COURSES", joinColumns = {
     @JoinColumn(name = "USER_ID")}, inverseJoinColumns = {
     @JoinColumn(name = "COURSE_ID")})
+    @Fetch(value = FetchMode.SELECT)
     private List<Course> courses = new ArrayList<>();
 
     public User() {
@@ -113,6 +117,8 @@ public class User implements Serializable{
     public List<Course> getCourses(){
         return courses;
     }
+
+    public void setCourses(List<Course> courses) { this.courses = courses; }
 
     public void addCourse(Course course)
     {

@@ -1,41 +1,39 @@
 package com.ncjavaedu.ediary.server.services;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.ncjavaedu.ediary.client.model.RoleDTO;
+import com.ncjavaedu.ediary.client.model.CourseDTO;
 import com.ncjavaedu.ediary.client.model.UserDTO;
 import com.ncjavaedu.ediary.client.services.ClientUserService;
-import com.ncjavaedu.ediary.model.Role;
+import com.ncjavaedu.ediary.model.Course;
 import com.ncjavaedu.ediary.model.User;
 import com.ncjavaedu.ediary.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
-
-//import com.ncjavaedu.ediary.client.model.UserDTO;
+import java.util.logging.Logger;
 
 public class ClientUserServiceImpl extends BaseServiceImpl implements ClientUserService {
+
+    private static final Logger logger = Logger.getLogger(ClientCourseServiceImpl.class.getName());
 
     @Autowired
     private UserService userService;
 
     @Override
     public List<UserDTO> getUsers() {
-        List<User> remoteUsers = userService.getUsers();
-        List<UserDTO> users = new ArrayList<>();
-        for (User user : remoteUsers){
-            UserDTO dto = userToDto(user);
-            users.add(dto);
-        }
-        return users;
+        return rcvUserDTOList(userService.getUsers());
     }
 
     @Override
-    public UserDTO saveUser(UserDTO dto) {
-        User user = userDtoToUser(dto);
-        userService.saveUser(user);
+    public UserDTO saveUser(UserDTO dto, List<CourseDTO> courseDTOs){
+        User user = ServiceUtils.userDtoToUser(dto);
+        List<Course> courses = new ArrayList<>();
+        for(CourseDTO c: courseDTOs){
+            courses.add(ServiceUtils.courseDtoToCourse(c));
+        }
+        userService.saveUser(user, courses);
 
-        //Update userId after save
+        dto.setCourses(courseDTOs);
         dto.setUserId(user.getUserId());
         return dto;
     }
@@ -43,36 +41,33 @@ public class ClientUserServiceImpl extends BaseServiceImpl implements ClientUser
     @Override
     public UserDTO getUser(String login, String password) {
         User user = userService.getUser(login, password);
-        return (user == null) ? null : userToDto(user);
+        return (user == null) ? null : getUserDTO(user);
     }
 
-    private UserDTO userToDto(User user){
-        UserDTO dto = new UserDTO();
-        dto.setUserId(user.getUserId());
-        dto.setFirstName(user.getFirstName());
-        dto.setLastName(user.getLastName());
-        dto.setEmail(user.getEmail());
-        dto.setUniversity(user.getUniversity());
-        if(user.getRole() != null) {
-            dto.setRole(RoleDTO.values()[user.getRole().ordinal()]);
+    @Override
+    public List<UserDTO> getLecturers(){
+        return rcvUserDTOList((userService.getLecturers()));
+    }
+
+    private List<UserDTO> rcvUserDTOList(List<User> src){
+        List<UserDTO> users = new ArrayList<>();
+        for (User user : src)
+            users.add(getUserDTO(user));
+        return users;
+    }
+
+    private UserDTO getUserDTO(User user) {
+        UserDTO dto = ServiceUtils.userToDto(user);
+        if (user.getCourses() != null){
+            ServiceUtils.linkUserToCoursesDto(dto, user);
         }
-        dto.setLogin(user.getLogin());
-        dto.setPassword(user.getPassword());
         return dto;
     }
 
-    private User userDtoToUser(UserDTO dto){
-        User user = new User();
-        user.setUserId(dto.getUserId());
-        user.setFirstName(dto.getFirstName());
-        user.setLastName(dto.getLastName());
-        user.setEmail(dto.getEmail());
-        user.setUniversity(dto.getUniversity());
-        if(dto.getRole() != null){
-            user.setRole(Role.values()[dto.getRole().ordinal()]);
-        }
-        user.setLogin(dto.getLogin());
-        user.setPassword(dto.getPassword());
-        return user;
+    @Override
+    public UserDTO deleteUser(UserDTO dto){
+        User user = ServiceUtils.userDtoToUser(dto);
+        userService.deleteUser(user);
+        return dto;
     }
 }

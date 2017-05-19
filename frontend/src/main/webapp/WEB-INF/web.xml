@@ -12,6 +12,9 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+    <listener>
+        <listener-class>com.ncjavaedu.ediary.utils.DriverUnregisterListener</listener-class>
+    </listener>
 
     <context-param>
         <param-name>spring.profiles.active</param-name>
@@ -24,9 +27,55 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <servlet>
+        <servlet-name>lectureService</servlet-name>
+        <servlet-class>com.ncjavaedu.ediary.server.services.ClientLectureServiceImpl</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>courseService</servlet-name>
+        <servlet-class>com.ncjavaedu.ediary.server.services.ClientCourseServiceImpl</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>sessionManagementService</servlet-name>
+        <servlet-class>com.ncjavaedu.ediary.server.services.ClientSessionManagementServiceImpl</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>remoteLoggingService</servlet-name>
+        <servlet-class>com.google.gwt.logging.server.RemoteLoggingServiceImpl</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!-- Servlet Mapping -->
+
     <servlet-mapping>
         <servlet-name>userService</servlet-name>
         <url-pattern>/ediary/userService</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>lectureService</servlet-name>
+        <url-pattern>/ediary/lectureService</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>courseService</servlet-name>
+        <url-pattern>/ediary/courseService</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>sessionManagementService</servlet-name>
+        <url-pattern>/ediary/sessionManagementService</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>remoteLoggingService</servlet-name>
+        <url-pattern>/ediary/remote_logging</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

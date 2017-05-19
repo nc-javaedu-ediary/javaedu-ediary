@@ -1,4 +1,6 @@
 [
-  {"id": 1, "title": "Lecture 1", "classroom": "3", "description": "some desc", "homework" : "none"},
-  {"id": 2, "title": "Lecture 2", "classroom": "5", "description": "some desc", "homework" : "none"}
+  {"lectureId": 1, "title": "Lecture 1", "date": "2017-05-15T19:00Z", "classroom": "3", "description": "some desc", "homework" : "none"},
+  {"lectureId": 2, "title": "Lecture 2", "date": "2017-05-19T15:00Z", "classroom": "5", "description": "some desc", "homework" : "none"},
+  {"lectureId": 3, "title": "Lecture 3", "date": "2017-05-01T15:00Z", "classroom": "5", "description": "some desc", "homework" : "none"},
+  {"lectureId": 4, "title": "Lecture 4", "date": "2017-05-02T15:00Z", "classroom": "5", "description": "some desc", "homework" : "none"}
 ]

@@ -1,16 +1,15 @@
 package com.ncjavaedu.ediary.server.services;
 
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.ncjavaedu.ediary.client.model.LectureDTO;
+import com.ncjavaedu.ediary.client.model.UserDTO;
 import com.ncjavaedu.ediary.model.Lecture;
 import com.ncjavaedu.ediary.client.services.ClientLectureService;
+import com.ncjavaedu.ediary.model.User;
 import com.ncjavaedu.ediary.services.LectureService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
-
-//import com.ncjavaedu.ediary.client.model.UserDTO;
 
 public class ClientLectureServiceImpl extends BaseServiceImpl implements ClientLectureService {
 
@@ -19,18 +18,27 @@ public class ClientLectureServiceImpl extends BaseServiceImpl implements ClientL
 
     @Override
     public List<LectureDTO> getLectures() {
-        List<Lecture> remoteUsers = lectureService.getLectures();
-        List<LectureDTO> lectures = new ArrayList<>();
-        for (Lecture lecture : remoteUsers){
-            LectureDTO dto = lectureToDto(lecture);
-            lectures.add(dto);
+        List<Lecture> remoteLectures = lectureService.getLectures();
+        List<LectureDTO> lecturesDTO = new ArrayList<>();
+        for (Lecture lecture : remoteLectures){
+            LectureDTO dto = ServiceUtils.lectureToDto(lecture);
+            if(lecture.getCourse() != null) {
+                dto.setCourse(ServiceUtils.courseToDto(lecture.getCourse()));
+                if(lecture.getCourse().getLecturer() != null){
+                    ServiceUtils.linkCourseToLecturerDto(dto.getCourse(),lecture.getCourse());
+                }
+            }
+            if (lecture.getStudentsAttendance() != null)
+                ServiceUtils.linkLectureToStudentsAttendanceDto(dto, lecture);
+
+            lecturesDTO.add(dto);
         }
-        return lectures;
+        return lecturesDTO;
     }
 
     @Override
     public LectureDTO saveLecture(LectureDTO dto) {
-        Lecture lecture = lectureDtoToUser(dto);
+        Lecture lecture = ServiceUtils.lectureDtoToLecture(dto);
         lectureService.saveLecture(lecture);
 
         //Update userId after save
@@ -38,23 +46,25 @@ public class ClientLectureServiceImpl extends BaseServiceImpl implements ClientL
         return dto;
     }
 
-    private LectureDTO lectureToDto(Lecture lecture){
-        LectureDTO dto = new LectureDTO();
+    @Override
+    public LectureDTO saveLecture(LectureDTO dto, List<UserDTO> studentsDTO) {
+        Lecture lecture = ServiceUtils.lectureDtoToLecture(dto);
+        List<User> students = new ArrayList<>();
+        for(UserDTO u: studentsDTO){
+            students.add(ServiceUtils.userDtoToUser(u));
+        }
+        lectureService.saveLecture(lecture, students);
+
+        dto.setStudentsAttendance(studentsDTO);
         dto.setLectureId(lecture.getLectureId());
-        dto.setTitle(lecture.getTitle());
-        dto.setClassroom(lecture.getClassroom());
-        dto.setDescription(lecture.getDescription());
-        dto.setHomework(lecture.getHomework());
+
         return dto;
     }
 
-    private Lecture lectureDtoToUser(LectureDTO dto){
-        Lecture lecture = new Lecture();
-        lecture.setLectureId(dto.getLectureId());
-        lecture.setTitle(dto.getTitle());
-        lecture.setClassroom(dto.getClassroom());
-        lecture.setDescription(dto.getDescription());
-        lecture.setHomework(dto.getHomework());
-        return lecture;
+    @Override
+    public LectureDTO deleteLecture(LectureDTO dto){
+        Lecture lecture = ServiceUtils.lectureDtoToLecture(dto);
+        lectureService.deleteLecture(lecture);
+        return dto;
     }
 }
