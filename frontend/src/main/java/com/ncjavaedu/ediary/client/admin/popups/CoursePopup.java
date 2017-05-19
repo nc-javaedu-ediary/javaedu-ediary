@@ -30,6 +30,7 @@ import com.sencha.gxt.widget.core.client.info.Info;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CoursePopup extends PopupPanel {
@@ -59,6 +60,7 @@ public class CoursePopup extends PopupPanel {
 
     private List<LectureDTO> lectures;
     private List<LectureDTO> newLectures;
+//    private List<LectureDTO> removedLectures;
     private boolean isSaved = false;
 
     private AdminPopupCallbacks cb = null;
@@ -140,12 +142,14 @@ public class CoursePopup extends PopupPanel {
                     dto.setTitle(title.getText());
 
 
-                    List<LectureDTO> lectureDTOS = new ArrayList<>();
                     newLectures = new ArrayList<>();
-                    for (LectureDTO l : lecturesList.getValue()) { // TODO Это новые лекции или же список всех лекций курса?
-                        lectureDTOS.add(l);
+                    for (LectureDTO l : lecturesList.getValue()) {
+//                        lectureDTOS.add(l);
+                        l.setCourse(dto);
                         newLectures.add(l);
                     }
+
+                    logger.log(Level.INFO, "newLectures " + newLectures.size());
 
                     AsyncCallback<CourseDTO> callback = new AsyncCallback<CourseDTO>() {
                         @Override
@@ -155,12 +159,14 @@ public class CoursePopup extends PopupPanel {
 
                         @Override
                         public void onSuccess(CourseDTO dto) {
-//                            onSave();
+                            isOk(true);
                             cb.coursePopupValidated(dto);
+                            Info.display("Success", "Изменения сохранены");
+
                         }
                     };
-                    ClientCourseService.App.getInstance().saveCourse(dto, lec, lectureDTOS, callback);
-                    super.hide();
+                    ClientCourseService.App.getInstance().saveCourse(dto, lec, newLectures, callback);
+//                    super.hide();
                 } else
                     Info.display("Ошибка", "Лектор не выбран");
             } else
@@ -170,8 +176,9 @@ public class CoursePopup extends PopupPanel {
         }
     }
 
-    private void onSave() {
-        isSaved(true);
+    private void isOk(boolean b) {
+        isSaved(b);
+        super.hide();
     }
 
     public void ShowCoursePopup(final AdminPopupCallbacks cb) {

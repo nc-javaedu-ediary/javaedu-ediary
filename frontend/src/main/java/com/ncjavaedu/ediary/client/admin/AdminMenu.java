@@ -268,6 +268,14 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         final CoursePopup popup = new CoursePopup(lectures);
 
         popup.ShowCoursePopup(this);
+        popup.addCloseHandler(new CloseHandler<PopupPanel>() {
+            @Override
+            public void onClose(CloseEvent<PopupPanel> event) {
+                if (popup.isSaved()) {
+                    schedule.updateSchedule(popup.getNewLectures());
+                }
+            }
+        });
     }
 
     @UiHandler({"editCourseButton"})
@@ -278,16 +286,9 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
         popup.addCloseHandler(new CloseHandler<PopupPanel>() {
             @Override
             public void onClose(CloseEvent<PopupPanel> event) {
-//                popup.getLectures();
-//                logger.log(Level.INFO, "popup.getok " + popup.isSaved());
-//                if (popup.isSaved()){
-//                    logger.log(Level.INFO, "popup.getLecturesDto() " + popup.getLectures());
-//                    logger.log(Level.INFO, "popup.getLecturesDto() " + popup.getNewLectures());
-//                    schedule.updateSchedule(popup.getNewLectures());
-//                }
-
-
-
+                if (popup.isSaved()) {
+                    schedule.updateSchedule(popup.getNewLectures());
+                }
             }
         });
     }
@@ -304,7 +305,14 @@ public class AdminMenu implements IsWidget, AdminPopupCallbacks {
             public void onSuccess(CourseDTO dto) {
                 for (CourseDTO c : courses) {
                     if (c.getCourseId() == dto.getCourseId()) {
+//                        logger.log(Level.INFO, "c " + c.getTitle() + " c.getLectures().size() " + c.getLectures().size());
                         courses.remove(c);
+
+//                        logger.log(Level.INFO, "lectures " + lectures.size() );
+//
+//                        lectures.removeAll(c.getLectures());
+//                        logger.log(Level.INFO, "lectures " + lectures.size() );
+
                         break;
                     }
                 }

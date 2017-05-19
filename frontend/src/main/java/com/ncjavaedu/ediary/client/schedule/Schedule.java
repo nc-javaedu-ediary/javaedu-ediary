@@ -111,7 +111,7 @@ public class Schedule extends Composite {
                 Set<String> timeOfLectures = new TreeSet<>();
                 for (LectureDTO lecture : currentWeekLectures) {
 //                    if (lecture.getCourse() != null)
-                        timeOfLectures.add(lecture.getLectureTime());
+                    timeOfLectures.add(lecture.getLectureTime());
                 }
 
                 String[] timesRow = timeOfLectures.toArray(new String[timeOfLectures.size()]);
@@ -123,26 +123,31 @@ public class Schedule extends Composite {
                 for (LectureDTO lecture : currentWeekLectures) {
                     dayOfWeak = getDayOfWeek(lecture.getDate());
 //                    if (lecture.getCourse() != null) {
-                        if (dayOfWeak >= 0 && dayOfWeak < 5) {
-                            for (int i = 1; i <= timesRow.length; i++) {
-                                if (schedule_table.getText(i, 0).equals(lecture.getLectureTime())) {
-                                    if (schedule_table.getText(i, dayOfWeak + 1).equals("нет занятий")) {
-                                        schedule_table.setWidget(i, dayOfWeak + 1, generateTimetableCell(lecture));
-                                        //не более 1 лекции
-                                        logger.log(Level.INFO, "i 3");
-                                        break;
-                                    } else {
+                    if (dayOfWeak >= 0 && dayOfWeak < 5) {
+                        for (int i = 1; i <= timesRow.length; i++) {
+                            if (schedule_table.getText(i, 0).equals(lecture.getLectureTime())) {
+//                                if (schedule_table.getText(i, dayOfWeak + 1).equals("нет занятий")) {
+//                                    schedule_table.setWidget(i, dayOfWeak + 1, generateTimetableCell(lecture));
+//                                    //не более 1 лекции
+//                                    logger.log(Level.INFO, "i 3");
+//                                    break;
+//                                } else {
 
-                                        logger.log(Level.WARNING, "more then 1 lecture in " + i + " " + (dayOfWeak + 1));
-                                        logger.log(Level.WARNING, "schedule_table.getElement " + schedule_table.getElement().toString());
+                                VerticalLayoutContainer vlc = new VerticalLayoutContainer();
+                                if (schedule_table.getWidget(i, dayOfWeak + 1) != null)
+                                    vlc.add(schedule_table.getWidget(i, dayOfWeak + 1));
+                                vlc.add(generateTimetableCell(lecture));
+                                schedule_table.setWidget(i, dayOfWeak + 1, vlc.asWidget());
+                                logger.log(Level.WARNING, "more then 1 lecture in " + i + " " + (dayOfWeak + 1));
+                                logger.log(Level.WARNING, "schedule_table.getElement " + schedule_table.getElement().toString());
 //                                    Widget w = schedule_table.getWidget(i, dayOfWeak + 1);
 //                                    schedule_table.getElement().toString();
 //                                    if (w!= null)
 //                                        schedule_table.setWidget();
-                                    }
-                                }
+//                                }
                             }
                         }
+                    }
 //                    }
                 }
             }
@@ -178,20 +183,34 @@ public class Schedule extends Composite {
     private void updateWeekLectureMap(List<LectureDTO> lectureDTOList) {
         Integer key;
         for (LectureDTO l : lectureDTOList) {
-            if (l.getCourse()!= null) {
+            if (l.getCourse() != null) {
                 if (l.getDate() != null)
                     key = getNumberOfWeek(l.getDate()) * getYear(l.getDate());
                 else
                     key = 0;
+//                logger.log(Level.WARNING, "!!!!2 " + l.getTitle() + " " + key);
 
                 if (!weeklectureMap.containsKey(key)) {
                     List<LectureDTO> list = new ArrayList<>();
                     list.add(l);
                     weeklectureMap.put(key, list);
                 } else {
-                    weeklectureMap.get(key).add(l);
+                    boolean flag = true;
+
+                    for (LectureDTO lect : weeklectureMap.get(key)) {
+                        if (l.getLectureId() == lect.getLectureId()) {
+                            flag = false;
+                            logger.log(Level.WARNING, "lect.getLectureId() " + lect.getLectureId() + " flag " + flag);
+                            break;
+                        }
+                    }
+                    if (flag)
+                        weeklectureMap.get(key).add(l);
+
                 }
-            }
+            } else
+                logger.log(Level.WARNING, "!!!!l " + l.getTitle());
+
         }
     }
 
@@ -277,13 +296,9 @@ public class Schedule extends Composite {
 
         if (lectureDTO.getTitle() != null) {
             Label title = new Label(lectureDTO.getTitle());
-            logger.log(Level.INFO, "lectureDTO.getTitle() " + 1);
-
             title.addClickHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-                    logger.log(Level.INFO, "lectureDTO.getTitle() " + 2);
-
                     final LecturePage lecturePage = new LecturePage(lectureDTO, showUserList);
                     lecturePage.addCloseHandler(new CloseHandler<PopupPanel>() {
                         @Override
@@ -296,37 +311,27 @@ public class Schedule extends Composite {
                     lecturePage.center();
                     lecturePage.show();
 
-                    logger.log(Level.INFO, "после create LecturePage " + lectureDTO.getTitle());
+//                    logger.log(Level.INFO, "после create LecturePage " + lectureDTO.getTitle());
                 }
             });
             lectureCell.add(title);
 
-            logger.log(Level.INFO, "lectureDTO.getTitle() " + 2);
-            logger.log(Level.INFO, "lectureDTO.getCourse() " + lectureDTO.getCourse());
+//            logger.log(Level.INFO, "lectureDTO.getTitle() " + 2);
+//            logger.log(Level.INFO, "lectureDTO.getCourse() " + lectureDTO.getCourse());
 
 
             if (lectureDTO.getCourse().getLecturer() != null) {
-                //TODO
-                logger.log(Level.INFO, "getLecturer " + 2);
-
                 Label lecturer = new Label(lectureDTO.getCourse().getLecturer().getFullName());
-//                lecturer.addClickHandler(new ClickHandler() {
-//                    @Override
-//                    public void onClick(ClickEvent event) {
-//                        //TODO toLecturers lectures
-//                    }
-//
-//                });
                 lectureCell.add(lecturer);
             }
-            logger.log(Level.INFO, "lectureDTO.getTitle() " + 3);
+//            logger.log(Level.INFO, "lectureDTO.getTitle() " + 3);
 
             if (lectureDTO.getClassroom() != null) {
                 Label classRoom = new Label("Кабинет №" + lectureDTO.getClassroom());
                 lectureCell.add(classRoom);
             }
 
-            logger.log(Level.INFO, "lectureDTO.getTitle() " + 4);
+//            logger.log(Level.INFO, "lectureDTO.getTitle() " + 4);
 
             if (lectureDTO.getDay() != null) {
                 lectureCell.add(new Label(lectureDTO.getDay()));
@@ -335,8 +340,13 @@ public class Schedule extends Composite {
         return lectureCell;
     }
 
-    public void updateSchedule(List<LectureDTO> lectureDTOList){
-        updateWeekLectureMap(lectureDTOList);
-        weekSchedule();
+    public void updateSchedule(List<LectureDTO> lectureDTOList) {
+        if (lectureDTOList != null && lectureDTOList.size() != 0) {
+//            for (LectureDTO i : lectureDTOList)
+//                logger.log(Level.INFO, "LectureDTO " + i.getTitle() + " " + i.getCourse() + " " +  i.getDate());
+
+            updateWeekLectureMap(lectureDTOList);
+            weekSchedule();
+        }
     }
 }

@@ -15,7 +15,7 @@
     </ui:with>
 
 
-    <container:VBoxLayoutContainer VBoxLayoutAlign="CENTER">
+    <container:VBoxLayoutContainer VBoxLayoutAlign="STRETCH">
         <container:HBoxLayoutContainer>
             <container:child>
                 <button:TextButton title="Previous Week" text="←" ui:field="previous" styleName="{style.buttonPrev}"/>
