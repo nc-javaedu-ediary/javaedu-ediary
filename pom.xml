@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>javaedu-ediary.parent</artifactId>
+    <groupId>com.ncjavaedu.ediary</groupId>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>services</module>
+        <module>frontend</module>
+    </modules>
+
+    <properties>
+        <profileName>production</profileName>
+        <!--<profileName>local</profileName>-->
+        <springframework.version>4.2.5.RELEASE</springframework.version>
+        <gwt.version>2.7.0</gwt.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+        <maven-compiler-plugin.version>3.6.1</maven-compiler-plugin.version>
+        <war.plugin.version>2.6</war.plugin.version>
+        <slf4j.version>1.7.5</slf4j.version>
+        <java.source>1.7</java.source>
+        <java.target>1.7</java.target>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+        </dependencies>
+    </dependencyManagement>
+</project>

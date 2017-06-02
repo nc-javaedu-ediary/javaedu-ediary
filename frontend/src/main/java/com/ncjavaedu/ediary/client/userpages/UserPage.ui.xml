@@ -1,0 +1,14 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:gxt='urn:import:com.sencha.gxt.widget.core.client'
+             xmlns:button='urn:import:com.sencha.gxt.widget.core.client.button'>
+    <ui:style src="../../../resources/style.css"/>
+
+
+    <gxt:ContentPanel headingText="Расписание занятий">
+        <gxt:button>
+            <button:TextButton ui:field="logoutButton" text="Выход"/>
+        </gxt:button>
+        <gxt:ContentPanel headerVisible="false" ui:field="timeTable">
+        </gxt:ContentPanel>
+    </gxt:ContentPanel>
+</ui:UiBinder>

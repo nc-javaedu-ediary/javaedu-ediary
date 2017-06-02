@@ -1,0 +1,43 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:container='urn:import:com.sencha.gxt.widget.core.client.container'
+             xmlns:element='urn:import:com.google.gwt.user.client.ui'
+             xmlns:button="urn:import:com.sencha.gxt.widget.core.client.button">
+
+    <ui:style src="../../../resources/style.css"/>
+
+    <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData"
+             field="week">
+        <ui:attributes width="1" height="0.2"/>
+    </ui:with>
+    <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData"
+             field="ttable">
+        <ui:attributes width="1" height="0.8"/>
+    </ui:with>
+
+
+    <container:VBoxLayoutContainer VBoxLayoutAlign="STRETCH">
+        <container:HBoxLayoutContainer>
+            <container:child>
+                <button:TextButton title="Previous Week" text="←" ui:field="previous" styleName="{style.buttonPrev}"/>
+            </container:child>
+            <container:child>
+                <element:Label ui:field="monday" styleName="{style.day}"/>
+            </container:child>
+            <container:child>
+                <element:Label text=" - " styleName="{style.day}"/>
+            </container:child>
+            <container:child>
+                <element:Label ui:field="friday" styleName="{style.day}"/>
+            </container:child>
+
+            <container:child>
+                <button:TextButton title="Next Week" text="→" ui:field="next" styleName="{style.buttonNext}"/>
+            </container:child>
+        </container:HBoxLayoutContainer>
+
+        <container:HBoxLayoutContainer layoutData="{ttable}" styleName="{style.schedule}">
+            <element:FlexTable ui:field="schedule_table" borderWidth="1" styleName="{style.table-style}"/>
+        </container:HBoxLayoutContainer>
+    </container:VBoxLayoutContainer>
+
+</ui:UiBinder>

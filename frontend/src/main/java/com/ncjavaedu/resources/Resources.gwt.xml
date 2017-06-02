@@ -1,0 +1,10 @@
+<module rename-to='resources'>
+  <inherits name='com.sencha.gxt.ui.GXT' />
+
+  <!--<servlet path="/service" class="com.db.standardreporting.server.StandardReportingServiceImpl" />-->
+
+  <!-- Specify the paths for translatable code -->
+  <source path='client' />
+  <source path='shared' />
+  <source path='service' />
+</module>

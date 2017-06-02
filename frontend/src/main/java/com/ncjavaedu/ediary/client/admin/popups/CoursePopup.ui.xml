@@ -1,0 +1,60 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:container="urn:import:com.sencha.gxt.widget.core.client.container"
+             xmlns:el="urn:import:com.google.gwt.user.client.ui"
+             xmlns:button="urn:import:com.sencha.gxt.widget.core.client.button"
+             xmlns:gxt="urn:import:com.sencha.gxt.widget.core.client"
+             xmlns:grid="urn:import:com.sencha.gxt.widget.core.client.grid"
+             xmlns:toolbar="urn:import:com.sencha.gxt.widget.core.client.toolbar"
+             xmlns:c="urn:import:com.sencha.gxt.widget.core.client"
+             xmlns:form="urn:import:com.sencha.gxt.widget.core.client.form"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <ui:with type="com.sencha.gxt.data.shared.LabelProvider" field="cbValueProvider"/>
+    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="cbLecturersStore"/>
+
+    <ui:with type="com.google.gwt.cell.client.Cell" field="textCell"/>
+    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="allLecturesStore"/>
+    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="courseLecturesStore"/>
+    <ui:with type="com.sencha.gxt.core.client.ValueProvider" field="lectureValueProvider"/>
+
+    <gxt:ContentPanel headingText="Информация о курсе" pixelSize="300,300" bodyStyle="padding: 20px">
+        <container:VBoxLayoutContainer VBoxLayoutAlign="STRETCH">
+            <!--First Name-->
+            <container:HBoxLayoutContainer>
+                <container:child>
+                    <form:FieldLabel text="Название"/>
+                </container:child>
+                <container:child>
+                    <form:TextField ui:field="title"/>
+                </container:child>
+            </container:HBoxLayoutContainer>
+
+            <!--Lecturer-->
+            <container:HBoxLayoutContainer>
+                <container:child>
+                    <form:FieldLabel text="Лектор"/>
+                </container:child>
+                <container:child>
+                    <form:ComboBox ui:field="lecturer" labelProvider="{cbValueProvider}"
+                                         store="{cbLecturersStore}"/>
+                </container:child>
+            </container:HBoxLayoutContainer>
+
+            <!--Lectures-->
+            <g:VerticalPanel>
+                <form:DualListField ui:field="lecturesList" cell="{textCell}" fromStore="{allLecturesStore}"
+                                    toStore="{courseLecturesStore}" valueProvider="{lectureValueProvider}"/>
+            </g:VerticalPanel>
+
+            <!--Buttons-->
+            <container:HBoxLayoutContainer pack="CENTER">
+                <container:child >
+                    <button:TextButton ui:field="saveButton" text="Сохранить"  />
+                </container:child>
+                <container:child>
+                    <button:TextButton ui:field="cancelButton" text="Отмена" />
+                </container:child>
+            </container:HBoxLayoutContainer>
+        </container:VBoxLayoutContainer>
+    </gxt:ContentPanel>
+</ui:UiBinder>

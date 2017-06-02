@@ -1,0 +1,118 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:container="urn:import:com.sencha.gxt.widget.core.client.container"
+             xmlns:el="urn:import:com.google.gwt.user.client.ui"
+             xmlns:button="urn:import:com.sencha.gxt.widget.core.client.button"
+             xmlns:gxt="urn:import:com.sencha.gxt.widget.core.client"
+             xmlns:grid="urn:import:com.sencha.gxt.widget.core.client.grid"
+             xmlns:toolbar="urn:import:com.sencha.gxt.widget.core.client.toolbar"
+             xmlns:c="urn:import:com.sencha.gxt.widget.core.client"
+             xmlns:form="urn:import:com.sencha.gxt.widget.core.client.form"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+    <ui:with type="com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer.VerticalLayoutData"
+             field="courseLayoutData">
+        <ui:attributes width="1" height="1" />
+    </ui:with>
+
+    <ui:with type="com.sencha.gxt.widget.core.client.container.BoxLayoutContainer.BoxLayoutData" field="nostretch">
+        <ui:attributes maxSize="-1" />
+    </ui:with>
+
+    <ui:with type="com.google.gwt.cell.client.Cell" field="textCell"/>
+    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="allCoursesStore"/>
+    <ui:with type="com.sencha.gxt.data.shared.ListStore" field="userCoursesStore"/>
+    <ui:with type="com.sencha.gxt.core.client.ValueProvider" field="courseValueProvider"/>
+
+    <gxt:ContentPanel headingText="Информация о пользователе" pixelSize="300,500" bodyStyle="padding: 20px">
+        <container:VBoxLayoutContainer VBoxLayoutAlign="STRETCH">
+            <!--First Name-->
+            <container:HBoxLayoutContainer>
+                <container:child>
+                    <form:FieldLabel text="Имя"/>
+                </container:child>
+                <container:child>
+                    <form:TextField ui:field="firstName"/>
+                </container:child>
+            </container:HBoxLayoutContainer>
+
+            <!--Last Name-->
+            <container:HBoxLayoutContainer>
+                <container:child>
+                    <form:FieldLabel text="Фамилия"/>
+                </container:child>
+                <container:child>
+                    <form:TextField ui:field="lastName"/>
+                </container:child>
+            </container:HBoxLayoutContainer>
+
+            <!--University-->
+            <container:HBoxLayoutContainer>
+                <container:child>
+                    <form:FieldLabel text="Университет"/>
+                </container:child>
+                <container:child>
+                    <form:TextField ui:field="university"/>
+                </container:child>
+            </container:HBoxLayoutContainer>
+
+            <!--E-mail-->
+            <container:HBoxLayoutContainer>
+                <container:child>
+                    <form:FieldLabel text="E-mail"/>
+                </container:child>
+                <container:child>
+                    <form:TextField ui:field="email"/>
+                </container:child>
+            </container:HBoxLayoutContainer>
+
+            <!--Login-->
+            <container:HBoxLayoutContainer>
+                <container:child>
+                    <form:FieldLabel text="Логин"/>
+                </container:child>
+                <container:child>
+                    <form:TextField ui:field="login"/>
+                </container:child>
+            </container:HBoxLayoutContainer>
+
+            <!--Password-->
+            <container:HBoxLayoutContainer>
+                <container:child>
+                    <form:FieldLabel text="Пароль"/>
+                </container:child>
+                <container:child>
+                    <form:TextField ui:field="password"/>
+                </container:child>
+            </container:HBoxLayoutContainer>
+
+            <!--Role-->
+            <container:HBoxLayoutContainer>
+                <container:child>
+                    <form:FieldLabel text="Роль"/>
+                </container:child>
+                <g:VerticalPanel>
+                    <form:Radio ui:field="roleAdmin" boxLabel="Админ"/>
+                    <form:Radio ui:field="roleStudent" boxLabel="Студент" value="true"/>
+                    <form:Radio ui:field="roleLecturer" boxLabel="Лектор"/>
+                </g:VerticalPanel>
+            </container:HBoxLayoutContainer>
+
+
+            <!--Courses-->
+            <g:VerticalPanel>
+                <form:DualListField ui:field="coursesList" cell="{textCell}" fromStore="{allCoursesStore}"
+                                    toStore="{userCoursesStore}" valueProvider="{courseValueProvider}"/>
+            </g:VerticalPanel>
+
+            <!--Buttons-->
+            <container:HBoxLayoutContainer pack="CENTER">
+                <container:child >
+                    <button:TextButton ui:field="saveButton" text="Сохранить"  />
+                </container:child>
+                <container:child>
+                    <button:TextButton ui:field="cancelButton" text="Отмена" />
+                </container:child>
+            </container:HBoxLayoutContainer>
+        </container:VBoxLayoutContainer>
+    </gxt:ContentPanel>
+</ui:UiBinder>
